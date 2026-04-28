@@ -1,0 +1,141 @@
+\begin{thebibliography}{20}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+
+\bibitem[{Asai et~al.(2024)Asai, Wu, Wang, Sil, and
+  Hajishirzi}]{asai2024selfrag}
+Akari Asai, Zeqiu Wu, Yizhong Wang, Avirup Sil, and Hannaneh Hajishirzi. 2024.
+\newblock \href {http://arxiv.org/abs/2310.11511} {Self-{RAG}: Learning to
+  retrieve, generate, and critique through self-reflection}.
+
+\bibitem[{Chen et~al.(2024)Chen, Lin, Han, and Sun}]{chen2024benchmarking}
+Jiawei Chen, Hongyu Lin, Xianpei Han, and Le~Sun. 2024.
+\newblock \href {http://arxiv.org/abs/2309.01431} {Benchmarking large language
+  models in retrieval-augmented generation}.
+
+\bibitem[{Es et~al.(2024)Es, James, Espinosa-Anke, and
+  Schockaert}]{es2024ragas}
+Shahul Es, Jithin James, Luis Espinosa-Anke, and Steven Schockaert. 2024.
+\newblock \href {http://arxiv.org/abs/2309.15217} {{RAGAS}: Automated
+  evaluation of retrieval augmented generation}.
+
+\bibitem[{Gao et~al.(2023)Gao, Yen, Yu, and Chen}]{gao2023enabling}
+Tianyu Gao, Howard Yen, Jiatong Yu, and Danqi Chen. 2023.
+\newblock \href {https://arxiv.org/abs/2305.14627} {Enabling large language
+  models to generate text with citations}.
+\newblock In \emph{Proceedings of the 2023 Conference on Empirical Methods in
+  Natural Language Processing}.
+
+\bibitem[{Gao et~al.(2024)Gao, Xiong, Gao, Jia, Pan, Bi, Dai, Sun, Wang, and
+  Wang}]{gao2024retrievalaugmented}
+Yunfan Gao, Yun Xiong, Xinyu Gao, Kangxiang Jia, Jinliu Pan, Yuxi Bi, Yi~Dai,
+  Jiawei Sun, Meng Wang, and Haofen Wang. 2024.
+\newblock \href {http://arxiv.org/abs/2312.10997} {Retrieval-augmented
+  generation for large language models: A survey}.
+
+\bibitem[{Guti{\'e}rrez et~al.(2024)Guti{\'e}rrez, Shu, Gu, Yasunaga, and
+  Su}]{gutierrez2024hipporag}
+Bernal~Jim{\'e}nez Guti{\'e}rrez, Yiheng Shu, Yu~Gu, Michihiro Yasunaga, and
+  Yu~Su. 2024.
+\newblock \href {http://arxiv.org/abs/2405.14831} {{HippoRAG}:
+  Neurobiologically inspired long-term memory for large language models}.
+
+\bibitem[{Jeong et~al.(2024)Jeong, Baek, Cho, Hwang, and
+  Park}]{jeong2024adaptiverag}
+Soyeong Jeong, Jinheon Baek, Sukmin Cho, Sung~Ju Hwang, and Jong~C. Park. 2024.
+\newblock \href {http://arxiv.org/abs/2403.14403} {Adaptive-{RAG}: Learning to
+  adapt retrieval-augmented large language models through question complexity}.
+
+\bibitem[{Jiang et~al.(2023)Jiang, Xu, Gao, Sun, Liu, Dwivedi-Yu, Yang, Callan,
+  and Neubig}]{jiang2023active}
+Zhengbao Jiang, Frank~F. Xu, Luyu Gao, Zhiqing Sun, Qian Liu, Jane Dwivedi-Yu,
+  Yiming Yang, Jamie Callan, and Graham Neubig. 2023.
+\newblock \href {http://arxiv.org/abs/2305.06983} {Active retrieval augmented
+  generation}.
+
+\bibitem[{Karpukhin et~al.(2020)Karpukhin, Oguz, Min, Lewis, Wu, Edunov, Chen,
+  and Yih}]{karpukhin-etal-2020-dense}
+Vladimir Karpukhin, Barlas Oguz, Sewon Min, Patrick Lewis, Ledell Wu, Sergey
+  Edunov, Danqi Chen, and Wen-tau Yih. 2020.
+\newblock \href {https://doi.org/10.18653/v1/2020.emnlp-main.550} {Dense
+  passage retrieval for open-domain question answering}.
+\newblock In \emph{Proceedings of the 2020 Conference on Empirical Methods in
+  Natural Language Processing (EMNLP)}, pages 6769--6781, Online. Association
+  for Computational Linguistics.
+
+\bibitem[{Lewis et~al.(2020)Lewis, Perez, Piktus, Petroni, Karpukhin, Goyal,
+  K{\"u}ttler, Lewis, tau Yih, Rockt{\"a}schel, Riedel, and
+  Kiela}]{retrievalaugmentedgeneration}
+Patrick Lewis, Ethan Perez, Aleksandra Piktus, Fabio Petroni, Vladimir
+  Karpukhin, Naman Goyal, Heinrich K{\"u}ttler, Mike Lewis, Wen tau Yih, Tim
+  Rockt{\"a}schel, Sebastian Riedel, and Douwe Kiela. 2020.
+\newblock \href {http://arxiv.org/abs/2005.11401} {Retrieval-augmented
+  generation for knowledge-intensive {NLP} tasks}.
+
+\bibitem[{Liu et~al.(2024)Liu, Lin, Hewitt, Paranjape, Bevilacqua, Petroni, and
+  Liang}]{liu2024lost}
+Nelson~F. Liu, Kevin Lin, John Hewitt, Ashwin Paranjape, Michele Bevilacqua,
+  Fabio Petroni, and Percy Liang. 2024.
+\newblock \href {http://arxiv.org/abs/2307.03172} {Lost in the middle: How
+  language models use long contexts}.
+
+\bibitem[{Min et~al.(2023)Min, Krishna, Lyu, Lewis, tau Yih, Koh, Iyyer,
+  Zettlemoyer, and Hajishirzi}]{min-etal-2023-factscore}
+Sewon Min, Kalpesh Krishna, Xinxi Lyu, Mike Lewis, Wen tau Yih, Pang~Wei Koh,
+  Mohit Iyyer, Luke Zettlemoyer, and Hannaneh Hajishirzi. 2023.
+\newblock \href {https://arxiv.org/abs/2305.14251} {{FActScore}: Fine-grained
+  atomic evaluation of factual precision in long form text generation}.
+\newblock In \emph{Proceedings of the 2023 Conference on Empirical Methods in
+  Natural Language Processing}.
+
+\bibitem[{Qian et~al.(2024)Qian, Zhang, Liu, Mao, and Dou}]{qian2024memorag}
+Hongjin Qian, Peitian Zhang, Zheng Liu, Kelong Mao, and Zhicheng Dou. 2024.
+\newblock \href {http://arxiv.org/abs/2409.05591} {{MemoRAG}: Moving towards
+  next-gen {RAG} via memory-inspired knowledge discovery}.
+
+\bibitem[{Saad-Falcon et~al.(2024)Saad-Falcon, Khattab, Potts, and
+  Zaharia}]{saadfalcon2024ares}
+Jon Saad-Falcon, Omar Khattab, Christopher Potts, and Matei Zaharia. 2024.
+\newblock \href {http://arxiv.org/abs/2311.09476} {{ARES}: An automated
+  evaluation framework for retrieval-augmented generation systems}.
+
+\bibitem[{Santhanam et~al.(2022)Santhanam, Khattab, Saad-Falcon, Potts, and
+  Zaharia}]{santhanam2022colbertv2}
+Keshav Santhanam, Omar Khattab, Jon Saad-Falcon, Christopher Potts, and Matei
+  Zaharia. 2022.
+\newblock \href {https://arxiv.org/abs/2112.01488} {{ColBERTv2}: Effective and
+  efficient retrieval via lightweight late interaction}.
+\newblock In \emph{Proceedings of the 2022 Conference of the North American
+  Chapter of the Association for Computational Linguistics}.
+
+\bibitem[{Shi et~al.(2023)Shi, Chen, Misra, Scales, Dohan, Chi, Sch{\"a}rli,
+  and Zhou}]{shi2023large}
+Freda Shi, Xinyun Chen, Kanishka Misra, Nathan Scales, David Dohan, Ed~Chi,
+  Nathanael Sch{\"a}rli, and Denny Zhou. 2023.
+\newblock \href {http://arxiv.org/abs/2302.00093} {Large language models can be
+  easily distracted by irrelevant context}.
+
+\bibitem[{Xu et~al.(2024)Xu, Shi, and Choi}]{xu2024recomp}
+Fangyuan Xu, Weijia Shi, and Eunsol Choi. 2024.
+\newblock \href {http://arxiv.org/abs/2310.04408} {{RECOMP}: Improving
+  retrieval-augmented {LMs} with compression and selective augmentation}.
+
+\bibitem[{Yan et~al.(2024)Yan, Gu, Zhu, and Ling}]{yan2024corrective}
+Shi-Qi Yan, Jia-Chen Gu, Yun Zhu, and Zhen-Hua Ling. 2024.
+\newblock \href {http://arxiv.org/abs/2401.15884} {Corrective retrieval
+  augmented generation}.
+
+\bibitem[{Yu et~al.(2024)Yu, Ping, Liu, Wang, You, Zhang, Shoeybi, and
+  Catanzaro}]{yu2024rankrag}
+Yue Yu, Wei Ping, Zihan Liu, Boxin Wang, Jiaxuan You, Chao Zhang, Mohammad
+  Shoeybi, and Bryan Catanzaro. 2024.
+\newblock \href {http://arxiv.org/abs/2407.02485} {{RankRAG}: Unifying context
+  ranking with retrieval-augmented generation in {LLMs}}.
+
+\bibitem[{Zhang et~al.(2024)Zhang, Patil, Jain, Shen, Zaharia, Stoica, and
+  Gonzalez}]{zhang2024raft}
+Tianjun Zhang, Shishir~G. Patil, Naman Jain, Sheng Shen, Matei Zaharia, Ion
+  Stoica, and Joseph~E. Gonzalez. 2024.
+\newblock \href {http://arxiv.org/abs/2403.10131} {{RAFT}: Adapting language
+  model to domain specific {RAG}}.
+
+\end{thebibliography}

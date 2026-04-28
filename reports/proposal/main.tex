@@ -1,0 +1,80 @@
+\pdfoutput=1
+\documentclass[11pt]{article}
+
+\usepackage{ACL2023}
+\usepackage{times}
+\usepackage{latexsym}
+\usepackage[T1]{fontenc}
+
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+% \usepackage{inconsolata}  % optional monospace font
+
+%%%%%%%%%%%%%%%%%%% TITLE AND AUTHORS %%%%%%%%%%%%%%%%%%%
+
+\title{Faithful RAG: Evaluating Citation Accuracy and Retrieval Robustness in Domain-Specific Scientific Literature}
+
+\author{\normalfont
+Elie Bruno | 355932 | \texttt{elie.bruno@epfl.ch} \\
+Andrea Trugenberger | SCIPER | \texttt{andrea.trugenberger@epfl.ch} \\
+Author 3 | SCIPER 3 | \texttt{author3@epfl.ch} \\
+Author 4 | SCIPER 4 | \texttt{author4@epfl.ch} \\
+Team Faithful RAG
+}
+
+%%%%%%%%%%%%%%%%%%% PROPOSAL %%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\maketitle
+\begin{abstract}
+Retrieval-Augmented Generation (RAG) systems ground language model outputs in retrieved documents, yet generated citations often fail to support the claims they accompany. This problem grows acute in scientific domains where policy analysts rely on cited evidence to make decisions. We build a RAG pipeline for intellectual property and innovation policy literature, parse a corpus of academic papers into structured chunks, and then systematically measure whether the system's citations hold up under scrutiny. We introduce a domain-specific benchmark of 50--100 expert-annotated question-answer pairs with ground-truth passages, implement Corrective RAG (CRAG) to detect and recover from low-quality retrievals, and compare chunked retrieval against long-context baselines. Our evaluation covers three axes: retrieval quality across embedding models and chunk granularities, citation faithfulness via NLI-based claim verification, and end-to-end answer quality measured through RAGAS metrics.
+\end{abstract}
+
+\section{Introduction}
+
+RAG has become the standard approach for grounding LLM generations in external knowledge \cite{retrievalaugmentedgeneration}. Systems present citations alongside generated answers, giving users the impression that claims are evidence-backed. But citation presence does not guarantee citation accuracy: models frequently cite the wrong passage, attribute claims to non-existent sources, or contradict their own retrieved context \cite{min-etal-2023-factscore}.
+
+This problem is sharpest in scientific and policy domains. A policy analyst who receives a fabricated citation about patent law cannot verify it without reading the original paper, which defeats the purpose of the system.
+
+We tackle this in the domain of intellectual property and innovation policy. We build a RAG pipeline that ingests academic papers via VLM-based PDF parsing, applies hybrid semantic chunking, retrieves with FAISS and neural reranking, and generates cited answers through multiple LLMs. We then design a systematic evaluation of citation faithfulness and retrieval robustness across this pipeline.
+
+Our contributions: (1) a domain-specific gold benchmark with expert-annotated ground-truth passages, (2) an NLI-based citation verification pipeline that decomposes answers into atomic claims and checks entailment against cited sources, (3) an implementation of Corrective RAG \cite{yan2024corrective} for retrieval quality assessment and query refinement, and (4) a multi-axis comparison of retrieval strategies (embedding models, chunk granularity, reranking) and their downstream effects on answer faithfulness.
+
+\section{Approach}
+
+\paragraph{RAG Pipeline.} We ingest academic PDFs using a vision-language model (Dolphin 1.5) that extracts structured markdown with layout-aware parsing. The extracted text goes through hybrid semantic chunking (coarse $\sim$2000 chars, fine $\sim$300 chars with overlap). We embed documents with OpenAI's \texttt{text-embedding-3-small} (1,536-dim) into FAISS indexes. At query time, the system retrieves top-75 candidates, optionally reranks with a neural reranker, and prompts an LLM to generate structured answers with inline citations.
+
+\paragraph{Gold Evaluation Dataset.} Each team member annotates 12--25 question-answer pairs drawn from the corpus, with ground-truth passages identified at the chunk level. Questions span five categories: policy impact, methodology, cross-country comparison, factual extraction, and multi-hop reasoning.
+
+\paragraph{Retrieval Ablation.} We compare four retrieval approaches: three bi-encoder models (OpenAI \texttt{text-embedding-3-small}, BGE-M3, E5-large) and ColBERTv2 \cite{santhanam2022colbertv2}, a late-interaction model that computes token-level similarity for finer-grained matching. We test across chunk granularities (300, 1000, 2000 chars) with and without neural reranking, measuring precision@k, recall@k, MRR, and hit rate.
+
+\paragraph{Citation Verification.} Following the ALCE evaluation framework \cite{gao2023enabling}, we extract atomic claims from generated answers using prompted decomposition, then classify each claim against its cited passage using DeBERTa-v3-large-mnli for natural language inference. Claims are labeled as \textit{supported}, \textit{not supported}, \textit{fabricated source}, or \textit{no citation}.
+
+\paragraph{Corrective RAG.} Following \citet{yan2024corrective}, we add a retrieval quality evaluator that scores document relevance after initial retrieval. When confidence falls below a threshold, the system reformulates the query and re-retrieves, drawing on ideas from FLARE \cite{jiang2023active} for iterative retrieval-generation. We conduct ablation studies on the confidence threshold.
+
+\paragraph{End-to-End Evaluation.} We evaluate full pipeline quality using RAGAS metrics (faithfulness, answer relevancy, context precision, context recall) and compare chunked RAG against a long-context baseline (128K token window with full papers).
+
+\section{Project Timeline}
+
+\paragraph{Weeks 1--2 (Apr 21 -- May 3).} Set up repository, assign roles, begin gold dataset annotation. Submit proposal and literature review. \\
+\paragraph{Weeks 3--4 (May 5 -- May 18).} Build pipeline components in parallel: retrieval evaluation (Elie), faithfulness scorer (Andrea), CRAG pipeline (Member 3), RAGAS integration and long-context baseline (Member 4). \\
+\paragraph{Week 5 (May 19 -- May 24).} Run preliminary experiments on the gold dataset. Submit progress report and initial notebooks. \\
+\paragraph{Weeks 6--7 (May 26 -- June 7).} Run full experiments, ablation studies, finalize notebooks. Submit final report.
+
+\paragraph{Team Roles.}
+\begin{itemize}
+\item \textbf{Elie Bruno}: Retrieval ablation (embedding models, chunk strategies, reranker impact)
+\item \textbf{Andrea Trugenberger}: Faithfulness and citation verification (NLI pipeline, cross-LLM comparison)
+\item \textbf{Member 3}: Corrective RAG implementation and threshold ablation
+\item \textbf{Member 4}: End-to-end RAGAS evaluation and long-context comparison
+\end{itemize}
+
+All members contribute to the gold evaluation dataset.
+
+% Entries for the entire Anthology, followed by custom entries
+\bibliography{anthology,custom}
+\bibliographystyle{acl_natbib}
+
+
+
+\end{document}

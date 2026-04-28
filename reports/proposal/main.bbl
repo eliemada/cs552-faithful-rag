@@ -1,0 +1,50 @@
+\begin{thebibliography}{6}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+
+\bibitem[{Gao et~al.(2023)Gao, Yen, Yu, and Chen}]{gao2023enabling}
+Tianyu Gao, Howard Yen, Jiatong Yu, and Danqi Chen. 2023.
+\newblock \href {https://arxiv.org/abs/2305.14627} {Enabling large language
+  models to generate text with citations}.
+\newblock In \emph{Proceedings of the 2023 Conference on Empirical Methods in
+  Natural Language Processing}.
+
+\bibitem[{Jiang et~al.(2023)Jiang, Xu, Gao, Sun, Liu, Dwivedi-Yu, Yang, Callan,
+  and Neubig}]{jiang2023active}
+Zhengbao Jiang, Frank~F. Xu, Luyu Gao, Zhiqing Sun, Qian Liu, Jane Dwivedi-Yu,
+  Yiming Yang, Jamie Callan, and Graham Neubig. 2023.
+\newblock \href {http://arxiv.org/abs/2305.06983} {Active retrieval augmented
+  generation}.
+
+\bibitem[{Lewis et~al.(2020)Lewis, Perez, Piktus, Petroni, Karpukhin, Goyal,
+  K{\"u}ttler, Lewis, tau Yih, Rockt{\"a}schel, Riedel, and
+  Kiela}]{retrievalaugmentedgeneration}
+Patrick Lewis, Ethan Perez, Aleksandra Piktus, Fabio Petroni, Vladimir
+  Karpukhin, Naman Goyal, Heinrich K{\"u}ttler, Mike Lewis, Wen tau Yih, Tim
+  Rockt{\"a}schel, Sebastian Riedel, and Douwe Kiela. 2020.
+\newblock \href {http://arxiv.org/abs/2005.11401} {Retrieval-augmented
+  generation for knowledge-intensive {NLP} tasks}.
+
+\bibitem[{Min et~al.(2023)Min, Krishna, Lyu, Lewis, tau Yih, Koh, Iyyer,
+  Zettlemoyer, and Hajishirzi}]{min-etal-2023-factscore}
+Sewon Min, Kalpesh Krishna, Xinxi Lyu, Mike Lewis, Wen tau Yih, Pang~Wei Koh,
+  Mohit Iyyer, Luke Zettlemoyer, and Hannaneh Hajishirzi. 2023.
+\newblock \href {https://arxiv.org/abs/2305.14251} {{FActScore}: Fine-grained
+  atomic evaluation of factual precision in long form text generation}.
+\newblock In \emph{Proceedings of the 2023 Conference on Empirical Methods in
+  Natural Language Processing}.
+
+\bibitem[{Santhanam et~al.(2022)Santhanam, Khattab, Saad-Falcon, Potts, and
+  Zaharia}]{santhanam2022colbertv2}
+Keshav Santhanam, Omar Khattab, Jon Saad-Falcon, Christopher Potts, and Matei
+  Zaharia. 2022.
+\newblock \href {https://arxiv.org/abs/2112.01488} {{ColBERTv2}: Effective and
+  efficient retrieval via lightweight late interaction}.
+\newblock In \emph{Proceedings of the 2022 Conference of the North American
+  Chapter of the Association for Computational Linguistics}.
+
+\bibitem[{Yan et~al.(2024)Yan, Gu, Zhu, and Ling}]{yan2024corrective}
+Shi-Qi Yan, Jia-Chen Gu, Yun Zhu, and Zhen-Hua Ling. 2024.
+\newblock \href {http://arxiv.org/abs/2401.15884} {Corrective retrieval
+  augmented generation}.
+
+\end{thebibliography}
