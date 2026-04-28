@@ -8,7 +8,6 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage{microtype}
-% \usepackage{inconsolata}  % optional monospace font
 \usepackage{fancyhdr}
 \usepackage{natbib}
 
@@ -37,38 +36,31 @@ Team Faithful RAG \\
 \maketitle
 \thispagestyle{fancy}
 
-\section{Literature Review}
-
-Retrieval-Augmented Generation (RAG) grounds language model outputs in external documents to reduce hallucination and enable knowledge updates without retraining \cite{retrievalaugmentedgeneration}. Research since then has branched in three directions: improving what gets retrieved, verifying whether the generation stays faithful to it, and evaluating these systems at scale. We organize prior work along these axes.
+Retrieval-Augmented Generation (RAG) grounds language model outputs in external documents to reduce hallucination without retraining~\cite{retrievalaugmentedgeneration}. Research has since branched in three directions: improving what gets retrieved, verifying whether generation stays faithful to it, and evaluating these systems at scale.
 
 \subsection{Retrieval Methods and Robustness}
 
-Dense passage retrieval \cite{karpukhin-etal-2020-dense} replaced sparse methods like BM25 with learned embeddings, enabling semantic matching between queries and passages. Subsequent work focused on what happens when retrieval returns noisy or irrelevant documents. \citet{shi2023large} showed that LLMs degrade when irrelevant context is mixed with relevant passages, even when the answer is present. \citet{liu2024lost} demonstrated a positional bias: models attend to information at the beginning and end of long contexts while neglecting the middle. These findings motivate careful retrieval filtering before generation.
+Dense passage retrieval~\cite{karpukhin-etal-2020-dense} replaced sparse methods with learned embeddings for semantic matching. However, retrieval quality remains fragile: \citet{shi2023large} showed LLMs degrade when irrelevant context is mixed with relevant passages, and \citet{liu2024lost} demonstrated a positional bias where models neglect information in the middle of long contexts. On the representation side, ColBERTv2~\cite{santhanam2022colbertv2} introduced late-interaction retrieval with token-level similarity, achieving stronger matching than single-vector bi-encoders.
 
-On the representation side, ColBERTv2 \cite{santhanam2022colbertv2} introduced late-interaction retrieval, where token-level embeddings enable finer-grained query-document matching than single-vector bi-encoders, achieving strong results with efficient indexing. Two recent approaches tackle retrieval quality directly. Corrective RAG \cite{yan2024corrective} adds a lightweight retrieval evaluator that classifies retrieved documents as correct, ambiguous, or incorrect, then triggers query refinement or web search fallback for low-confidence retrievals. Adaptive-RAG \cite{jeong2024adaptiverag} routes queries by complexity, and FLARE \cite{jiang2023active} interleaves generation with retrieval by detecting low-confidence spans and issuing targeted queries mid-generation. These approaches reduce noise fed to the generator, but none measures whether this translates to more faithful citations in the output.
+Several approaches tackle retrieval quality directly. Corrective RAG~\cite{yan2024corrective} classifies retrieved documents as correct, ambiguous, or incorrect and triggers query refinement for low-confidence retrievals. Adaptive-RAG~\cite{jeong2024adaptiverag} routes queries by complexity, while FLARE~\cite{jiang2023active} interleaves generation with retrieval by detecting low-confidence spans mid-generation. These reduce noise fed to the generator, but none measures whether this translates to more faithful citations.
 
 \subsection{Faithfulness and Self-Correction}
 
-Self-RAG \cite{asai2024selfrag} trains the LLM itself to emit special reflection tokens that signal when retrieval is needed, whether retrieved passages are relevant, and whether the generation is supported by them. This internalizes the retrieval-verify loop but requires fine-tuning the generator. RAFT \cite{zhang2024raft} takes a different path: it fine-tunes the model on a mix of relevant and distractor documents, teaching it to ignore noise and cite the correct passage. RankRAG \cite{yu2024rankrag} collapses the reranking and generation stages into a single instruction-tuned LLM that jointly scores context relevance and produces the answer.
+Self-RAG~\cite{asai2024selfrag} trains the LLM to emit reflection tokens signaling retrieval need, passage relevance, and generation support---internalizing the verify loop but requiring fine-tuning. RAFT~\cite{zhang2024raft} fine-tunes on relevant and distractor documents, teaching models to cite correctly. RankRAG~\cite{yu2024rankrag} unifies reranking and generation in a single instruction-tuned LLM.
 
-On the evaluation side, FActScore \cite{min-etal-2023-factscore} decomposes generated biographies into atomic facts and verifies each against a knowledge source, providing fine-grained precision scores. ALCE \cite{gao2023enabling} extends this to citation-specific evaluation, benchmarking whether LLMs can generate text where each statement is backed by a correct inline citation. This claim-level decomposition shifted evaluation toward entailment-based verification. We adopt both principles, applying NLI-based entailment checking to each claim-citation pair in generated output.
+For evaluation, FActScore~\cite{min-etal-2023-factscore} decomposes generations into atomic facts verified against a knowledge source, shifting evaluation from surface overlap toward entailment-based verification. ALCE~\cite{gao2023enabling} extends this to citation-specific evaluation, benchmarking whether each generated statement is backed by a correct inline citation.
 
-\subsection{RAG Evaluation Frameworks}
+\subsection{Evaluation Frameworks and Structured Retrieval}
 
-Evaluating RAG systems requires measuring both retrieval and generation quality. RAGAS \cite{es2024ragas} defines four component-wise metrics: faithfulness (are claims grounded in context?), answer relevancy (does the answer address the question?), context precision (are relevant passages ranked higher?), and context recall (are all relevant passages retrieved?). ARES \cite{saadfalcon2024ares} automates evaluation using LLM judges with prediction-powered inference for statistical guarantees, reducing the need for human annotation.
-
-The RGB benchmark \cite{chen2024benchmarking} tests four specific failure modes: noise robustness (can the model ignore irrelevant documents?), negative rejection (can it refuse to answer when no relevant document exists?), information integration (can it combine evidence from multiple documents?), and counterfactual robustness (can it resist contradictory information?). These axes overlap with but do not cover citation accuracy, which our work targets.
-
-\subsection{Structured Retrieval and Memory}
-
-Recent work explores alternatives to flat vector search. HippoRAG \cite{gutierrez2024hipporag} models retrieval after hippocampal memory indexing, constructing a knowledge graph from the corpus and using personalized PageRank to traverse it during retrieval. MemoRAG \cite{qian2024memorag} introduces a dual-system architecture: a lightweight ``memory model'' forms global understanding of the corpus and generates draft answers, which then guide a retrieval model toward relevant passages. RECOMP \cite{xu2024recomp} addresses context length by training extractive and abstractive compressors that distill retrieved passages into concise summaries before generation. \citet{gao2024retrievalaugmented} survey these and other approaches, identifying retrieval granularity, noise filtering, and faithful generation as the three persistent open problems in the field.
+RAGAS~\cite{es2024ragas} defines component-wise metrics: faithfulness, answer relevancy, context precision, and context recall. ARES~\cite{saadfalcon2024ares} automates evaluation via LLM judges with statistical guarantees. The RGB benchmark~\cite{chen2024benchmarking} tests noise robustness, negative rejection, information integration, and counterfactual robustness---axes that overlap with but do not cover citation accuracy. Beyond flat vector search, HippoRAG~\cite{gutierrez2024hipporag} uses knowledge graphs with PageRank traversal, MemoRAG~\cite{qian2024memorag} introduces a dual-system memory architecture, and RECOMP~\cite{xu2024recomp} compresses passages before generation. \citet{gao2024retrievalaugmented} survey these approaches, identifying retrieval granularity, noise filtering, and faithful generation as persistent open problems.
 
 \subsection{Positioning Our Work}
 
-We combine a corrective retrieval mechanism \cite{yan2024corrective} with post-hoc citation verification inspired by FActScore \cite{min-etal-2023-factscore}, without fine-tuning the generator (unlike Self-RAG and RAFT). We also move beyond general-domain benchmarks (RGB, RAGAS) by constructing a domain-specific evaluation set for scientific policy literature, where citation accuracy has direct practical consequences. No prior work combines corrective retrieval, claim-level faithfulness scoring, and domain-specific evaluation in a single pipeline.
+We combine corrective retrieval~\cite{yan2024corrective} with post-hoc citation verification inspired by FActScore and ALCE, without fine-tuning the generator (unlike Self-RAG and RAFT). We move beyond general-domain benchmarks by constructing a domain-specific evaluation set for scientific policy literature. No prior work combines corrective retrieval, claim-level faithfulness scoring, and domain-specific evaluation in a single pipeline.
 
 %%%%%%%%%%%%%%%%%%% BIBLIOGRAPHY %%%%%%%%%%%%%%%%%%%
 
+\newpage
 \bibliography{anthology, custom}
 \bibliographystyle{acl_natbib}
 
