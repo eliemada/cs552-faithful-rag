@@ -107,7 +107,9 @@ See [rcp_support/README.md](rcp_support/README.md) for full setup instructions.
 
 | Member | SCIPER | Role |
 |--------|--------|------|
-| Andrea Trugenberger | 357615 | Retrieval & chunking ablation |
-| Elie Bruno | 355932 | Faithfulness & citation verification |
-| Faruk Zahiragic | 415360 | Corrective RAG (CRAG) |
-| Yusif Askari | 413862 | RAGAS evaluation & long-context comparison |
+| Elie Bruno | 355932 | Retrieval ablation (embeddings, chunking, reranking) |
+| Andrea Trugenberger | 357615 | Citation verification (NLI pipeline, cross-LLM comparison) |
+| Faruk Zahiragic | 415360 | Corrective RAG and threshold ablation |
+| Yusif Askari | 413862 | RAGAS and long-context baseline |
+
+All members contribute to the gold evaluation dataset.
