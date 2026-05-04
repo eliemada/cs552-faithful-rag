@@ -1,0 +1,113 @@
+name: Sync to Classroom Repo
+
+on:
+  schedule:
+    # Every night at 02:00 UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch: # Manual trigger
+
+jobs:
+  sync:
+    name: Sync to CS-552 Classroom
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout source repo
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+        with:
+          path: source
+          fetch-depth: 0
+
+      - name: Checkout classroom repo
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+        with:
+          repository: CS-552/open-project-m2-citeright
+          token: ${{ secrets.CLASSROOM_PAT }}
+          path: classroom
+          fetch-depth: 0
+
+      - name: Build classroom structure
+        run: |
+          set -euo pipefail
+
+          cd classroom
+
+          # Preserve .git and any classroom-only files (rcp_support, README from classroom)
+          # Remove old synced content but keep classroom-specific dirs
+          find . -maxdepth 1 \
+            ! -name '.' \
+            ! -name '.git' \
+            ! -name 'rcp_support' \
+            -exec rm -rf {} +
+
+          # ── code/ ──────────────────────────────────────────────
+          # Map all source code into code/
+          mkdir -p code
+
+          # Core Python packages (the RAG pipeline)
+          cp -r ../source/packages code/
+
+          # Evaluation scripts & data
+          cp -r ../source/evaluation code/
+
+          # Utility scripts
+          cp -r ../source/scripts code/
+
+          # Frontend
+          cp -r ../source/frontend code/
+
+          # Documentation
+          cp -r ../source/docs code/
+
+          # Root config files needed to run the project
+          cp ../source/pyproject.toml code/
+          cp ../source/uv.lock code/
+          cp ../source/docker-compose.yml code/
+          cp ../source/docker-entrypoint.sh code/
+          cp ../source/Makefile code/
+          cp ../source/.env.example code/ 2>/dev/null || true
+          cp ../source/.dockerignore code/ 2>/dev/null || true
+
+          # ── notebooks/ ────────────────────────────────────────
+          cp -r ../source/notebooks .
+
+          # ── report/ ───────────────────────────────────────────
+          cp -r ../source/report .
+
+          # ── README.md ─────────────────────────────────────────
+          cp ../source/CS552_README.md README.md
+
+      - name: Squash-commit and push
+        run: |
+          set -euo pipefail
+          cd classroom
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          SOURCE_SHA=$(cd ../source && git rev-parse --short HEAD)
+          SOURCE_MSG=$(cd ../source && git log -1 --pretty=format:"%s")
+
+          git add -A
+
+          # Only commit if there are changes
+          if git diff --cached --quiet; then
+            echo "No changes to sync."
+            exit 0
+          fi
+
+          git commit -m "sync: ${SOURCE_MSG} (${SOURCE_SHA})"
+
+          # Squash all synced commits into one on top of the initial classroom commit
+          # Find the initial commit from classroom (the one from github-classroom[bot])
+          INITIAL_COMMIT=$(git log --reverse --format="%H" | head -1)
+
+          git reset --soft "${INITIAL_COMMIT}"
+          git commit -m "sync: latest from cs552-faithful-rag @ ${SOURCE_SHA}
+
+          Auto-synced from source repository.
+          Source commit: ${SOURCE_SHA} — ${SOURCE_MSG}
+          Synced at: $(date -u '+%Y-%m-%d %H:%M UTC')"
+
+          git push --force-with-lease origin main

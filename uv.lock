@@ -4363,7 +4363,7 @@ provides-extras = ["pdf", "vector", "cloud", "analysis", "cli"]
 
 [[package]]
 name = "rag-pipeline-monorepo"
-version = "1.0.0"
+version = "1.0.1"
 source = { virtual = "." }
 
 [package.dev-dependencies]

@@ -83,8 +83,8 @@ project-2-rag/
 ├── scripts/                   # Ops utilities (S3 helpers, tests, benchmarking)
 ├── data/                      # Local OpenAlex snapshots / IP policy PDFs
 ├── docs/                      # Designs, setup guides, benchmarking docs
-├── notebooks/                 # Chunking benchmark notebook + artifacts
-├── reports/                   # Generated HTML/plot reports
+├── notebooks/                 # Individual team member notebooks
+├── report/                    # LaTeX reports (proposal, lit review, progress, final)
 ├── docker-compose.yml         # API + worker runtime definitions
 ├── Makefile                   # Worker Docker build/push helpers
 └── CI.md / RELEASING.md       # Automation and release checklists
@@ -367,7 +367,7 @@ The worker image includes Dolphin weights and all dependencies. See `Makefile` f
 - `docs/markdown_chunking.md` describes the chunking system, evaluation metrics, and S3 layout in detail.
 - `docs/benchmarking_system.md` covers the professional-grade chunking benchmarking framework and how to generate Plotly reports via `scripts/benchmarking/generate_chunking_report.py`.
 - `docs/LITELLM_SETUP.md` and `docs/checkpoint_2025-11-10.md` summarize infra bring-up milestones.
-- `notebooks/chunking_benchmark.ipynb` reproduces evaluation figures; results are stored in `notebooks/chunking_benchmark_results.csv` and `reports/chunking_evaluation_*.html`.
+- Chunking benchmark results are stored in `evaluation/chunking_benchmark_detailed.json`.
 - `scripts/dev/test_retriever.py`, `scripts/dev/test_local_processing.py`, and `scripts/dev/test_markdown_chunking.py` provide lightweight smoke tests for each pipeline stage.
 
 ## Testing & Quality

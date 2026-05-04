@@ -7,7 +7,7 @@ All reports use the LaTeX templates provided by the course.
 Download the templates from Overleaf and place them in the corresponding folders:
 
 ```
-reports/
+report/
 ├── proposal/              # 1-page proposal (due May 3)
 │   └── main.tex           # Drop Overleaf template here
 ├── literature_review/     # 1-page lit review (due May 3)

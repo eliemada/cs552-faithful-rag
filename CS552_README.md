@@ -53,28 +53,30 @@ See the original [README.md](README.md) for full architecture details.
 ## Repository Structure
 
 ```
-cs552-faithful-rag/
-├── packages/                     # [inherited] core RAG pipeline
-│   ├── shared/rag_pipeline/      #   retrieval, chunking, embeddings
-│   ├── api/                      #   FastAPI backend
-│   └── worker/                   #   GPU PDF parser
-├── frontend/                     # [inherited] Next.js UI
-├── evaluation/                   # [NEW] CS-552 research contribution
-│   ├── gold_dataset/             #   annotated Q&A pairs
-│   ├── retrieval_eval/           #   retrieval metrics
-│   ├── faithfulness/             #   citation verification
-│   ├── crag/                     #   corrective RAG
-│   ├── ragas_eval/               #   RAGAS + long-context comparison
-│   └── long_context/             #   128K baseline
-├── individual_notebooks/         # [NEW] one notebook per team member
+open-project-m2-citeright/
+├── code/                         # All source code
+│   ├── packages/                 #   core RAG pipeline (shared, api, worker)
+│   ├── evaluation/               #   CS-552 research contribution
+│   │   ├── gold_dataset/         #     annotated Q&A pairs
+│   │   ├── retrieval_eval/       #     retrieval metrics
+│   │   ├── faithfulness/         #     citation verification
+│   │   ├── crag/                 #     corrective RAG
+│   │   ├── ragas_eval/           #     RAGAS + long-context comparison
+│   │   └── long_context/         #     128K baseline
+│   ├── frontend/                 #   Next.js UI
+│   ├── scripts/                  #   utilities & benchmarking
+│   ├── docs/                     #   design docs & guides
+│   ├── pyproject.toml            #   Python project config
+│   └── docker-compose.yml        #   service definitions
+├── notebooks/                    # One notebook per team member
 │   ├── submit.sh                 #   RCP job launcher
 │   └── *.ipynb                   #   individual contributions
-├── reports/                      # [NEW] LaTeX reports
+├── report/                       # LaTeX reports
 │   ├── proposal/                 #   due May 3
 │   ├── literature_review/        #   due May 3
 │   ├── progress_report/          #   due May 24
 │   └── final_report/             #   due June 7
-└── README.md                     # original project docs
+└── README.md
 ```
 
 ## Deadlines
@@ -88,7 +90,7 @@ cs552-faithful-rag/
 ## Running Notebooks
 
 ```bash
-cd individual_notebooks
+cd notebooks
 ./submit.sh  # launches RCP environment (details TBD)
 ```
 

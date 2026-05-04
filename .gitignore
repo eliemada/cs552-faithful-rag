@@ -79,9 +79,17 @@ temp/
 # Archive (old code - optional, remove this line if you want to track archive)
 archive/.worktrees/
 
+# LaTeX build artifacts
+*.aux
+*.blg
+*.out
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+missfont.log
+
 # Generated reports and visualizations
-reports/*.html
-reports/*.json
-reports/*.png
-reports/*.pdf
-reports/plots/
+report/*.html
+report/*.json
+report/*.png
+report/plots/
