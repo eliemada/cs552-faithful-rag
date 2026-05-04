@@ -33,12 +33,10 @@ jobs:
 
           cd classroom
 
-          # Preserve .git and any classroom-only files (rcp_support, README from classroom)
-          # Remove old synced content but keep classroom-specific dirs
+          # Remove everything except .git — we rebuild from source
           find . -maxdepth 1 \
             ! -name '.' \
             ! -name '.git' \
-            ! -name 'rcp_support' \
             -exec rm -rf {} +
 
           # ── code/ ──────────────────────────────────────────────
@@ -74,6 +72,9 @@ jobs:
 
           # ── report/ ───────────────────────────────────────────
           cp -r ../source/report .
+
+          # ── rcp_support/ ────────────────────────────────────────
+          cp -r ../source/rcp_support .
 
           # ── README.md ─────────────────────────────────────────
           cp ../source/CS552_README.md README.md
