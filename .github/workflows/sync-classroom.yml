@@ -13,6 +13,14 @@ jobs:
     timeout-minutes: 10
 
     steps:
+      - name: Check deadline
+        run: |
+          # Stop syncing after final submission deadline (June 7, 2026)
+          if [[ "$(date -u +%Y%m%d)" -gt "20260607" ]]; then
+            echo "Past deadline — skipping sync."
+            exit 1
+          fi
+
       - name: Checkout source repo
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
         with:

@@ -1,9 +1,13 @@
+[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/QDjEejvC)
+
 # CS-552 — Faithful RAG: Citation Accuracy & Retrieval Robustness in Domain-Specific Scientific Literature
 
 **Course**: CS-552 Modern Natural Language Processing, Spring 2026, EPFL  
 **Project type**: Open Project  
 **Team**: 4 members  
 **Base**: Forked from [cs433_ml_project_2](https://github.com/eliemada/cs433_ml_project_2) (Evidence-Based Policy Support Through RAG)
+
+> **Assignment info**: See the [open project description](https://docs.google.com/document/d/1NI4UKsasYuFLxOGGzsAweCbW0XOEtc59/edit#heading=h.8ww6fxjeedkw) for deliverables, [rubric](https://docs.google.com/document/d/1NI4UKsasYuFLxOGGzsAweCbW0XOEtc59/edit#heading=h.psuj40jgnavg), and [RCP setup guide](rcp_support/README.md).
 
 ---
 
