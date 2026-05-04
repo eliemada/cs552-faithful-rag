@@ -67,11 +67,9 @@ jobs:
           cp -r ../source/docs code/
 
           # Root config files needed to run the project
-          cp ../source/pyproject.toml code/
-          cp ../source/uv.lock code/
-          cp ../source/docker-compose.yml code/
-          cp ../source/docker-entrypoint.sh code/
-          cp ../source/Makefile code/
+          for f in pyproject.toml uv.lock docker-compose.yml docker-entrypoint.sh Makefile; do
+            cp "../source/${f}" code/ 2>/dev/null || true
+          done
           cp ../source/.env.example code/ 2>/dev/null || true
           cp ../source/.dockerignore code/ 2>/dev/null || true
 

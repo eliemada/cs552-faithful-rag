@@ -81,13 +81,11 @@ def compute_faithfulness_score(results: list[VerificationResult]) -> dict:
     return {
         "faithfulness": supported / total,
         "supported_ratio": supported / total,
-        "not_supported_ratio": sum(
-            1 for r in results if r.label == VerificationLabel.NOT_SUPPORTED
-        ) / total,
+        "not_supported_ratio": sum(1 for r in results if r.label == VerificationLabel.NOT_SUPPORTED)
+        / total,
         "fabricated_ratio": fabricated / total,
-        "no_citation_ratio": sum(
-            1 for r in results if r.label == VerificationLabel.NO_CITATION
-        ) / total,
+        "no_citation_ratio": sum(1 for r in results if r.label == VerificationLabel.NO_CITATION)
+        / total,
         "total_claims": total,
     }
 
