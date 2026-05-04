@@ -48,6 +48,8 @@ models/
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
 *.ipynb
+# Allow individual notebooks for submission
+!notebooks/*.ipynb
 
 # Logs
 *.log
