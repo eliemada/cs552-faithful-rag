@@ -75,9 +75,7 @@ def generate(
             temperature=temperature,
             system=system,
         )
-    raise ValueError(
-        f"Unknown model_spec prefix in {model_spec!r}; expected 'local:' or 'api:'"
-    )
+    raise ValueError(f"Unknown model_spec prefix in {model_spec!r}; expected 'local:' or 'api:'")
 
 
 # ---------- embeddings & NLI ----------
