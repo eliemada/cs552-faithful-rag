@@ -13,17 +13,21 @@ Usage:
     results = retriever.search("What are the effects of climate change?", top_k=10)
 """
 
-import os
 import json
+import logging
+import os
 import tempfile
-from typing import List, Dict, Optional
 from dataclasses import dataclass
+from pathlib import Path
+from typing import Dict, List, Optional, Union
+
+import faiss
 import numpy as np
 import requests
-import faiss
-import boto3
 
 from rag_pipeline.rag.openai_embedder import OpenAIEmbedder
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -56,40 +60,68 @@ class FAISSRetriever:
         self.embedder = embedder
 
     @classmethod
+    def from_path(
+        cls,
+        indexes_dir: Union[str, Path],
+        chunk_type: str,
+        openai_api_key: str,
+    ) -> "FAISSRetriever":
+        """Load a FAISS retriever from a directory holding ``<chunk_type>.faiss``
+        and ``<chunk_type>_metadata.json``.
+
+        This is the preferred constructor: it works against the local archive
+        (``data/s3_archive/indexes/``), the RCP scratch cache
+        (``/scratch/citeright_artifacts/indexes/``), or any HuggingFace
+        ``snapshot_download`` target — the public dataset replaces the original
+        S3 bucket.
+        """
+        indexes_dir = Path(indexes_dir)
+        index_path = indexes_dir / f"{chunk_type}.faiss"
+        metadata_path = indexes_dir / f"{chunk_type}_metadata.json"
+
+        if not index_path.exists():
+            raise FileNotFoundError(f"FAISS index missing: {index_path}")
+        if not metadata_path.exists():
+            raise FileNotFoundError(f"FAISS metadata missing: {metadata_path}")
+
+        index = faiss.read_index(str(index_path))
+        metadata = json.loads(metadata_path.read_text())
+        embedder = OpenAIEmbedder(api_key=openai_api_key, model="text-embedding-3-small")
+
+        logger.info("Loaded %s index with %d vectors from %s", chunk_type, index.ntotal, indexes_dir)
+        return cls(index, metadata, embedder)
+
+    @classmethod
     def from_s3(
         cls, bucket_name: str, chunk_type: str, openai_api_key: str, index_prefix: str = "indexes/"
     ) -> "FAISSRetriever":
-        """
-        Load FAISS retriever from S3.
+        """Load a FAISS retriever from S3 (legacy — kept for the original
+        ``cs433-rag-project2`` bucket, which is being retired)."""
+        try:
+            import boto3  # noqa: PLC0415
+        except ImportError as exc:
+            raise RuntimeError(
+                "boto3 is required for S3 loading. Install it or use from_path() instead."
+            ) from exc
 
-        Args:
-            bucket_name: S3 bucket name
-            chunk_type: "coarse" or "fine"
-            openai_api_key: OpenAI API key
-            index_prefix: S3 prefix for indexes
-        """
         s3_client = boto3.client("s3")
-
-        # Download index
-        index_key = f"{index_prefix}{chunk_type}.faiss"
         with tempfile.NamedTemporaryFile(suffix=".faiss", delete=False) as f:
             index_path = f.name
+        try:
+            logger.info("Downloading index from s3://%s/%s%s.faiss", bucket_name, index_prefix, chunk_type)
+            s3_client.download_file(bucket_name, f"{index_prefix}{chunk_type}.faiss", index_path)
+            index = faiss.read_index(index_path)
+        finally:
+            os.unlink(index_path)
 
-        print(f"Downloading index from s3://{bucket_name}/{index_key}...")
-        s3_client.download_file(bucket_name, index_key, index_path)
-        index = faiss.read_index(index_path)
-        os.unlink(index_path)
-
-        # Download metadata
-        metadata_key = f"{index_prefix}{chunk_type}_metadata.json"
-        print(f"Downloading metadata from s3://{bucket_name}/{metadata_key}...")
-        response = s3_client.get_object(Bucket=bucket_name, Key=metadata_key)
+        logger.info("Downloading metadata from s3://%s/%s%s_metadata.json", bucket_name, index_prefix, chunk_type)
+        response = s3_client.get_object(
+            Bucket=bucket_name, Key=f"{index_prefix}{chunk_type}_metadata.json"
+        )
         metadata = json.loads(response["Body"].read().decode("utf-8"))
-
-        # Initialize embedder
         embedder = OpenAIEmbedder(api_key=openai_api_key, model="text-embedding-3-small")
 
-        print(f"Loaded {chunk_type} index with {index.ntotal} vectors")
+        logger.info("Loaded %s index with %d vectors", chunk_type, index.ntotal)
         return cls(index, metadata, embedder)
 
     def search(self, query: str, top_k: int = 50) -> List[SearchResult]:
@@ -237,6 +269,27 @@ class HybridRetriever:
         self.faiss_candidates = faiss_candidates
 
     @classmethod
+    def from_path(
+        cls,
+        indexes_dir: Union[str, Path],
+        openai_api_key: str,
+        zeroentropy_api_key: Optional[str] = None,
+        chunk_type: str = "coarse",
+        faiss_candidates: int = 75,
+    ) -> "HybridRetriever":
+        """Load a hybrid retriever from a local directory of FAISS indexes.
+
+        Use this in CS-552 evaluation notebooks: it works against the cached
+        artefacts on RCP, the local archive on a laptop, or anything the
+        HuggingFace ``citeright/corpus`` dataset has been downloaded to.
+        """
+        faiss_retriever = FAISSRetriever.from_path(
+            indexes_dir=indexes_dir, chunk_type=chunk_type, openai_api_key=openai_api_key
+        )
+        reranker = ZeroEntropyReranker(api_key=zeroentropy_api_key) if zeroentropy_api_key else None
+        return cls(faiss_retriever, reranker, faiss_candidates)
+
+    @classmethod
     def from_s3(
         cls,
         bucket_name: str,
@@ -245,24 +298,11 @@ class HybridRetriever:
         chunk_type: str = "coarse",
         faiss_candidates: int = 75,
     ) -> "HybridRetriever":
-        """
-        Load hybrid retriever from S3.
-
-        Args:
-            bucket_name: S3 bucket name
-            openai_api_key: OpenAI API key
-            zeroentropy_api_key: Optional ZeroEntropy API key
-            chunk_type: "coarse" or "fine"
-            faiss_candidates: Number of FAISS candidates
-        """
+        """Load a hybrid retriever from S3 (legacy — bucket retired)."""
         faiss_retriever = FAISSRetriever.from_s3(
             bucket_name=bucket_name, chunk_type=chunk_type, openai_api_key=openai_api_key
         )
-
-        reranker = None
-        if zeroentropy_api_key:
-            reranker = ZeroEntropyReranker(api_key=zeroentropy_api_key)
-
+        reranker = ZeroEntropyReranker(api_key=zeroentropy_api_key) if zeroentropy_api_key else None
         return cls(faiss_retriever, reranker, faiss_candidates)
 
     def search(self, query: str, top_k: int = 10, use_reranker: bool = True) -> List[SearchResult]:
