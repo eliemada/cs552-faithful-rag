@@ -74,49 +74,59 @@ def bootstrap_cells() -> list[nbformat.NotebookNode]:
         "datasets transformers accelerate "
         "litellm tqdm pandas matplotlib"
     )
-    bootstrap = '\n'.join([
-        "import logging",
-        "import os",
-        "import sys",
-        "from pathlib import Path",
-        "",
-        "logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(levelname)s] %(message)s')",
-        "",
-        "# Locate repo root (notebook lives in <repo>/notebooks/).",
-        "REPO_ROOT = Path.cwd().resolve()",
-        "while REPO_ROOT.name == 'notebooks' or not (REPO_ROOT / 'pyproject.toml').exists():",
-        "    if REPO_ROOT.parent == REPO_ROOT:",
-        "        raise RuntimeError('Could not find repo root (no pyproject.toml above notebook).')",
-        "    REPO_ROOT = REPO_ROOT.parent",
-        "if str(REPO_ROOT) not in sys.path:",
-        "    sys.path.insert(0, str(REPO_ROOT))",
-        "",
-        "# On RCP submit.sh sets these; default for laptop dev otherwise.",
-        "os.environ.setdefault('CITERIGHT_HF_REPO', 'citeright/corpus')",
-        "if Path('/scratch').is_dir():",
-        "    os.environ.setdefault('CITERIGHT_DATA_DIR', '/scratch/citeright_artifacts')",
-        "    os.environ.setdefault('HF_HOME', '/scratch/hf_cache')",
-        "",
-        "from evaluation.common import (",
-        "    artifact_root, available_models, generate, ",
-        "    load_chunk_metadata, load_faiss_index, load_gold_qa, load_paper_markdown,",
-        ")",
-        "",
-        "ART = artifact_root()",
-        "print(f'Corpus root: {ART}')",
-        "print(f'Available models: {len(available_models())}')",
-    ])
-    optional_keys = '\n'.join([
-        "# Optional: paid-API comparison arms.",
-        "# Skip these cells if you only want the local-model path (always works).",
-        "import getpass",
-        "for var in ('OPENAI_API_KEY', 'OPENROUTER_API_KEY'):",
-        "    if var not in os.environ:",
-        "        val = getpass.getpass(f'{var} (leave blank to skip): ').strip()",
-        "        if val:",
-        "            os.environ[var] = val",
-        "print('Local models always available; API arms enabled iff keys above were provided.')",
-    ])
+    bootstrap = "\n".join(
+        [
+            "import logging",
+            "import os",
+            "import sys",
+            "from pathlib import Path",
+            "",
+            "logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(levelname)s] %(message)s')",
+            "",
+            "# Locate repo root (notebook lives in <repo>/notebooks/).",
+            "REPO_ROOT = Path.cwd().resolve()",
+            "while REPO_ROOT.name == 'notebooks' or not (REPO_ROOT / 'pyproject.toml').exists():",
+            "    if REPO_ROOT.parent == REPO_ROOT:",
+            "        raise RuntimeError('Could not find repo root (no pyproject.toml above notebook).')",
+            "    REPO_ROOT = REPO_ROOT.parent",
+            "if str(REPO_ROOT) not in sys.path:",
+            "    sys.path.insert(0, str(REPO_ROOT))",
+            "",
+            "# On RCP submit.sh sets these; default for laptop dev otherwise.",
+            "os.environ.setdefault('CITERIGHT_HF_REPO', 'citeright/corpus')",
+            "if Path('/scratch').is_dir():",
+            "    os.environ.setdefault('CITERIGHT_DATA_DIR', '/scratch/citeright_artifacts')",
+            "    os.environ.setdefault('HF_HOME', '/scratch/hf_cache')",
+            "",
+            "# Bootstrap imports only — pull additional helpers in your own cells:",
+            "#   from evaluation.common import generate, load_paper_markdown,",
+            "#       load_paper_chunks, load_paper_openalex, load_embedder, load_nli_classifier",
+            "from evaluation.common import (  # noqa: E402",
+            "    artifact_root,",
+            "    available_models,",
+            "    load_chunk_metadata,",
+            "    load_faiss_index,",
+            "    load_gold_qa,",
+            ")",
+            "",
+            "ART = artifact_root()",
+            "print(f'Corpus root: {ART}')",
+            "print(f'Available models: {len(available_models())}')",
+        ]
+    )
+    optional_keys = "\n".join(
+        [
+            "# Optional: paid-API comparison arms.",
+            "# Skip these cells if you only want the local-model path (always works).",
+            "import getpass",
+            "for var in ('OPENAI_API_KEY', 'OPENROUTER_API_KEY'):",
+            "    if var not in os.environ:",
+            "        val = getpass.getpass(f'{var} (leave blank to skip): ').strip()",
+            "        if val:",
+            "            os.environ[var] = val",
+            "print('Local models always available; API arms enabled iff keys above were provided.')",
+        ]
+    )
     return [
         nbformat.v4.new_markdown_cell(
             "## Setup\n\n"
@@ -139,25 +149,25 @@ def bootstrap_cells() -> list[nbformat.NotebookNode]:
 
 
 def smoke_test_cells() -> list[nbformat.NotebookNode]:
-    smoke = '\n'.join([
-        "# Confirm the corpus loads end-to-end.",
-        "import faiss",
-        "",
-        "meta = load_chunk_metadata('coarse')",
-        "index = load_faiss_index('coarse')",
-        "gold = load_gold_qa()",
-        "",
-        "print(f'Coarse FAISS rows: {index.ntotal}')",
-        "print(f'Coarse metadata entries: {len(meta)}')",
-        "print(f'Gold Q&A pairs: {len(gold)}')",
-        "assert index.ntotal == len(meta), 'FAISS / metadata size mismatch'",
-        "",
-        "# Show one chunk so we know the schema.",
-        "first = meta[0]",
-        "print(f\"\\nExample chunk:\\n  paper_id: {first['paper_id']}\")",
-        "print(f\"  section : {first.get('section_hierarchy', [])}\")",
-        "print(f\"  text    : {first['text'][:200]}...\")",
-    ])
+    smoke = "\n".join(
+        [
+            "# Confirm the corpus loads end-to-end.",
+            "meta = load_chunk_metadata('coarse')",
+            "index = load_faiss_index('coarse')",
+            "gold = load_gold_qa()",
+            "",
+            "print(f'Coarse FAISS rows: {index.ntotal}')",
+            "print(f'Coarse metadata entries: {len(meta)}')",
+            "print(f'Gold Q&A pairs: {len(gold)}')",
+            "assert index.ntotal == len(meta), 'FAISS / metadata size mismatch'",
+            "",
+            "# Show one chunk so we know the schema.",
+            "first = meta[0]",
+            "print(f\"\\nExample chunk:\\n  paper_id: {first['paper_id']}\")",
+            "print(f\"  section : {first.get('section_hierarchy', [])}\")",
+            "print(f\"  text    : {first['text'][:200]}...\")",
+        ]
+    )
     return [
         nbformat.v4.new_markdown_cell(
             "## Smoke test\n\n"

@@ -88,7 +88,9 @@ class FAISSRetriever:
         metadata = json.loads(metadata_path.read_text())
         embedder = OpenAIEmbedder(api_key=openai_api_key, model="text-embedding-3-small")
 
-        logger.info("Loaded %s index with %d vectors from %s", chunk_type, index.ntotal, indexes_dir)
+        logger.info(
+            "Loaded %s index with %d vectors from %s", chunk_type, index.ntotal, indexes_dir
+        )
         return cls(index, metadata, embedder)
 
     @classmethod
@@ -108,13 +110,20 @@ class FAISSRetriever:
         with tempfile.NamedTemporaryFile(suffix=".faiss", delete=False) as f:
             index_path = f.name
         try:
-            logger.info("Downloading index from s3://%s/%s%s.faiss", bucket_name, index_prefix, chunk_type)
+            logger.info(
+                "Downloading index from s3://%s/%s%s.faiss", bucket_name, index_prefix, chunk_type
+            )
             s3_client.download_file(bucket_name, f"{index_prefix}{chunk_type}.faiss", index_path)
             index = faiss.read_index(index_path)
         finally:
             os.unlink(index_path)
 
-        logger.info("Downloading metadata from s3://%s/%s%s_metadata.json", bucket_name, index_prefix, chunk_type)
+        logger.info(
+            "Downloading metadata from s3://%s/%s%s_metadata.json",
+            bucket_name,
+            index_prefix,
+            chunk_type,
+        )
         response = s3_client.get_object(
             Bucket=bucket_name, Key=f"{index_prefix}{chunk_type}_metadata.json"
         )
