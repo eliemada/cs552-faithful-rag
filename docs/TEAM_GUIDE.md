@@ -28,38 +28,40 @@ covers *how* to actually work on it day-to-day.
 
 ## 1. One-time laptop setup
 
-### EPFL VPN
-Cisco Secure Client → `vpn.epfl.ch` → GASPAR creds. Required for any RCP command.
-If you also use Tailscale, **disable "Use Tailscale DNS"** while running `runai`
-— Tailscale's MagicDNS hijacks the lookup for `rcpepfl.run.ai`.
+**EPFL VPN** — Cisco Secure Client → `vpn.epfl.ch` → GASPAR creds. Required for
+all RCP commands. If you run Tailscale too, disable **"Use Tailscale DNS"** —
+its MagicDNS hijacks lookups for `rcpepfl.run.ai`.
 
-### Run:AI CLI
-1. Browser → https://rcpepfl.run.ai/ → SSO with EPFL.
-2. Top-right `?` icon → **Researcher CLI** → macOS / Linux → download.
-3. ```bash
-   chmod +x ./runai && sudo mv ./runai /usr/local/bin/runai
-   runai version
-   ```
+**Install Run:AI CLI** — log into https://rcpepfl.run.ai/ via SSO, top-right
+`?` → **Researcher CLI** → **macOS** (or Linux). The portal shows a one-line
+installer:
 
-If you get **AADSTS50105** at SSO, your account is not yet provisioned —
-email `nlp-cs552-spring2026-ta-team@groupes.epfl.ch` with your sciper and
-gaspar. Team CiteRight is **group g68**.
+```bash
+bash -c "$(curl -fsSL https://rcpepfl.run.ai/api/v1/cli-exposer/installer/mac -H 'Authorization: Bearer …')"
+```
 
-### Kubeconfig + first login
+Paste it, answer **Y** to the three prompts (PATH, auto-completion,
+auto-update), then `source ~/.zshrc` and `runai version`. If SSO fails with
+**AADSTS50105**, your account is not yet provisioned — email
+`nlp-cs552-spring2026-ta-team@groupes.epfl.ch` with sciper + gaspar. We are
+**group g68**.
+
+**Kubeconfig + first login** — `<gaspar>` is the username before `@epfl.ch`,
+e.g. `enbruno`:
+
 ```bash
 mkdir -p ~/.kube
 curl -o ~/.kube/config https://wiki.rcp.epfl.ch/public/files/kube-config.yaml
 runai config cluster rcp-caas-prod
-runai login
-runai project set course-cs-552-<your-gaspar>
+runai login                                # browser SSO
+runai project set course-cs-552-enbruno    # ← your gaspar
 ```
 
-### HuggingFace token
-Needed once, only if you want to upload artifacts (datasets, model checkpoints).
-Read-only access (e.g. downloading the corpus) does not require auth.
+**HuggingFace** — only needed for *uploading* artefacts. Reading the corpus is
+public:
 
 ```bash
-hf auth login   # paste a token from https://huggingface.co/settings/tokens
+hf auth login   # token from https://huggingface.co/settings/tokens
 ```
 
 ---
