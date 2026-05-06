@@ -40,7 +40,8 @@ def artifact_root() -> Path:
         If no usable archive is reachable (e.g. offline laptop with no mirror).
     """
     if (override := _explicit_override()) is not None:
-        return override
+        # Override is the **target** path. Populate it on first run.
+        return override if _populated(override) else _hf_download(override)
 
     if is_rcp():
         if _populated(SCRATCH_CACHE):
@@ -135,13 +136,17 @@ def load_gold_qa() -> list[dict]:
 
 
 def _explicit_override() -> Path | None:
+    """Return the user-specified artifact directory, if any.
+
+    If the directory is empty (typical for first-run on RCP, where
+    ``submit.sh`` pre-creates it via ``mkdir -p``), the caller is expected to
+    treat it as the **download target** rather than failing — so we don't
+    raise here.
+    """
     import os
 
     if env_path := os.environ.get("CITERIGHT_DATA_DIR"):
-        path = Path(env_path)
-        if not _populated(path):
-            raise RuntimeError(f"CITERIGHT_DATA_DIR={path!s} but no artifacts found")
-        return path
+        return Path(env_path)
     return None
 
 
