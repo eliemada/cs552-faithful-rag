@@ -49,9 +49,20 @@
 set -euo pipefail
 
 # ============== EDIT THESE LINES ==============
-GASPAR="gaspar"              # <-- For local runs: your EPFL username. TAs may replace this for grading.
-GROUP="gXX"                  # <-- REQUIRED FOR SUBMISSION: your team, e.g. g07.
+GASPAR="${GASPAR:-gaspar}"   # <-- For local runs: GASPAR=<username> ./submit.sh. TAs may replace.
+GROUP="${GROUP:-g68}"        # <-- Team CiteRight (CS-552 Spring 2026). Confirmed by TAs.
 # ==============================================
+#
+# Find your team group with:
+#   runai login && kubectl get pvc | grep scratch
+# Output line "course-cs-552-scratch-gXX" — the gXX part is GROUP.
+#
+# Team CiteRight notes:
+# - Notebooks load corpus artefacts via $CITERIGHT_DATA_DIR (set below).
+# - First run downloads ~3 GB from huggingface.co/datasets/citeright/corpus.
+# - Re-runs read the cache.
+# - API keys (OPENAI / OPENROUTER) are optional and read inside notebooks
+#   via getpass — DO NOT put them in this file.
 
 # Refuse to run with placeholders. GASPAR is required only by whoever is
 # launching the job; GROUP must be correct in the submitted file.
@@ -98,11 +109,13 @@ runai submit \
   --environment HF_HOME=/scratch/hf_cache \
   --environment HF_HUB_ENABLE_HF_TRANSFER=1 \
   --environment WANDB_DIR=/scratch/wandb \
+  --environment CITERIGHT_DATA_DIR=/scratch/citeright_artifacts \
+  --environment CITERIGHT_HF_REPO=citeright/corpus \
   --existing-pvc "claimname=${SCRATCH_PVC},path=/scratch" \
   --existing-pvc "claimname=${SHARED_RO_PVC},path=/shared-ro" \
   --existing-pvc "claimname=${SHARED_RW_PVC},path=/shared-rw" \
   --command -- /bin/bash -lc "\
-    mkdir -p /scratch/hf_cache /scratch/wandb && \
+    mkdir -p /scratch/hf_cache /scratch/wandb /scratch/citeright_artifacts && \
     ln -sf \"\$(command -v python3)\" /usr/local/bin/python && \
     cd /scratch && \
     jupyter lab \
