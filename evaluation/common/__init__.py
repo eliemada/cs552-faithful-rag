@@ -13,6 +13,7 @@ models
 
 from evaluation.common.data_loader import (
     artifact_root,
+    ensure_paper_artifacts,
     iter_all_chunks,
     list_paper_ids,
     load_chunk_metadata,
@@ -36,6 +37,7 @@ __all__ = [
     "LOCAL_MODELS_DEFAULT",
     "artifact_root",
     "available_models",
+    "ensure_paper_artifacts",
     "generate",
     "iter_all_chunks",
     "list_paper_ids",
