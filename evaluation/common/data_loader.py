@@ -150,8 +150,27 @@ def _explicit_override() -> Path | None:
     return None
 
 
+# The four FAISS files are the canonical sentinel for a complete corpus
+# download. They land last (largest binaries) and the loaders all need them,
+# so checking for these guards against partial / in-flight downloads being
+# mistaken for a populated cache.
+_REQUIRED_FILES: tuple[str, ...] = (
+    "indexes/coarse.faiss",
+    "indexes/coarse_metadata.json",
+    "indexes/fine.faiss",
+    "indexes/fine_metadata.json",
+)
+
+
 def _populated(path: Path) -> bool:
-    return path.is_dir() and any(path.iterdir())
+    """Return True iff the artifact dir contains the required corpus files.
+
+    A bare ``any(path.iterdir())`` check is too lax: a partial HF download
+    leaves the directory non-empty long before all files have been written,
+    which would trick ``artifact_root()`` into returning early and the
+    downstream loaders into raising ``FileNotFoundError``.
+    """
+    return path.is_dir() and all((path / rel).is_file() for rel in _REQUIRED_FILES)
 
 
 def _hf_download(target: Path) -> Path:
