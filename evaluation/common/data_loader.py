@@ -112,13 +112,38 @@ def list_paper_ids() -> list[str]:
 
 
 def load_paper_markdown(paper_id: str) -> str:
-    """Return the Dolphin-parsed markdown for one paper."""
-    return (artifact_root() / "processed" / paper_id / "document.md").read_text()
+    """Return the Dolphin-parsed markdown for one paper.
+
+    Lazy-fetches the file from ``citeright/corpus`` if it is not already on disk.
+    This avoids needing to bulk-download the whole 999-paper ``processed/``
+    subtree (which can hit HF rate limits) — pay only for what you read.
+    """
+    rel = f"processed/{paper_id}/document.md"
+    return _ensure_file(rel).read_text()
 
 
 def load_paper_openalex(paper_id: str) -> dict:
-    """Return the OpenAlex metadata record for one paper (DOI, year, OA status, ...)."""
-    return json.loads((artifact_root() / "raw_metadata" / f"{paper_id}.json").read_text())
+    """Return the OpenAlex metadata record for one paper (DOI, year, OA status, ...).
+
+    Lazy-fetches if missing — see :func:`load_paper_markdown` for rationale.
+    """
+    rel = f"raw_metadata/{paper_id}.json"
+    return json.loads(_ensure_file(rel).read_text())
+
+
+def ensure_paper_artifacts(paper_id: str) -> None:
+    """Pre-fetch every artefact a single paper might be queried for.
+
+    Useful at the start of a notebook section that iterates over a fixed list
+    of paper IDs (e.g. all gold-Q&A papers): warm the cache once, then every
+    subsequent loader call is a local read.
+    """
+    for rel in (
+        f"processed/{paper_id}/document.md",
+        f"processed/{paper_id}/metadata.json",
+        f"raw_metadata/{paper_id}.json",
+    ):
+        _ensure_file(rel)
 
 
 # ---------- gold dataset (lives in repo, not in HF artifacts) ----------
@@ -171,6 +196,40 @@ def _populated(path: Path) -> bool:
     downstream loaders into raising ``FileNotFoundError``.
     """
     return path.is_dir() and all((path / rel).is_file() for rel in _REQUIRED_FILES)
+
+
+def _ensure_file(rel_path: str) -> Path:
+    """Return absolute path to ``rel_path`` inside the artifact root,
+    downloading it from HuggingFace if not present.
+
+    Single-file fetch is far gentler on HF rate limits than bulk
+    ``snapshot_download`` of 71 k objects, and it's enough for most loaders
+    that touch a small slice of the corpus per run.
+    """
+    art = artifact_root()
+    local = art / rel_path
+    if local.is_file():
+        return local
+
+    try:
+        from huggingface_hub import hf_hub_download  # type: ignore[import-not-found]
+    except ImportError as exc:
+        raise RuntimeError(
+            f"Missing corpus file {rel_path!r} and huggingface_hub is not installed. "
+            "Install with: pip install huggingface_hub"
+        ) from exc
+
+    import os as _os
+
+    logger.info("Lazy-fetching %s from %s", rel_path, HF_CORPUS_REPO)
+    hf_hub_download(
+        HF_CORPUS_REPO,
+        rel_path,
+        repo_type="dataset",
+        local_dir=str(art),
+        token=_os.environ.get("HF_TOKEN"),
+    )
+    return local
 
 
 def _hf_download(target: Path) -> Path:
