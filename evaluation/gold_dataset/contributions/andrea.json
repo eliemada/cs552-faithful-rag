@@ -18,7 +18,48 @@
             "paper_id": "00002_W2122361802",
             "char_start": 22713,
             "char_end": 22944,
-            "quote": "we have a volatile mix of two powerful types of \u201ctransaction costs\u201d that can burden innovation: (1) the complements problem, the solution of which requires coordination, perhaps large-scale coordination; and (2) the hold-up problem"
+            "quote": "we have a volatile mix of two powerful types of “transaction costs” that can burden innovation: (1) the complements problem, the solution of which requires coordination, perhaps large-scale coordination; and (2) the hold-up problem"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q005",
+    "question": "According to Shapiro (2001), what economic problem do cross-licenses solve, and what happens to product prices in their absence?",
+    "gold_answer": "Cross-licenses solve the complements problem between two firms, making them highly pro-competitive. Without cross-licenses or patent pools, products bear 'multiple patent burdens' which magnify the static-monopoly costs by pushing prices well above marginal costs.",
+    "difficulty": "multi-hop",
+    "category": "multi_hop",
+    "annotator": "andrea",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Cross-licenses solve the complements problem between two firms and are highly pro-competitive.",
+        "supporting_spans": [
+          {
+            "paper_id": "00002_W2122361802",
+            "char_start": 25607,
+            "char_end": 25717,
+            "quote": "cross-licenses can solve the complements problem, at least among two firms, and thus be highly pro-competitive"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c002",
+        "text": "Without cross-licenses or patent pools, products bear 'multiple patent burdens' that magnify static-monopoly costs by raising prices well above marginal costs.",
+        "supporting_spans": [
+          {
+            "paper_id": "00002_W2122361802",
+            "char_start": 16509,
+            "char_end": 16797,
+            "quote": "without cross-licenses or patent pools, there is a tendency for products to bear “ multiple patent burdens. ” The buildup of licensing fees can have several unattractive consequences. First, the well-known costs of static monopoly power are magnified: prices are well above marginal costs"
           }
         ],
         "annotator_label": "supports",
