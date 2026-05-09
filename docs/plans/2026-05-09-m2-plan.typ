@@ -7,7 +7,21 @@
 #align(center)[
   #text(size: 14pt, weight: "bold")[CiteRight — M2 Plan]
   #v(-4pt)
-  #text(size: 9pt)[CS-552 · Spring 2026 · drafted 2026-05-09]
+  #text(size: 9pt)[CS-552 · Spring 2026 · drafted 2026-05-09 · rev. 2026-05-09]
+]
+
+#block(
+  fill: rgb("#e9f7ee"),
+  inset: 6pt,
+  radius: 3pt,
+  width: 100%,
+)[
+  #text(size: 9pt)[
+    *Status — 2026-05-09:* Phase 1 (foundation) merged in
+    #link("https://github.com/eliemada/cs552-faithful-rag/pull/9")[PR #9].
+    Schema, validator, aggregator, IAA pipeline, CI gate — *shipped*. 26
+    unit tests green. Annotation can start now.
+  ]
 ]
 
 == What the feedback told us
@@ -30,9 +44,9 @@ Push to 75–100 QA pairs *only* if quality holds. Defer the full ablation grid,
   inset: 5pt,
   stroke: 0.4pt + gray,
   [*Dates*], [*Owner*], [*Deliverable*],
-  [May 9–10], [Elie], [Lock schema (`claims[]`, `(paper_id, char_start, char_end)` spans), rubric.],
-  [May 9–11], [Faruk], [`scripts/validate_gold_qa.py` (schema, paper-id, span re-locator), IAA spot-check pipeline, κ computation.],
-  [May 9–16], [All], [13 QA pairs each → freeze v1 ≥ 50 pairs. Daily 15-min sync.],
+  [#strike[May 9–10]], [Elie], [#strike[Lock schema, rubric.] *Done — PR #9.*],
+  [#strike[May 9–11]], [Faruk], [#strike[`validate_gold_qa.py`, IAA pipeline, κ.] *Done — PR #9. Faruk now starts Phase 5 (failure-mode taxonomy) earlier; see below.*],
+  [May 9–16], [All], [13 QA pairs each → freeze v1 ≥ 50 pairs. Daily 15-min sync. *Annotate `contributions/<your-name>.json`, run `validate_gold_qa.py --strict` locally before PR.*],
   [May 11–18], [Elie], [Two retrieval configs: \ A = `text-embedding-3-small`, 300-char, no reranker \ B = `BGE-M3`, 2000-char, ZeroEntropy reranker. Start re-indexing May 11.],
   [May 13–20], [Andrea], [Faithfulness: claim split → DeBERTa-v3 NLI, `CitationSupport@τ` (τ = 0.5, 0.7).],
   [May 16–22], [Faruk], [Failure-mode taxonomy across both configs: hallucination · mis-citation · partial support · retrieval miss. Curate 15 errors → seeds CRAG triggers post-M2.],
