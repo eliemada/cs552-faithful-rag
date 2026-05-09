@@ -11,7 +11,12 @@ authors = [
 ]
 
 # Minimal root dependencies
-dependencies = []
+dependencies = [
+    "jupyter>=1.1.1",
+    "sentencepiece>=0.2.1",
+    "torch>=2.9.1",
+    "transformers>=4.57.3",
+]
 
 [tool.uv.workspace]
 members = [

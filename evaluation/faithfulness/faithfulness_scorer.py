@@ -43,30 +43,71 @@ class VerificationResult:
 def extract_claims(answer: str) -> list[str]:
     """
     Extract individual factual claims from a generated answer.
-
-    TODO: Implement using either:
-    - Rule-based sentence splitting + filtering
-    - LLM-prompted claim decomposition (FActScore-style)
+    
+    Currently uses rule-based sentence splitting (placeholder).
+    TODO: Replace with LLM-prompted claim decomposition (FActScore-style)
+          once OpenRouter API key is available.
+    
+    Args:
+        answer: The full text of the generated RAG answer
+    
+    Returns:
+        A list of atomic claim strings
     """
-    raise NotImplementedError("Implement claim extraction")
+    import re
+
+    # Split on sentence-ending punctuation followed by whitespace
+    sentences = re.split(r'(?<=[.!?])\s+', answer.strip())
+    
+    # Filter out very short fragments and empty strings
+    claims = [s.strip() for s in sentences if len(s.strip()) > 15]
+    
+    return claims
 
 
 def verify_claim_nli(
     claim: str,
     passage: str,
-    model=None,
-    tokenizer=None,
+    nli_pipeline=None,
 ) -> tuple[VerificationLabel, float]:
     """
     Use NLI model to check if passage entails the claim.
-
-    TODO: Load DeBERTa-v3-large-mnli from HuggingFace:
-        from transformers import AutoModelForSequenceClassification, AutoTokenizer
-        model = AutoModelForSequenceClassification.from_pretrained(
-            "microsoft/deberta-v3-large-mnli"
-        )
+    
+    Args:
+        claim: The atomic claim to verify
+        passage: The cited passage that supposedly supports the claim
+        nli_pipeline: Optional pre-loaded HuggingFace pipeline (for efficiency).
+                      If None, loads the model on first call.
+    
+    Returns:
+        Tuple of (VerificationLabel, confidence score)
     """
-    raise NotImplementedError("Implement NLI verification")
+    from transformers import pipeline
+
+    # Load model if not provided (allows reuse across many calls)
+    if nli_pipeline is None:
+        nli_pipeline = pipeline(
+            "zero-shot-classification",
+            model="cross-encoder/nli-deberta-v3-small"
+        )
+
+    # Run NLI: does the passage entail, contradict, or stay neutral to the claim?
+    result = nli_pipeline(
+        passage,
+        candidate_labels=["entailment", "contradiction", "neutral"],
+        hypothesis_template="This text means that {}."
+    )
+    
+    top_label = result["labels"][0]
+    top_score = float(result["scores"][0])
+
+    # Map NLI labels to our citation labels
+    if top_label == "entailment" and top_score > 0.5:
+        return VerificationLabel.SUPPORTED, round(top_score, 3)
+    elif top_label == "contradiction":
+        return VerificationLabel.NOT_SUPPORTED, round(top_score, 3)
+    else:
+        return VerificationLabel.NOT_SUPPORTED, round(top_score, 3)
 
 
 def compute_faithfulness_score(results: list[VerificationResult]) -> dict:
