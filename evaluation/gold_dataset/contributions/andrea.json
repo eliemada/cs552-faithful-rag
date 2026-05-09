@@ -105,5 +105,32 @@
         "reviewer_label": null
       }
     ]
+  },
+  {
+    "id": "q008",
+    "question": "According to the surveys reviewed by Mendonça et al. (2004), how do firms generally rank patents as a means of appropriating returns from innovation, compared to marketing activities?",
+    "gold_answer": "A common finding across large-scale innovation surveys is that patents tend to rank relatively low as a means of appropriating innovation returns, except in a few industries where they play a strategic role. Marketing activities and assets play a wider and more significant role.",
+    "difficulty": "single-hop",
+    "category": "comparison",
+    "annotator": "andrea",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Across innovation surveys, patents tend to rank lower than marketing activities as a means of appropriating innovation returns, except in a few strategic industries.",
+        "supporting_spans": [
+          {
+            "paper_id": "00004_W2114989862",
+            "char_start": 29544,
+            "char_end": 29852,
+            "quote": "A common finding of these studies is that, as a means of appropriating innovation returns, patents tend to rank lower in these hierarchies, with the exception of a few industries in which they play a strategic role. In contrast, marketing activities and assets tend to play a wider and more significant role."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
   }
 ]
