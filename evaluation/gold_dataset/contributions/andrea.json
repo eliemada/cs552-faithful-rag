@@ -78,5 +78,32 @@
     "review_status": "pending",
     "iaa_subset": false,
     "claims": []
+  },
+  {
+    "id": "q007",
+    "question": "According to Mendonça et al. (2004), what advantage do trademarks have over patents and R&D as innovation indicators in terms of firm coverage?",
+    "gold_answer": "Trademarks are used by a wider range of firms than patents or R&D, capturing innovation activity in services and in small and medium-sized enterprises (SMEs).",
+    "difficulty": "single-hop",
+    "category": "comparison",
+    "annotator": "andrea",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Trademarks are used by a wider set of firms than patents and R&D, capturing innovation in services and SMEs.",
+        "supporting_spans": [
+          {
+            "paper_id": "00004_W2114989862",
+            "char_start": 5917,
+            "char_end": 6066,
+            "quote": "Trademarks are used by a wider set of business firms, capturing change in service activities as well as in small and medium-sized enterprises (SMEs)."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
   }
 ]
