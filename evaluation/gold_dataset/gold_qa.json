@@ -1,8 +1,8 @@
 [
   {
     "id": "q001",
-    "question": "What does Shapiro (2001) argue is the empirical relationship between cross-licensing and innovation in industries characterized by overlapping patent rights?",
-    "gold_answer": "Shapiro argues that the existence of a web of cross-licenses offers direct empirical support for the view that cross-licensing promotes rather than stifles innovation in industries with overlapping patent rights.",
+    "question": "Does Shapiro (2001) treat cross-licensing as a brake or a boost on innovation?",
+    "gold_answer": "A boost. He reads the spread of cross-licenses across industries with heavy patent overlap as direct empirical support that they promote, not stifle, innovation.",
     "difficulty": "single-hop",
     "category": "policy_impact",
     "annotator": "elie",
@@ -12,7 +12,7 @@
     "claims": [
       {
         "id": "c001",
-        "text": "Shapiro argues that the prevalence of cross-licenses provides direct empirical support for the view that cross-licensing promotes rather than stifles innovation.",
+        "text": "Shapiro takes the prevalence of cross-licenses as empirical support that cross-licensing promotes rather than stifles innovation.",
         "supporting_spans": [
           {
             "paper_id": "00002_W2122361802",
@@ -28,8 +28,8 @@
   },
   {
     "id": "q002",
-    "question": "What evidence does the patent-economics literature provide that strong patent rights can impede downstream innovation in technology-intensive sectors?",
-    "gold_answer": "Shapiro (2001) argues that without cross-licenses or patent pools, products in industries with overlapping patents bear 'multiple patent burdens' whose buildup of licensing fees magnifies the costs of static monopoly power. Galasso and Schankerman (2014) provide causal evidence from court-induced patent invalidations showing that patent rights block downstream innovation specifically in computers, electronics and medical instruments, but not in drugs, chemicals or mechanical technologies.",
+    "question": "What does the literature say about patents holding back follow-on innovation in technology-heavy industries?",
+    "gold_answer": "Two complementary points. Shapiro (2001) argues that without cross-licenses or pools, products in patent-dense industries bear 'multiple patent burdens' that amplify the static-monopoly costs of high prices. Galasso and Schankerman (2014) find that patent rights block downstream innovation in computers, electronics and medical instruments, but not in drugs, chemicals or mechanical technologies.",
     "difficulty": "multi-hop",
     "category": "multi_hop",
     "annotator": "elie",
@@ -39,7 +39,7 @@
     "claims": [
       {
         "id": "c001",
-        "text": "Without cross-licenses or patent pools, products in industries with overlapping patents bear 'multiple patent burdens' whose accumulating licensing fees magnify the costs of static monopoly power.",
+        "text": "Without cross-licenses or pools, products in patent-dense industries bear 'multiple patent burdens' that magnify static-monopoly costs.",
         "supporting_spans": [
           {
             "paper_id": "00002_W2122361802",
@@ -53,7 +53,7 @@
       },
       {
         "id": "c002",
-        "text": "Galasso and Schankerman (2014) find that patent rights block downstream innovation in computers, electronics and medical instruments, but not in drugs, chemicals or mechanical technologies.",
+        "text": "Patent rights block downstream innovation in computers, electronics and medical instruments, but not in drugs, chemicals or mechanical technologies.",
         "supporting_spans": [
           {
             "paper_id": "00010_W2116398574",
@@ -69,8 +69,8 @@
   },
   {
     "id": "q003",
-    "question": "What was the median outcome of patent-infringement cases decided by the EU Unified Patent Court during its first full year of operation in 2024?",
-    "gold_answer": "Not covered by the corpus. The papers in this collection predate the Unified Patent Court's operational period and do not contain post-2023 case-outcome statistics for that court.",
+    "question": "How many patent-infringement cases did the EU Unified Patent Court decide in 2024?",
+    "gold_answer": "Not covered by the corpus.",
     "difficulty": "unanswerable",
     "category": "factual",
     "annotator": "elie",
