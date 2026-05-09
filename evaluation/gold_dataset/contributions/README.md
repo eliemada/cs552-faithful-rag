@@ -1,0 +1,32 @@
+# Per-member contributions
+
+Edit **only your own file**:
+
+| Member  | File             |
+|---------|------------------|
+| Elie    | `elie.json`      |
+| Andrea  | `andrea.json`    |
+| Faruk   | `faruk.json`     |
+| Yusif   | `yusif.json`     |
+
+## Why per-member files
+
+Four people committing to one `gold_qa.json` is a merge-conflict factory.
+Per-member files mean conflicts only happen when two people touch the same
+file — which they shouldn't.
+
+`gold_qa.json` at the parent level is the **aggregated** artifact, produced
+by `scripts/aggregate_gold_qa.py`. CI verifies it stays in sync.
+
+## ID convention
+
+To prevent ID collisions across members without coordination:
+
+| Member  | Question id range |
+|---------|-------------------|
+| Elie    | `q001` … `q099`   |
+| Andrea  | `q100` … `q199`   |
+| Faruk   | `q200` … `q299`   |
+| Yusif   | `q300` … `q399`   |
+
+Claim IDs (`c001`, `c002`, ...) only need to be unique inside one QA pair.

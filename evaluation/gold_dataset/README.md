@@ -1,43 +1,59 @@
-# Gold Evaluation Dataset
+# Gold evaluation dataset (v0.1)
 
-## Purpose
-50-100 expert-annotated Q&A pairs for evaluating RAG pipeline quality.
+Small, expert-annotated benchmark for citation-faithful RAG. Target: 50
+validated Q&A pairs by **2026-05-16** for M2.
 
-## Format
-Each entry in `gold_qa.json` should have:
-```json
-{
-  "id": "q001",
-  "question": "What is the impact of patent protection on innovation in developing countries?",
-  "gold_answer": "The expected answer based on the literature...",
-  "gold_passages": [
-    {
-      "paper_id": "02596_W1962380625",
-      "passage": "The exact passage from the paper that answers this...",
-      "chunk_id": "coarse_1234"
-    }
-  ],
-  "difficulty": "single-hop",
-  "category": "policy_impact",
-  "annotator": "first_last"
-}
+## Files
+
+| File                                | What it is                                     |
+|-------------------------------------|------------------------------------------------|
+| [`SCHEMA.json`](./SCHEMA.json)      | JSON Schema 2020-12, the canonical spec.       |
+| [`SCHEMA.md`](./SCHEMA.md)          | Human walkthrough of the schema.               |
+| [`RUBRIC.md`](./RUBRIC.md)          | Annotation guide. **Read first.**              |
+| [`paper_ids.txt`](./paper_ids.txt)  | Allowlist snapshot for offline CI.             |
+| `contributions/<name>.json`         | Per-member sources of truth.                   |
+| `gold_qa.json`                      | Aggregated artifact (CI keeps in sync).        |
+| `reviews/`                          | IAA review notes — see folder README.          |
+
+## Workflow
+
+```bash
+# 1. edit your own contribution
+$EDITOR evaluation/gold_dataset/contributions/<your-name>.json
+
+# 2. validate locally with full corpus access
+uv run python scripts/validate_gold_qa.py --strict
+
+# 3. refresh the aggregated artifact
+uv run python scripts/aggregate_gold_qa.py
+
+# 4. open a PR — CI runs the fast (offline) validator
+git add evaluation/gold_dataset/
+git commit -m "feat(gold): add 3 pairs (q010-q012) on patent reform impact"
 ```
 
-## Categories
-- `policy_impact` — Questions about effects of policies
-- `methodology` — Questions about research methods used
-- `comparison` — Questions comparing approaches/countries/sectors
-- `factual` — Direct factual extraction
-- `multi_hop` — Requires combining info from multiple papers
+## What CI checks (fast / offline)
 
-## Difficulty Levels
-- `single-hop` — Answer found in one passage
-- `multi-hop` — Requires combining 2+ passages
-- `unanswerable` — Not covered by the corpus (tests rejection)
+- JSON Schema compliance
+- Question / claim ID uniqueness and namespacing
+- `paper_id` ∈ `paper_ids.txt`
+- `char_end > char_start ≥ 0`, non-empty `quote`
+- `unanswerable` ↔ empty `claims[]` invariant
+- `gold_qa.json == aggregate(contributions/*)`
 
-## Assignment
-Each team member writes 12-25 Q&A pairs:
-- [ ] Person 1: 
-- [ ] Person 2: 
-- [ ] Person 3: 
-- [ ] Person 4: 
+## What you must check locally (--strict)
+
+- `markdown[char_start:char_end] == quote` after LF normalisation
+
+CI cannot do this — the corpus is 3 GB on HF and not on the runner.
+
+## Targets (M2)
+
+- Per person: 13 pairs (≥ 1 unanswerable, ≥ 2 multi-hop, ≥ 5 in IAA subset).
+- Total: 52 pairs by 2026-05-16, frozen as `gold_qa_v1`.
+- IAA: Cohen's κ ≥ 0.6 on the IAA subset before reporting headline numbers.
+
+## Schema versioning
+
+This is **v0.1**. Breaking changes get a new file (`SCHEMA.v0.2.json`) and a
+fresh PR. Don't mutate v0.1 once the M2 freeze is in.
