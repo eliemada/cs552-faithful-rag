@@ -1,0 +1,29 @@
+[
+  {
+    "id": "q004",
+    "question": "According to Shapiro (2001), what are the two main types of transaction costs that overlapping patents impose on innovation?",
+    "gold_answer": "Shapiro identifies two transaction costs: (1) the complements problem, which requires coordination among multiple patent holders, and (2) the hold-up problem, where firms inadvertently infringe on patents issued after their products were designed.",
+    "difficulty": "single-hop",
+    "category": "policy_impact",
+    "annotator": "andrea",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Shapiro identifies two transaction costs from overlapping patents: the complements problem (requiring coordination) and the hold-up problem.",
+        "supporting_spans": [
+          {
+            "paper_id": "00002_W2122361802",
+            "char_start": 22713,
+            "char_end": 22944,
+            "quote": "we have a volatile mix of two powerful types of \u201ctransaction costs\u201d that can burden innovation: (1) the complements problem, the solution of which requires coordination, perhaps large-scale coordination; and (2) the hold-up problem"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  }
+]

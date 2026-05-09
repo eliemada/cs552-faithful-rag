@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://citeright.epfl/schemas/gold-qa.v0.1.json",
+  "title": "CiteRight Gold Q&A pair (v0.1)",
+  "description": "One annotated Q&A pair with claim-level supporting spans into the corpus.",
+  "type": "array",
+  "items": { "$ref": "#/$defs/QAPair" },
+
+  "$defs": {
+    "QAPair": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "question",
+        "gold_answer",
+        "difficulty",
+        "category",
+        "annotator",
+        "review_status",
+        "claims"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^q[0-9]{3,4}$",
+          "description": "Globally unique question id, e.g. 'q001'."
+        },
+        "question": { "type": "string", "minLength": 1 },
+        "gold_answer": { "type": "string", "minLength": 1 },
+        "difficulty": {
+          "type": "string",
+          "enum": ["single-hop", "multi-hop", "unanswerable"]
+        },
+        "category": {
+          "type": "string",
+          "enum": ["policy_impact", "methodology", "comparison", "factual", "multi_hop"]
+        },
+        "annotator": {
+          "type": "string",
+          "enum": ["elie", "andrea", "faruk", "yusif"]
+        },
+        "reviewer": {
+          "type": ["string", "null"],
+          "enum": ["elie", "andrea", "faruk", "yusif", null]
+        },
+        "review_status": {
+          "type": "string",
+          "enum": ["pending", "approved", "rejected"]
+        },
+        "iaa_subset": { "type": "boolean", "default": false },
+        "claims": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Claim" }
+        }
+      }
+    },
+
+    "Claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "text", "supporting_spans"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^c[0-9]{3,4}$",
+          "description": "Claim id unique within the QA pair."
+        },
+        "text": { "type": "string", "minLength": 1 },
+        "supporting_spans": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Span" }
+        },
+        "annotator_label": {
+          "type": ["string", "null"],
+          "enum": ["supports", "contradicts", "unrelated", null]
+        },
+        "reviewer_label": {
+          "type": ["string", "null"],
+          "enum": ["supports", "contradicts", "unrelated", null]
+        }
+      }
+    },
+
+    "Span": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["paper_id", "char_start", "char_end", "quote"],
+      "properties": {
+        "paper_id": {
+          "type": "string",
+          "pattern": "^[0-9]{5}_[A-Za-z0-9]+$",
+          "description": "Paper id as it appears in chunks/<paper_id>_*.json."
+        },
+        "char_start": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Inclusive Unicode codepoint offset into the LF-normalised document.md."
+        },
+        "char_end": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Exclusive Unicode codepoint offset; must satisfy char_end > char_start."
+        },
+        "quote": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Verbatim slice of document.md[char_start:char_end] after LF-normalisation. Strict mode re-checks this against the live corpus."
+        }
+      }
+    }
+  }
+}
