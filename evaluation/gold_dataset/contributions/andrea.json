@@ -66,5 +66,17 @@
         "reviewer_label": null
       }
     ]
+  },
+  {
+    "id": "q006",
+    "question": "What were the total patent litigation costs incurred by the US semiconductor industry in 2023?",
+    "gold_answer": "Not covered by the corpus.",
+    "difficulty": "unanswerable",
+    "category": "factual",
+    "annotator": "andrea",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": []
   }
 ]
