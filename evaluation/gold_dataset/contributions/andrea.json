@@ -335,5 +335,32 @@
         "reviewer_label": null
       }
     ]
+  },
+  {
+    "id": "q016",
+    "question": "According to Sell and Prakash's (2004) summary of Kingdon (1984), what two types of changes can open a policy window?",
+    "gold_answer": "A policy window can open because of changes in the problem stream (e.g., the HIV/AIDS crisis) or changes in the political stream (e.g., the election of a new leader with different priorities).",
+    "difficulty": "single-hop",
+    "category": "methodology",
+    "annotator": "andrea",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Per Kingdon (1984), a policy window can open due to changes in the problem stream or in the political stream.",
+        "supporting_spans": [
+          {
+            "paper_id": "00007_W2150316800",
+            "char_start": 42581,
+            "char_end": 42775,
+            "quote": "For Kingdon (1984) , a policy window could open because of changes either in the problem stream (HIV/AIDS crisis) or in the political stream (election of a new leader with different priorities)."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
   }
 ]
