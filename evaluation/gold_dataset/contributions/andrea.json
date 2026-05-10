@@ -159,5 +159,46 @@
         "reviewer_label": null
       }
     ]
+  },
+  {
+    "id": "q010",
+    "question": "How do Lemley and Shapiro (2005) reframe what a patent grants its owner, and what two dimensions of uncertainty do they identify?",
+    "gold_answer": "Lemley and Shapiro reframe a patent as conferring not the right to exclude rivals, but only the right to try to exclude by asserting the patent in court. They identify two fundamental dimensions of patent uncertainty: (1) uncertainty about the commercial significance of the invention, and (2) uncertainty about the validity and scope of the legal right being granted.",
+    "difficulty": "multi-hop",
+    "category": "multi_hop",
+    "annotator": "andrea",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "A patent confers not the right to exclude, but only the right to try to exclude by asserting the patent in court.",
+        "supporting_spans": [
+          {
+            "paper_id": "00005_W4233445588",
+            "char_start": 1424,
+            "char_end": 1552,
+            "quote": "patent does not confer upon its owner the right to exclude but rather a right to try to exclude by asserting the patent in court"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c002",
+        "text": "There are two fundamental dimensions of patent uncertainty: commercial significance of the invention, and validity and scope of the legal right.",
+        "supporting_spans": [
+          {
+            "paper_id": "00005_W4233445588",
+            "char_start": 3256,
+            "char_end": 3472,
+            "quote": "There are two fundamental dimensions of uncertainty: 1) uncertainty about the commercial significance of the invention being patented, and 2) uncertainty about the validity and scope of the legal right being granted."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
   }
 ]
