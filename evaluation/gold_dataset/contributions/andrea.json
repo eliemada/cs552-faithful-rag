@@ -308,5 +308,32 @@
         "reviewer_label": null
       }
     ]
+  },
+  {
+    "id": "q015",
+    "question": "How did the business and NGO campaigns frame intellectual property rights according to Sell and Prakash (2004)?",
+    "gold_answer": "The business campaign framed IPR protection as part of free trade, while the NGO campaign framed IPR in terms of public health.",
+    "difficulty": "single-hop",
+    "category": "comparison",
+    "annotator": "andrea",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "The business campaign grafted IPR protection onto the free-trade frame, while the NGO campaign grafted IPR onto the public-health frame.",
+        "supporting_spans": [
+          {
+            "paper_id": "00007_W2150316800",
+            "char_start": 5246,
+            "char_end": 5425,
+            "quote": "Each campaign grafted new normative frames onto existing ones; the business campaign grafted IPR protection onto free trade, while the NGO campaign grafted IPR onto public health."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
   }
 ]
