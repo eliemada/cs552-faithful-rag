@@ -40,33 +40,113 @@ class VerificationResult:
     explanation: str
 
 
-def extract_claims(answer: str) -> list[str]:
+def extract_claims(answer: str, model: str = "openai/gpt-4o-mini") -> list[str]:
     """
-    Extract individual factual claims from a generated answer.
+    Extract atomic factual claims from a generated RAG answer using an LLM.
+    
+    Falls back to rule-based sentence splitting if no API key is set.
+    
+    Args:
+        answer: The full text of the generated RAG answer
+        model: OpenRouter model spec (default: GPT-4o-mini, cheap and fast)
+    
+    Returns:
+        A list of atomic claim strings, each a single verifiable proposition.
+    """
+    import os
+    import json
+    import urllib.request
+    import re
 
-    TODO: Implement using either:
-    - Rule-based sentence splitting + filtering
-    - LLM-prompted claim decomposition (FActScore-style)
-    """
-    raise NotImplementedError("Implement claim extraction")
+    api_key = os.environ.get("OPENROUTER_API_KEY")
+    
+    # Fallback: rule-based splitting if no API key
+    if not api_key:
+        sentences = re.split(r'(?<=[.!?])\s+', answer.strip())
+        return [s.strip() for s in sentences if len(s.strip()) > 15]
+
+    # LLM-based decomposition (FActScore-style)
+    prompt = f"""Decompose the following answer into atomic factual claims.
+Each claim must be ONE independently verifiable proposition.
+If two facts are joined by "and", split them.
+Ignore questions, opinions, and meta-commentary.
+Return ONLY a JSON array of strings, no other text.
+
+Answer:
+\"\"\"{answer}\"\"\"
+
+JSON array:"""
+
+    body = json.dumps({
+        "model": model,
+        "messages": [{"role": "user", "content": prompt}],
+        "temperature": 0,
+    }).encode()
+
+    req = urllib.request.Request(
+        "https://openrouter.ai/api/v1/chat/completions",
+        data=body,
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+        },
+    )
+
+    with urllib.request.urlopen(req) as response:
+        data = json.loads(response.read())
+    
+    text = data["choices"][0]["message"]["content"].strip()
+    
+    # Strip markdown code fences if present
+    text = re.sub(r"^```(?:json)?\s*", "", text)
+    text = re.sub(r"\s*```$", "", text)
+    
+    return json.loads(text)
 
 
 def verify_claim_nli(
     claim: str,
     passage: str,
-    model=None,
-    tokenizer=None,
+    nli_pipeline=None,
 ) -> tuple[VerificationLabel, float]:
     """
     Use NLI model to check if passage entails the claim.
-
-    TODO: Load DeBERTa-v3-large-mnli from HuggingFace:
-        from transformers import AutoModelForSequenceClassification, AutoTokenizer
-        model = AutoModelForSequenceClassification.from_pretrained(
-            "microsoft/deberta-v3-large-mnli"
-        )
+    
+    Args:
+        claim: The atomic claim to verify
+        passage: The cited passage that supposedly supports the claim
+        nli_pipeline: Optional pre-loaded HuggingFace pipeline (for efficiency).
+                      If None, loads the model on first call.
+    
+    Returns:
+        Tuple of (VerificationLabel, confidence score)
     """
-    raise NotImplementedError("Implement NLI verification")
+    from transformers import pipeline
+
+    # Load model if not provided (allows reuse across many calls)
+    if nli_pipeline is None:
+        nli_pipeline = pipeline(
+            "zero-shot-classification",
+            model="cross-encoder/nli-deberta-v3-small"
+        )
+
+    # Run NLI: does the passage entail, contradict, or stay neutral to the claim?
+    result = nli_pipeline(
+        passage,
+        candidate_labels=["entailment", "contradiction", "neutral"],
+        hypothesis_template="This text means that {}."
+    )
+    
+    top_label = result["labels"][0]
+    top_score = float(result["scores"][0])
+
+    # Map NLI labels to our citation labels
+    if top_label == "entailment" and top_score > 0.5:
+        return VerificationLabel.SUPPORTED, round(top_score, 3)
+    elif top_label == "contradiction":
+        return VerificationLabel.NOT_SUPPORTED, round(top_score, 3)
+    else:
+        return VerificationLabel.NOT_SUPPORTED, round(top_score, 3)
 
 
 def compute_faithfulness_score(results: list[VerificationResult]) -> dict:
