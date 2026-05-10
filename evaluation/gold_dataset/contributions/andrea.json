@@ -227,5 +227,32 @@
         "reviewer_label": null
       }
     ]
+  },
+  {
+    "id": "q012",
+    "question": "How do Jorde and Teece (1990) characterize the standard view of cooperation among competitors in antitrust thinking?",
+    "gold_answer": "They describe cooperation among competitors as highly suspect in mainstream antitrust thinking — perhaps the last surviving element of what was once called the 'inhospitality tradition' in antitrust.",
+    "difficulty": "single-hop",
+    "category": "policy_impact",
+    "annotator": "andrea",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "In standard antitrust thinking, cooperation among competitors is treated as highly suspect — a remnant of the 'inhospitality tradition' in antitrust.",
+        "supporting_spans": [
+          {
+            "paper_id": "00006_W2138453742",
+            "char_start": 1168,
+            "char_end": 1323,
+            "quote": "cooperation among competitors is highly suspect, being perhaps the last bastion of what was once referred to as the “inhospitality tradition” in antitrust."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
   }
 ]
