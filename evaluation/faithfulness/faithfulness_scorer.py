@@ -148,6 +148,74 @@ def verify_claim_nli(
     else:
         return VerificationLabel.NOT_SUPPORTED, round(top_score, 3)
 
+def verify_claim_llm_judge(
+    claim: str,
+    passage: str,
+    model: str = "openai/gpt-4o-mini",
+) -> tuple[VerificationLabel, float, str]:
+    """
+    Use an LLM judge to check whether the passage SPECIFICALLY supports the claim.
+    
+    Catches a failure mode that NLI misses: claims that are topically related
+    to the passage but state different specifics (hallucinated details).
+    
+    Returns
+    -------
+    (label, confidence, explanation)
+    """
+    import os
+    import json
+    import urllib.request
+    import re
+
+    api_key = os.environ.get("OPENROUTER_API_KEY")
+    if not api_key:
+        raise RuntimeError("OPENROUTER_API_KEY required for LLM judge")
+
+    prompt = f"""You are a strict citation verifier. Determine whether the PASSAGE specifically supports the CLAIM.
+
+A claim is SUPPORTED only if the specific facts, terms, and entities in the claim appear in the passage.
+A claim that is topically related but states different specifics is NOT_SUPPORTED.
+
+PASSAGE:
+\"\"\"{passage}\"\"\"
+
+CLAIM:
+\"\"\"{claim}\"\"\"
+
+Return ONLY a JSON object with these fields:
+{{"label": "supported" | "not_supported", "confidence": 0.0 to 1.0, "reason": "one sentence"}}"""
+
+    body = json.dumps({
+        "model": model,
+        "messages": [{"role": "user", "content": prompt}],
+        "temperature": 0,
+    }).encode()
+
+    req = urllib.request.Request(
+        "https://openrouter.ai/api/v1/chat/completions",
+        data=body,
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+        },
+    )
+
+    with urllib.request.urlopen(req) as response:
+        data = json.loads(response.read())
+
+    text = data["choices"][0]["message"]["content"].strip()
+    text = re.sub(r"^```(?:json)?\s*", "", text)
+    text = re.sub(r"\s*```$", "", text)
+    parsed = json.loads(text)
+
+    label = (
+        VerificationLabel.SUPPORTED
+        if parsed["label"] == "supported"
+        else VerificationLabel.NOT_SUPPORTED
+    )
+    return label, float(parsed["confidence"]), parsed.get("reason", "")
+
 
 def compute_faithfulness_score(results: list[VerificationResult]) -> dict:
     """Aggregate faithfulness metrics across all claims."""
@@ -168,6 +236,7 @@ def compute_faithfulness_score(results: list[VerificationResult]) -> dict:
         / total,
         "total_claims": total,
     }
+
 
 
 if __name__ == "__main__":
