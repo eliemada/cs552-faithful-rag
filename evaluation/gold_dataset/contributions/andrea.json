@@ -132,5 +132,32 @@
         "reviewer_label": null
       }
     ]
+  },
+  {
+    "id": "q009",
+    "question": "According to Lemley and Shapiro (2005), what fraction of issued patents are ever litigated, and what fraction reach trial?",
+    "gold_answer": "Only 1.5 percent of issued patents are ever litigated, and only 0.1 percent are ever litigated to trial.",
+    "difficulty": "single-hop",
+    "category": "factual",
+    "annotator": "andrea",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Only 1.5 percent of issued patents are ever litigated, and only 0.1 percent are ever litigated to trial.",
+        "supporting_spans": [
+          {
+            "paper_id": "00005_W4233445588",
+            "char_start": 1141,
+            "char_end": 1349,
+            "quote": "Most issued patents turn out to have little or no commercial significance, which is one reason that only 1.5 percent of patents are ever litigated, and only 0.1 percent of patents are ever litigated to trial."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
   }
 ]
