@@ -281,5 +281,32 @@
         "reviewer_label": null
       }
     ]
+  },
+  {
+    "id": "q014",
+    "question": "How does the simultaneous model of innovation described by Jorde and Teece (1990) characterize the nature of innovation activity?",
+    "gold_answer": "The simultaneous model visualizes innovation as an incremental and cumulative activity that builds on prior knowledge — whether inside or outside the organization, and whether proprietary or in the public domain.",
+    "difficulty": "single-hop",
+    "category": "methodology",
+    "annotator": "andrea",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "In the simultaneous model, innovation is characterized as an incremental and cumulative activity that builds on prior knowledge from inside or outside the organization, proprietary or public.",
+        "supporting_spans": [
+          {
+            "paper_id": "00006_W2138453742",
+            "char_start": 9401,
+            "char_end": 9664,
+            "quote": "The simultaneous model visualizes innovation as an incremental and cumulative activity that involves building on what went before, whether it is inside the organization or outside the organization, and whether the knowledge is proprietary or in the public domain."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
   }
 ]
