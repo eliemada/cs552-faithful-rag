@@ -200,5 +200,32 @@
         "reviewer_label": null
       }
     ]
+  },
+  {
+    "id": "q011",
+    "question": "According to Lemley and Shapiro (2005), how does patent quality affect the efficiency of the patent system at stimulating innovation?",
+    "gold_answer": "When patents are granted on already-known or obvious technologies, they impose social costs without offsetting benefits. The lower the quality of patents — i.e., the greater the fraction improperly issued — the less efficient the patent system is at stimulating innovation.",
+    "difficulty": "single-hop",
+    "category": "policy_impact",
+    "annotator": "andrea",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Lower patent quality (a higher fraction of improperly issued patents) makes the patent system less efficient at stimulating innovation.",
+        "supporting_spans": [
+          {
+            "paper_id": "00005_W4233445588",
+            "char_start": 6316,
+            "char_end": 6650,
+            "quote": "When patents are granted covering technologies that were already known or were obvious, the resulting patents cause social costs without offsetting benefits. Therefore, the lower the quality of patents—that is, the greater is the fraction of patents improperly issued—the less efficient the patent system is at stimulating innovation."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
   }
 ]
