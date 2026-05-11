@@ -4,6 +4,7 @@ Cross-LLM faithfulness experiment with dual verification (NLI + LLM judge).
 Compares NLI-based and LLM-judge faithfulness scores to expose hallucination
 patterns NLI misses.
 """
+
 import json
 import os
 import sys
@@ -20,22 +21,23 @@ for line in env.splitlines():
         os.environ["OPENROUTER_API_KEY"] = line.split("=", 1)[1].strip()
         break
 
-from evaluation.faithfulness.faithfulness_scorer import (
+from evaluation.faithfulness.faithfulness_scorer import (  # noqa: E402
     extract_claims,
     verify_claim_nli,
     verify_claim_llm_judge,
-    VerificationLabel,
 )
 
 
 def ask_llm(question: str, model: str) -> str:
     """Ask an LLM to answer a question with no retrieval."""
     prompt = f"Answer this research question concisely (2-3 sentences):\n\n{question}"
-    body = json.dumps({
-        "model": model,
-        "messages": [{"role": "user", "content": prompt}],
-        "temperature": 0,
-    }).encode()
+    body = json.dumps(
+        {
+            "model": model,
+            "messages": [{"role": "user", "content": prompt}],
+            "temperature": 0,
+        }
+    ).encode()
     req = urllib.request.Request(
         "https://openrouter.ai/api/v1/chat/completions",
         data=body,
@@ -55,14 +57,16 @@ def evaluate_answer(answer: str, gold_passage: str, nli_pipeline) -> dict:
     for claim in claims:
         nli_label, nli_conf = verify_claim_nli(claim, gold_passage, nli_pipeline=nli_pipeline)
         judge_label, judge_conf, reason = verify_claim_llm_judge(claim, gold_passage)
-        results.append({
-            "claim": claim,
-            "nli_label": nli_label.value,
-            "nli_confidence": nli_conf,
-            "judge_label": judge_label.value,
-            "judge_confidence": judge_conf,
-            "judge_reason": reason,
-        })
+        results.append(
+            {
+                "claim": claim,
+                "nli_label": nli_label.value,
+                "nli_confidence": nli_conf,
+                "judge_label": judge_label.value,
+                "judge_confidence": judge_conf,
+                "judge_reason": reason,
+            }
+        )
     n_supported_nli = sum(1 for r in results if r["nli_label"] == "supported")
     n_supported_judge = sum(1 for r in results if r["judge_label"] == "supported")
     return {
@@ -80,12 +84,11 @@ def main():
         "deepseek/deepseek-chat",
     ]
 
-    gold = json.loads(
-        (ROOT / "evaluation/gold_dataset/contributions/andrea.json").read_text()
-    )
+    gold = json.loads((ROOT / "evaluation/gold_dataset/contributions/andrea.json").read_text())
 
     print("Loading NLI model...")
     from transformers import pipeline
+
     nli = pipeline("zero-shot-classification", model="cross-encoder/nli-deberta-v3-small")
 
     pair = next(p for p in gold if p["difficulty"] != "unanswerable")
@@ -102,7 +105,7 @@ def main():
             answer = ask_llm(question, model)
             print(f"\nAnswer: {answer}\n")
             result = evaluate_answer(answer, gold_passage, nli)
-            print(f"\nPer-claim breakdown:")
+            print("\nPer-claim breakdown:")
             for c in result["claims"]:
                 marker_nli = "✓" if c["nli_label"] == "supported" else "✗"
                 marker_judge = "✓" if c["judge_label"] == "supported" else "✗"
@@ -122,7 +125,9 @@ def main():
         if "error" in res:
             print(f"{model:<35} ERROR")
         else:
-            print(f"{model:<35} {res['nli_faithfulness']:<10.1%} {res['judge_faithfulness']:<10.1%}")
+            print(
+                f"{model:<35} {res['nli_faithfulness']:<10.1%} {res['judge_faithfulness']:<10.1%}"
+            )
 
 
 if __name__ == "__main__":
