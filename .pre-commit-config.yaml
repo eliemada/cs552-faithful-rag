@@ -1,0 +1,57 @@
+# Pre-commit hooks for CiteRight.
+#
+# Compatible with both `prek` (Rust, fast — recommended) and `pre-commit`
+# (Python, reference implementation). The team standardises on prek.
+#
+# Install:
+#   brew install j178/tap/prek          # macOS / Linuxbrew
+#   cargo install --locked prek         # Rust users
+#   curl -fsSL https://raw.githubusercontent.com/j178/prek/main/install.sh | sh
+#
+# Wire to git:
+#   prek install                        # creates .git/hooks/pre-commit
+#
+# Run on demand against staged files:
+#   prek run                            # only staged files
+#   prek run --all-files                # whole repo
+
+minimum_pre_commit_version: "3.5.0"
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-json
+      - id: check-yaml
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: ["--maxkb=500"]
+      - id: mixed-line-ending
+        args: ["--fix=lf"]
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.7.4
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+
+  - repo: local
+    hooks:
+      - id: aggregate-gold-qa
+        name: aggregate gold_qa.json
+        description: regenerate gold_qa.json whenever a contribution changes
+        entry: uv run python -m scripts.aggregate_gold_qa
+        language: system
+        pass_filenames: false
+        files: ^evaluation/gold_dataset/contributions/.*\.json$
+
+      - id: validate-gold-qa
+        name: validate gold dataset (offline)
+        description: schema + structural checks; matches CI's fast validator
+        entry: uv run python -m scripts.validate_gold_qa
+        language: system
+        pass_filenames: false
+        files: ^evaluation/gold_dataset/.*\.(json|md|txt)$

@@ -304,6 +304,39 @@ gh pr create --title "..." --body "..."
 gh pr merge <num> --squash --delete-branch
 ```
 
+### Pre-commit hooks (`prek`)
+
+We run pre-commit checks via [prek](https://github.com/j178/prek) — a Rust
+drop-in for the Python `pre-commit` framework, ~10× faster on a cold cache.
+Config lives in [`.pre-commit-config.yaml`](../.pre-commit-config.yaml).
+
+One-time install:
+
+```bash
+brew install j178/tap/prek         # macOS / Linuxbrew
+# or: cargo install --locked prek
+prek install                       # writes .git/hooks/pre-commit
+```
+
+What runs on every commit (staged files only):
+
+- `ruff` lint + format on Python
+- `trailing-whitespace`, `end-of-file-fixer`, `mixed-line-ending --fix=lf`
+- `check-json`, `check-yaml`, `check-merge-conflict`, `check-added-large-files`
+- `aggregate-gold-qa` — regenerates `gold_qa.json` whenever you stage a file
+  in `evaluation/gold_dataset/contributions/`
+- `validate-gold-qa` — schema + structural checks (matches CI's fast path)
+
+If a hook modifies a file, the commit aborts with a clear message; just
+`git add` the modified file and commit again.
+
+Run on demand:
+
+```bash
+prek run                           # only staged files
+prek run --all-files               # everything; surfaces pre-existing issues
+```
+
 ### Don't commit edits to `submit.sh`
 The submitted version has `GASPAR="${GASPAR:-gaspar}"` and `GROUP="${GROUP:-g68}"`
 on purpose. If you change them locally for testing, do not commit. If you

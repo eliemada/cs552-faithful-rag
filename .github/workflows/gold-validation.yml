@@ -1,0 +1,65 @@
+name: gold-validation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'evaluation/gold_dataset/**'
+      - 'evaluation/common/**'
+      - 'scripts/validate_gold_qa.py'
+      - 'scripts/aggregate_gold_qa.py'
+      - 'scripts/compute_iaa.py'
+      - 'tests/**'
+      - '.github/workflows/gold-validation.yml'
+      - 'pyproject.toml'
+      - 'uv.lock'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'evaluation/gold_dataset/**'
+      - 'evaluation/common/**'
+      - 'scripts/validate_gold_qa.py'
+      - 'scripts/aggregate_gold_qa.py'
+      - 'scripts/compute_iaa.py'
+      - 'tests/**'
+      - '.github/workflows/gold-validation.yml'
+      - 'pyproject.toml'
+      - 'uv.lock'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate gold dataset
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+
+      - run: uv python install 3.11
+
+      - run: uv sync --all-packages
+
+      - name: Validator unit tests
+        run: uv run pytest tests/ -v
+
+      - name: Schema + structural checks
+        run: uv run python -m scripts.validate_gold_qa
+
+      - name: Aggregate is in sync with contributions/
+        run: uv run python -m scripts.aggregate_gold_qa --check
+
+      - name: PR summary
+        if: always()
+        run: |
+          {
+            echo "# Gold dataset CI summary"
+            echo
+            uv run python -m scripts.validate_gold_qa --report || true
+          } >> "$GITHUB_STEP_SUMMARY"

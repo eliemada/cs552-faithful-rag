@@ -93,15 +93,21 @@ open-project-m2-citeright/
 
 ## Running Notebooks
 
+Team CiteRight is **group g68** (set in `submit.sh`). Each teammate launches
+the same job with their own gaspar via env-var override:
+
 ```bash
 cd notebooks
-# Set GASPAR to your EPFL username, GROUP to your team (e.g. g07)
-./submit.sh          # launches 1-GPU interactive Jupyter on RCP
-# Then: runai port-forward <job-name> --port 8888:8888
+GASPAR=<your-epfl-username> ./submit.sh
+runai port-forward <job-name> --port 8888:8888
 # Open http://localhost:8888 (token: cs552)
 ```
 
-See [rcp_support/README.md](rcp_support/README.md) for full setup instructions.
+The corpus is hosted at [huggingface.co/datasets/citeright/corpus](https://huggingface.co/datasets/citeright/corpus)
+and is downloaded automatically by the notebook bootstrap on first run.
+
+- **Daily workflow & onboarding:** [docs/TEAM_GUIDE.md](docs/TEAM_GUIDE.md)
+- **RCP / Run:AI reference (course staff):** [rcp_support/README.md](rcp_support/README.md)
 
 ## Team
 
