@@ -43,13 +43,13 @@ class VerificationResult:
 def extract_claims(answer: str, model: str = "openai/gpt-4o-mini") -> list[str]:
     """
     Extract atomic factual claims from a generated RAG answer using an LLM.
-    
+
     Falls back to rule-based sentence splitting if no API key is set.
-    
+
     Args:
         answer: The full text of the generated RAG answer
         model: OpenRouter model spec (default: GPT-4o-mini, cheap and fast)
-    
+
     Returns:
         A list of atomic claim strings, each a single verifiable proposition.
     """
@@ -59,10 +59,10 @@ def extract_claims(answer: str, model: str = "openai/gpt-4o-mini") -> list[str]:
     import re
 
     api_key = os.environ.get("OPENROUTER_API_KEY")
-    
+
     # Fallback: rule-based splitting if no API key
     if not api_key:
-        sentences = re.split(r'(?<=[.!?])\s+', answer.strip())
+        sentences = re.split(r"(?<=[.!?])\s+", answer.strip())
         return [s.strip() for s in sentences if len(s.strip()) > 15]
 
     # LLM-based decomposition (FActScore-style)
@@ -77,11 +77,13 @@ Answer:
 
 JSON array:"""
 
-    body = json.dumps({
-        "model": model,
-        "messages": [{"role": "user", "content": prompt}],
-        "temperature": 0,
-    }).encode()
+    body = json.dumps(
+        {
+            "model": model,
+            "messages": [{"role": "user", "content": prompt}],
+            "temperature": 0,
+        }
+    ).encode()
 
     req = urllib.request.Request(
         "https://openrouter.ai/api/v1/chat/completions",
@@ -94,13 +96,13 @@ JSON array:"""
 
     with urllib.request.urlopen(req) as response:
         data = json.loads(response.read())
-    
+
     text = data["choices"][0]["message"]["content"].strip()
-    
+
     # Strip markdown code fences if present
     text = re.sub(r"^```(?:json)?\s*", "", text)
     text = re.sub(r"\s*```$", "", text)
-    
+
     return json.loads(text)
 
 
@@ -111,13 +113,13 @@ def verify_claim_nli(
 ) -> tuple[VerificationLabel, float]:
     """
     Use NLI model to check if passage entails the claim.
-    
+
     Args:
         claim: The atomic claim to verify
         passage: The cited passage that supposedly supports the claim
         nli_pipeline: Optional pre-loaded HuggingFace pipeline (for efficiency).
                       If None, loads the model on first call.
-    
+
     Returns:
         Tuple of (VerificationLabel, confidence score)
     """
@@ -126,17 +128,16 @@ def verify_claim_nli(
     # Load model if not provided (allows reuse across many calls)
     if nli_pipeline is None:
         nli_pipeline = pipeline(
-            "zero-shot-classification",
-            model="cross-encoder/nli-deberta-v3-small"
+            "zero-shot-classification", model="cross-encoder/nli-deberta-v3-small"
         )
 
     # Run NLI: does the passage entail, contradict, or stay neutral to the claim?
     result = nli_pipeline(
         passage,
         candidate_labels=["entailment", "contradiction", "neutral"],
-        hypothesis_template="This text means that {}."
+        hypothesis_template="This text means that {}.",
     )
-    
+
     top_label = result["labels"][0]
     top_score = float(result["scores"][0])
 
@@ -148,6 +149,7 @@ def verify_claim_nli(
     else:
         return VerificationLabel.NOT_SUPPORTED, round(top_score, 3)
 
+
 def verify_claim_llm_judge(
     claim: str,
     passage: str,
@@ -155,10 +157,10 @@ def verify_claim_llm_judge(
 ) -> tuple[VerificationLabel, float, str]:
     """
     Use an LLM judge to check whether the passage SPECIFICALLY supports the claim.
-    
+
     Catches a failure mode that NLI misses: claims that are topically related
     to the passage but state different specifics (hallucinated details).
-    
+
     Returns
     -------
     (label, confidence, explanation)
@@ -186,11 +188,13 @@ CLAIM:
 Return ONLY a JSON object with these fields:
 {{"label": "supported" | "not_supported", "confidence": 0.0 to 1.0, "reason": "one sentence"}}"""
 
-    body = json.dumps({
-        "model": model,
-        "messages": [{"role": "user", "content": prompt}],
-        "temperature": 0,
-    }).encode()
+    body = json.dumps(
+        {
+            "model": model,
+            "messages": [{"role": "user", "content": prompt}],
+            "temperature": 0,
+        }
+    ).encode()
 
     req = urllib.request.Request(
         "https://openrouter.ai/api/v1/chat/completions",
@@ -236,7 +240,6 @@ def compute_faithfulness_score(results: list[VerificationResult]) -> dict:
         / total,
         "total_claims": total,
     }
-
 
 
 if __name__ == "__main__":
