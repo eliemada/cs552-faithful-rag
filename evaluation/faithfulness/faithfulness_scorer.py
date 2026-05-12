@@ -264,9 +264,7 @@ def verify_claim(
             claim=claim,
             label=VerificationLabel.FABRICATED_SOURCE,
             confidence=1.0,
-            explanation=(
-                f"Cited source '{claim.cited_source_id}' is not in the corpus."
-            ),
+            explanation=(f"Cited source '{claim.cited_source_id}' is not in the corpus."),
         )
 
     # Case 3: real source, real passage — does it actually support the claim?
