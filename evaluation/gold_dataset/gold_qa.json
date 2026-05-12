@@ -113,8 +113,8 @@
     "difficulty": "multi-hop",
     "category": "multi_hop",
     "annotator": "andrea",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "elie",
+    "review_status": "approved",
     "iaa_subset": true,
     "claims": [
       {
@@ -129,7 +129,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       },
       {
         "id": "c002",
@@ -143,7 +143,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       }
     ]
   },
@@ -247,8 +247,8 @@
     "difficulty": "multi-hop",
     "category": "multi_hop",
     "annotator": "andrea",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "elie",
+    "review_status": "approved",
     "iaa_subset": true,
     "claims": [
       {
@@ -263,7 +263,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       },
       {
         "id": "c002",
@@ -277,7 +277,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       }
     ]
   },
@@ -288,8 +288,8 @@
     "difficulty": "single-hop",
     "category": "policy_impact",
     "annotator": "andrea",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "elie",
+    "review_status": "approved",
     "iaa_subset": true,
     "claims": [
       {
@@ -304,7 +304,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       }
     ]
   },
@@ -315,8 +315,8 @@
     "difficulty": "single-hop",
     "category": "policy_impact",
     "annotator": "andrea",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "elie",
+    "review_status": "approved",
     "iaa_subset": true,
     "claims": [
       {
@@ -331,7 +331,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       }
     ]
   },
