@@ -78,5 +78,369 @@
     "review_status": "pending",
     "iaa_subset": false,
     "claims": []
+  },
+  {
+    "id": "q004",
+    "question": "According to Shapiro (2001), what are the two main types of transaction costs that overlapping patents impose on innovation?",
+    "gold_answer": "Shapiro identifies two transaction costs: (1) the complements problem, which requires coordination among multiple patent holders, and (2) the hold-up problem, where firms inadvertently infringe on patents issued after their products were designed.",
+    "difficulty": "single-hop",
+    "category": "policy_impact",
+    "annotator": "andrea",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Shapiro identifies two transaction costs from overlapping patents: the complements problem (requiring coordination) and the hold-up problem.",
+        "supporting_spans": [
+          {
+            "paper_id": "00002_W2122361802",
+            "char_start": 22713,
+            "char_end": 22944,
+            "quote": "we have a volatile mix of two powerful types of \u201ctransaction costs\u201d that can burden innovation: (1) the complements problem, the solution of which requires coordination, perhaps large-scale coordination; and (2) the hold-up problem"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q005",
+    "question": "According to Shapiro (2001), what economic problem do cross-licenses solve, and what happens to product prices in their absence?",
+    "gold_answer": "Cross-licenses solve the complements problem between two firms, making them highly pro-competitive. Without cross-licenses or patent pools, products bear 'multiple patent burdens' which magnify the static-monopoly costs by pushing prices well above marginal costs.",
+    "difficulty": "multi-hop",
+    "category": "multi_hop",
+    "annotator": "andrea",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Cross-licenses solve the complements problem between two firms and are highly pro-competitive.",
+        "supporting_spans": [
+          {
+            "paper_id": "00002_W2122361802",
+            "char_start": 25607,
+            "char_end": 25717,
+            "quote": "cross-licenses can solve the complements problem, at least among two firms, and thus be highly pro-competitive"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c002",
+        "text": "Without cross-licenses or patent pools, products bear 'multiple patent burdens' that magnify static-monopoly costs by raising prices well above marginal costs.",
+        "supporting_spans": [
+          {
+            "paper_id": "00002_W2122361802",
+            "char_start": 16509,
+            "char_end": 16797,
+            "quote": "without cross-licenses or patent pools, there is a tendency for products to bear \u201c multiple patent burdens. \u201d The buildup of licensing fees can have several unattractive consequences. First, the well-known costs of static monopoly power are magnified: prices are well above marginal costs"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q006",
+    "question": "What were the total patent litigation costs incurred by the US semiconductor industry in 2023?",
+    "gold_answer": "Not covered by the corpus.",
+    "difficulty": "unanswerable",
+    "category": "factual",
+    "annotator": "andrea",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": []
+  },
+  {
+    "id": "q007",
+    "question": "According to Mendon\u00e7a et al. (2004), what advantage do trademarks have over patents and R&D as innovation indicators in terms of firm coverage?",
+    "gold_answer": "Trademarks are used by a wider range of firms than patents or R&D, capturing innovation activity in services and in small and medium-sized enterprises (SMEs).",
+    "difficulty": "single-hop",
+    "category": "comparison",
+    "annotator": "andrea",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Trademarks are used by a wider set of firms than patents and R&D, capturing innovation in services and SMEs.",
+        "supporting_spans": [
+          {
+            "paper_id": "00004_W2114989862",
+            "char_start": 5917,
+            "char_end": 6066,
+            "quote": "Trademarks are used by a wider set of business firms, capturing change in service activities as well as in small and medium-sized enterprises (SMEs)."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q008",
+    "question": "According to the surveys reviewed by Mendon\u00e7a et al. (2004), how do firms generally rank patents as a means of appropriating returns from innovation, compared to marketing activities?",
+    "gold_answer": "A common finding across large-scale innovation surveys is that patents tend to rank relatively low as a means of appropriating innovation returns, except in a few industries where they play a strategic role. Marketing activities and assets play a wider and more significant role.",
+    "difficulty": "single-hop",
+    "category": "comparison",
+    "annotator": "andrea",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Across innovation surveys, patents tend to rank lower than marketing activities as a means of appropriating innovation returns, except in a few strategic industries.",
+        "supporting_spans": [
+          {
+            "paper_id": "00004_W2114989862",
+            "char_start": 29544,
+            "char_end": 29852,
+            "quote": "A common finding of these studies is that, as a means of appropriating innovation returns, patents tend to rank lower in these hierarchies, with the exception of a few industries in which they play a strategic role. In contrast, marketing activities and assets tend to play a wider and more significant role."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q009",
+    "question": "According to Lemley and Shapiro (2005), what fraction of issued patents are ever litigated, and what fraction reach trial?",
+    "gold_answer": "Only 1.5 percent of issued patents are ever litigated, and only 0.1 percent are ever litigated to trial.",
+    "difficulty": "single-hop",
+    "category": "factual",
+    "annotator": "andrea",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Only 1.5 percent of issued patents are ever litigated, and only 0.1 percent are ever litigated to trial.",
+        "supporting_spans": [
+          {
+            "paper_id": "00005_W4233445588",
+            "char_start": 1141,
+            "char_end": 1349,
+            "quote": "Most issued patents turn out to have little or no commercial significance, which is one reason that only 1.5 percent of patents are ever litigated, and only 0.1 percent of patents are ever litigated to trial."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q010",
+    "question": "How do Lemley and Shapiro (2005) reframe what a patent grants its owner, and what two dimensions of uncertainty do they identify?",
+    "gold_answer": "Lemley and Shapiro reframe a patent as conferring not the right to exclude rivals, but only the right to try to exclude by asserting the patent in court. They identify two fundamental dimensions of patent uncertainty: (1) uncertainty about the commercial significance of the invention, and (2) uncertainty about the validity and scope of the legal right being granted.",
+    "difficulty": "multi-hop",
+    "category": "multi_hop",
+    "annotator": "andrea",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "A patent confers not the right to exclude, but only the right to try to exclude by asserting the patent in court.",
+        "supporting_spans": [
+          {
+            "paper_id": "00005_W4233445588",
+            "char_start": 1424,
+            "char_end": 1552,
+            "quote": "patent does not confer upon its owner the right to exclude but rather a right to try to exclude by asserting the patent in court"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c002",
+        "text": "There are two fundamental dimensions of patent uncertainty: commercial significance of the invention, and validity and scope of the legal right.",
+        "supporting_spans": [
+          {
+            "paper_id": "00005_W4233445588",
+            "char_start": 3256,
+            "char_end": 3472,
+            "quote": "There are two fundamental dimensions of uncertainty: 1) uncertainty about the commercial significance of the invention being patented, and 2) uncertainty about the validity and scope of the legal right being granted."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q011",
+    "question": "According to Lemley and Shapiro (2005), how does patent quality affect the efficiency of the patent system at stimulating innovation?",
+    "gold_answer": "When patents are granted on already-known or obvious technologies, they impose social costs without offsetting benefits. The lower the quality of patents \u2014 i.e., the greater the fraction improperly issued \u2014 the less efficient the patent system is at stimulating innovation.",
+    "difficulty": "single-hop",
+    "category": "policy_impact",
+    "annotator": "andrea",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Lower patent quality (a higher fraction of improperly issued patents) makes the patent system less efficient at stimulating innovation.",
+        "supporting_spans": [
+          {
+            "paper_id": "00005_W4233445588",
+            "char_start": 6316,
+            "char_end": 6650,
+            "quote": "When patents are granted covering technologies that were already known or were obvious, the resulting patents cause social costs without offsetting benefits. Therefore, the lower the quality of patents\u2014that is, the greater is the fraction of patents improperly issued\u2014the less efficient the patent system is at stimulating innovation."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q012",
+    "question": "How do Jorde and Teece (1990) characterize the standard view of cooperation among competitors in antitrust thinking?",
+    "gold_answer": "They describe cooperation among competitors as highly suspect in mainstream antitrust thinking \u2014 perhaps the last surviving element of what was once called the 'inhospitality tradition' in antitrust.",
+    "difficulty": "single-hop",
+    "category": "policy_impact",
+    "annotator": "andrea",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "In standard antitrust thinking, cooperation among competitors is treated as highly suspect \u2014 a remnant of the 'inhospitality tradition' in antitrust.",
+        "supporting_spans": [
+          {
+            "paper_id": "00006_W2138453742",
+            "char_start": 1168,
+            "char_end": 1323,
+            "quote": "cooperation among competitors is highly suspect, being perhaps the last bastion of what was once referred to as the \u201cinhospitality tradition\u201d in antitrust."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q013",
+    "question": "How do Jorde and Teece (1990) define innovation?",
+    "gold_answer": "They define innovation as the search for, discovery, development, improvement, adoption and commercialization of new processes, new products, and new organizational structures and procedures.",
+    "difficulty": "single-hop",
+    "category": "factual",
+    "annotator": "andrea",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Jorde and Teece define innovation as the search for, discovery, development, improvement, adoption and commercialization of new processes, products, and organizational structures and procedures.",
+        "supporting_spans": [
+          {
+            "paper_id": "00006_W2138453742",
+            "char_start": 3483,
+            "char_end": 3670,
+            "quote": "Innovation is the search for, and the discovery, development, improvement, adoption and commercialization of new processes, new products, and new organizational structures and procedures."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q014",
+    "question": "How does the simultaneous model of innovation described by Jorde and Teece (1990) characterize the nature of innovation activity?",
+    "gold_answer": "The simultaneous model visualizes innovation as an incremental and cumulative activity that builds on prior knowledge \u2014 whether inside or outside the organization, and whether proprietary or in the public domain.",
+    "difficulty": "single-hop",
+    "category": "methodology",
+    "annotator": "andrea",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "In the simultaneous model, innovation is characterized as an incremental and cumulative activity that builds on prior knowledge from inside or outside the organization, proprietary or public.",
+        "supporting_spans": [
+          {
+            "paper_id": "00006_W2138453742",
+            "char_start": 9401,
+            "char_end": 9664,
+            "quote": "The simultaneous model visualizes innovation as an incremental and cumulative activity that involves building on what went before, whether it is inside the organization or outside the organization, and whether the knowledge is proprietary or in the public domain."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q015",
+    "question": "How did the business and NGO campaigns frame intellectual property rights according to Sell and Prakash (2004)?",
+    "gold_answer": "The business campaign framed IPR protection as part of free trade, while the NGO campaign framed IPR in terms of public health.",
+    "difficulty": "single-hop",
+    "category": "comparison",
+    "annotator": "andrea",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "The business campaign grafted IPR protection onto the free-trade frame, while the NGO campaign grafted IPR onto the public-health frame.",
+        "supporting_spans": [
+          {
+            "paper_id": "00007_W2150316800",
+            "char_start": 5246,
+            "char_end": 5425,
+            "quote": "Each campaign grafted new normative frames onto existing ones; the business campaign grafted IPR protection onto free trade, while the NGO campaign grafted IPR onto public health."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q016",
+    "question": "According to Sell and Prakash's (2004) summary of Kingdon (1984), what two types of changes can open a policy window?",
+    "gold_answer": "A policy window can open because of changes in the problem stream (e.g., the HIV/AIDS crisis) or changes in the political stream (e.g., the election of a new leader with different priorities).",
+    "difficulty": "single-hop",
+    "category": "methodology",
+    "annotator": "andrea",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Per Kingdon (1984), a policy window can open due to changes in the problem stream or in the political stream.",
+        "supporting_spans": [
+          {
+            "paper_id": "00007_W2150316800",
+            "char_start": 42581,
+            "char_end": 42775,
+            "quote": "For Kingdon (1984) , a policy window could open because of changes either in the problem stream (HIV/AIDS crisis) or in the political stream (election of a new leader with different priorities)."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
   }
 ]
