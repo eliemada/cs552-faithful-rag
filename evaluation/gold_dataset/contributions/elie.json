@@ -78,5 +78,317 @@
     "review_status": "pending",
     "iaa_subset": false,
     "claims": []
+  },
+  {
+    "id": "q017",
+    "question": "How much did annual US patent issuance grow between 1983 and 2010, according to Boldrin and Levine (2013)?",
+    "gold_answer": "Boldrin and Levine report that US patent issuance grew from 59,715 in 1983 to 189,597 in 2003 and 244,341 in 2010 — more than quadrupling in less than 30 years.",
+    "difficulty": "single-hop",
+    "category": "factual",
+    "annotator": "elie",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "US annual patent issuance grew from 59,715 in 1983 to 244,341 in 2010, more than quadrupling in less than 30 years.",
+        "supporting_spans": [
+          {
+            "paper_id": "00013_W3124020986",
+            "char_start": 4111,
+            "char_end": 4319,
+            "quote": "In 1983 in the United States, 59,715 patents were issued; by 2003, 189,597 patents were issued; and in 2010, 244,341 new patents were approved. In less than 30 years, the flow of patents more than quadrupled."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q018",
+    "question": "What does Moser (2013) conclude from the historical evidence about whether patent laws are necessary or sufficient for higher rates of innovation?",
+    "gold_answer": "Moser concludes that patent laws may influence the direction of technological change and help encourage the diffusion of knowledge, but they do not appear to be either a necessary or a sufficient condition for higher rates of innovation.",
+    "difficulty": "single-hop",
+    "category": "policy_impact",
+    "annotator": "elie",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "On Moser's reading of the historical evidence, patent laws are neither a necessary nor a sufficient condition for higher rates of innovation, although they can shape its direction and aid knowledge diffusion.",
+        "supporting_spans": [
+          {
+            "paper_id": "00008_W3125878831",
+            "char_start": 30778,
+            "char_end": 31003,
+            "quote": "patent laws may influence the direction of technological change and help to encourage the diffusion of knowledge, even though patent laws do not appear to be a necessary or sufficient condition for higher rates of innovation."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q019",
+    "question": "Does the joint evidence from Boldrin and Levine (2013) and Moser (2013) support the view that more patents lead to more innovation?",
+    "gold_answer": "No. Boldrin and Levine (2013) point out that annual US patent issuance more than quadrupled between 1983 and 2010, yet neither R&D expenditure nor productivity tracked that surge. Moser (2013), reviewing the historical evidence, concludes that patent laws are not a necessary or sufficient condition for higher rates of innovation.",
+    "difficulty": "multi-hop",
+    "category": "multi_hop",
+    "annotator": "elie",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Annual US patent issuance more than quadrupled between 1983 and 2010.",
+        "supporting_spans": [
+          {
+            "paper_id": "00013_W3124020986",
+            "char_start": 4111,
+            "char_end": 4319,
+            "quote": "In 1983 in the United States, 59,715 patents were issued; by 2003, 189,597 patents were issued; and in 2010, 244,341 new patents were approved. In less than 30 years, the flow of patents more than quadrupled."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c002",
+        "text": "Historical evidence shows patent laws are not a necessary or sufficient condition for higher rates of innovation.",
+        "supporting_spans": [
+          {
+            "paper_id": "00008_W3125878831",
+            "char_start": 30778,
+            "char_end": 31003,
+            "quote": "patent laws may influence the direction of technological change and help to encourage the diffusion of knowledge, even though patent laws do not appear to be a necessary or sufficient condition for higher rates of innovation."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q020",
+    "question": "What two-way trade-off does Fosfuri (2006) use to model the licensor's decision to license a technology?",
+    "gold_answer": "Fosfuri frames technology licensing as a trade-off between a revenue effect — licensing payments net of transaction costs — and a profit dissipation effect — the lower price-cost margin and/or reduced market share that result from added competition with the licensee.",
+    "difficulty": "single-hop",
+    "category": "methodology",
+    "annotator": "elie",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Fosfuri (2006) models technology licensing as a trade-off between a revenue effect (licensing payments net of transaction costs) and a profit dissipation effect (lower price-cost margin and/or reduced market share from increased competition with the licensee).",
+        "supporting_spans": [
+          {
+            "paper_id": "00011_W3122382941",
+            "char_start": 472,
+            "char_end": 742,
+            "quote": "The licensing of technology entails a trade-off: licensing payments net of transaction costs (revenue effect) must be balanced against the lower price—cost margin and/or reduced market share implied by increased competition (profit dissipation effect) from the licensee."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q021",
+    "question": "What does the cross-country panel evidence in Kanwar and Evenson (2003) say about the effect of intellectual property rights on innovation?",
+    "gold_answer": "Using cross-country panel data on R&D investment, patent protection and other country-specific characteristics over 1981–1995, Kanwar and Evenson conclude that the evidence unambiguously indicates the significance of intellectual property rights as incentives for spurring innovation.",
+    "difficulty": "single-hop",
+    "category": "policy_impact",
+    "annotator": "elie",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Kanwar and Evenson's 1981–1995 cross-country panel evidence unambiguously indicates that intellectual property rights are a significant incentive for spurring innovation.",
+        "supporting_spans": [
+          {
+            "paper_id": "00015_W3121800927",
+            "char_start": 964,
+            "char_end": 1232,
+            "quote": "utilising cross-country panel data on R&D investment, patent protection and other country-specific characteristics spanning the period 1981–95. The evidence unambiguously indicates the significance of intellectual property rights as incentives for spurring innovation."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q022",
+    "question": "How do Aghion, Dewatripont, and Stein (2008) characterize the fundamental trade-off between academic and private-sector research, and the role each plays across research stages?",
+    "gold_answer": "They argue that the fundamental trade-off between academia and the private sector is one of creative control versus focus. By serving as a precommitment mechanism that lets scientists freely pursue their own interests, academia can be indispensable for early-stage research, while the private sector's ability to direct scientists toward higher-payoff activities makes it more attractive for later-stage research.",
+    "difficulty": "multi-hop",
+    "category": "methodology",
+    "annotator": "elie",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Aghion, Dewatripont, and Stein cast the fundamental academia-versus-private-sector trade-off as creative control versus focus.",
+        "supporting_spans": [
+          {
+            "paper_id": "00009_W2109614009",
+            "char_start": 489,
+            "char_end": 594,
+            "quote": "the fundamental tradeoff between academia and the private sector is one of creative control versus focus."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c002",
+        "text": "Academia acts as a precommitment mechanism letting scientists pursue their own interests and is indispensable for early-stage research, while the private sector is more attractive for later-stage research.",
+        "supporting_spans": [
+          {
+            "paper_id": "00009_W2109614009",
+            "char_start": 595,
+            "char_end": 902,
+            "quote": "By serving as a precommitment mechanism that allows scientists to freely pursue their own interests, academia can be indispensable for early-stage research. At the same time, the private sector's ability to direct scientists toward higher-payoff activities makes it more attractive for later-stage research."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q023",
+    "question": "Why does Lemley (2001) argue that it would be wasteful for the US Patent Office to invest substantially more resources in examining every application?",
+    "gold_answer": "Because the overwhelming majority of issued patents are never litigated or even licensed, so it is far cheaper for society to make detailed validity determinations in the small fraction of patents that are actually asserted than to spend more resources examining patents that will never be heard from again.",
+    "difficulty": "single-hop",
+    "category": "policy_impact",
+    "annotator": "elie",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Because most issued patents are never litigated or licensed, society is better off making detailed validity determinations in the few asserted cases than spending additional resources examining patents that will never be heard from again.",
+        "supporting_spans": [
+          {
+            "paper_id": "00014_W2131270121",
+            "char_start": 5568,
+            "char_end": 5887,
+            "quote": "the overwhelming majority of patents are never litigated or even licensed. Because so few patents are ever asserted against a competitor, it is much cheaper for society to make detailed validity determinations in those few cases than to invest additional resources examining patents that will never be heard from again."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q024",
+    "question": "How do Besen and Raskind (1991) state the basic economic objective of intellectual property protection?",
+    "gold_answer": "Besen and Raskind state that the objective of intellectual property protection is to create incentives that maximize the difference between the value of the intellectual property that is created and used and the social cost of its creation, including the cost of administering the system.",
+    "difficulty": "single-hop",
+    "category": "factual",
+    "annotator": "elie",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "The objective of intellectual property protection is to create incentives that maximize the difference between the value of IP created and used and the social cost of its creation, including the cost of administering the system.",
+        "supporting_spans": [
+          {
+            "paper_id": "00012_W1999853213",
+            "char_start": 5469,
+            "char_end": 5728,
+            "quote": "The objective of intellectual property protection is to create incentives that maximize the difference between the value of the intellectual property that is created and used and the social cost of its creation, including the cost of administering the system."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q025",
+    "question": "Do Kanwar and Evenson (2003) and Boldrin and Levine (2013) agree on whether stronger intellectual property rights spur innovation?",
+    "gold_answer": "No. Kanwar and Evenson's cross-country panel evidence over 1981–1995 unambiguously points to intellectual property rights as significant incentives for spurring innovation. Boldrin and Levine, by contrast, argue that while weak patent systems may mildly increase innovation with limited side effects, strong patent systems retard innovation with many negative side effects.",
+    "difficulty": "multi-hop",
+    "category": "multi_hop",
+    "annotator": "elie",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Cross-country panel evidence over 1981–1995 unambiguously indicates that intellectual property rights are significant incentives for spurring innovation.",
+        "supporting_spans": [
+          {
+            "paper_id": "00015_W3121800927",
+            "char_start": 964,
+            "char_end": 1232,
+            "quote": "utilising cross-country panel data on R&D investment, patent protection and other country-specific characteristics spanning the period 1981–95. The evidence unambiguously indicates the significance of intellectual property rights as incentives for spurring innovation."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c002",
+        "text": "Weak patent systems may mildly increase innovation with limited side effects, while strong patent systems retard innovation with many negative side effects.",
+        "supporting_spans": [
+          {
+            "paper_id": "00013_W3124020986",
+            "char_start": 1020,
+            "char_end": 1169,
+            "quote": "weak patent systems may mildly increase innovation with limited side effects, strong patent systems retard innovation with many negative side effects"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q026",
+    "question": "According to Moser (2013), how do patent 'thickets' built by incumbents affect litigation risk for later innovators?",
+    "gold_answer": "Moser argues that litigation risks are exacerbated when incumbents build thickets of strategic patents that cover little innovative progress and instead serve as a legal weapon to protect incumbents' profits.",
+    "difficulty": "single-hop",
+    "category": "policy_impact",
+    "annotator": "elie",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Incumbents' thickets of strategic patents cover little innovative progress and serve as a legal weapon to protect their profits, exacerbating litigation risk.",
+        "supporting_spans": [
+          {
+            "paper_id": "00008_W3125878831",
+            "char_start": 933,
+            "char_end": 1117,
+            "quote": "Litigation risks are exacerbated when incumbents build “ thickets ” of strategic patents that cover little innovative progress and instead serve as a legal weapon to protect incumbents"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
   }
 ]
