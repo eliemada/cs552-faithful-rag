@@ -221,6 +221,91 @@ Return ONLY a JSON object with these fields:
     return label, float(parsed["confidence"]), parsed.get("reason", "")
 
 
+def verify_claim(
+    claim: Claim,
+    known_source_ids: set[str],
+    verifier: str = "nli",
+    nli_pipeline=None,
+    judge_model: str = "openai/gpt-4o-mini",
+) -> VerificationResult:
+    """
+    Orchestrate the full four-way verification of a single claim.
+
+    Decision tree:
+        1. No cited_source_id          -> NO_CITATION
+        2. cited_source_id not in corpus -> FABRICATED_SOURCE
+        3. Otherwise                   -> run verifier on (claim, passage)
+                                          -> SUPPORTED or NOT_SUPPORTED
+
+    Args:
+        claim: The Claim to verify.
+        known_source_ids: Set of source IDs that exist in the retrieval corpus.
+                          Used to detect fabricated citations.
+        verifier: "nli" (fast, free) or "llm_judge" (slower, costs API calls,
+                  catches hallucinated specifics).
+        nli_pipeline: Optional pre-loaded HF pipeline for the NLI path.
+        judge_model: OpenRouter model spec for the LLM-judge path.
+
+    Returns:
+        A VerificationResult with label, confidence, and a short explanation.
+    """
+    # Case 1: the model didn't cite anything
+    if claim.cited_source_id is None:
+        return VerificationResult(
+            claim=claim,
+            label=VerificationLabel.NO_CITATION,
+            confidence=1.0,
+            explanation="Claim was generated without any citation.",
+        )
+
+    # Case 2: the model cited a source that doesn't exist in our corpus
+    if claim.cited_source_id not in known_source_ids:
+        return VerificationResult(
+            claim=claim,
+            label=VerificationLabel.FABRICATED_SOURCE,
+            confidence=1.0,
+            explanation=(
+                f"Cited source '{claim.cited_source_id}' is not in the corpus."
+            ),
+        )
+
+    # Case 3: real source, real passage — does it actually support the claim?
+    # Guard against the edge case where the source exists but no passage was
+    # attached to the Claim (shouldn't happen in practice, but be defensive).
+    if claim.cited_passage is None:
+        return VerificationResult(
+            claim=claim,
+            label=VerificationLabel.NOT_SUPPORTED,
+            confidence=1.0,
+            explanation="Source exists but no passage was provided for verification.",
+        )
+
+    if verifier == "nli":
+        label, confidence = verify_claim_nli(
+            claim.text, claim.cited_passage, nli_pipeline=nli_pipeline
+        )
+        explanation = f"NLI verifier returned {label.value} (score={confidence})."
+        return VerificationResult(
+            claim=claim,
+            label=label,
+            confidence=confidence,
+            explanation=explanation,
+        )
+
+    if verifier == "llm_judge":
+        label, confidence, reason = verify_claim_llm_judge(
+            claim.text, claim.cited_passage, model=judge_model
+        )
+        return VerificationResult(
+            claim=claim,
+            label=label,
+            confidence=confidence,
+            explanation=f"LLM judge: {reason}",
+        )
+
+    raise ValueError(f"Unknown verifier: {verifier!r}. Use 'nli' or 'llm_judge'.")
+
+
 def compute_faithfulness_score(results: list[VerificationResult]) -> dict:
     """Aggregate faithfulness metrics across all claims."""
     if not results:
