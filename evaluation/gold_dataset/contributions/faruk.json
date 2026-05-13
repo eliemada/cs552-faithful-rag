@@ -37,7 +37,7 @@
     "question": "How do market structures in the semiconductor and biotechnology industries result in different IPR externalization styles?",
     "gold_answer": "The semiconductor industry uses coercive and bilateral strategies due to its mature technology and zero-sum market share competition. Biotechnology uses cooperative and multilateral strategies because its technology is developing and competition is a positive-sum game over market creation.",
     "difficulty": "multi-hop",
-    "category": "multi_hop",
+    "category": "comparison",
     "annotator": "faruk",
     "reviewer": null,
     "review_status": "pending",
@@ -78,7 +78,7 @@
         "reviewer_label": null
       },
       {
-        "id": "c004",
+        "id": "c003",
         "text": "The biotechnology industry utilizes a slow, cooperative externalization strategy relying on multilateral harmonization.",
         "supporting_spans": [
           {
@@ -152,8 +152,8 @@
     "id": "q203",
     "question": "What are the steps in the structured 'Rule of Reason' analysis used in pharmaceutical antitrust cases?",
     "gold_answer": "The structured Rule of Reason involves first identifying a contract that restrains trade and assessing its competitive risk. If a risk exists, the burden shifts to the defendant to prove actual procompetitive benefits before determining if the restraint is the least restrictive means.",
-    "difficulty": "single-hop",
-    "category": "factual",
+    "difficulty": "multi-hop",
+    "category": "multi_hop",
     "annotator": "faruk",
     "reviewer": null,
     "review_status": "pending",
@@ -368,7 +368,7 @@
         "reviewer_label": null
       },
       {
-        "id": "c003",
+        "id": "c002",
         "text": "The legislative change was aimed at addressing foreign counterfeiting of trademarked blue jeans.",
         "supporting_spans": [
           {
@@ -428,9 +428,9 @@
         "supporting_spans": [
           {
             "paper_id": "00207_W2994601296",
-            "char_start": 82616,
+            "char_start": 82627,
             "char_end": 82690,
-            "quote": "principles that would ultimately undermine their own copyright protection."
+            "quote": "that would ultimately undermine their own copyright protection."
           }
         ],
         "annotator_label": "supports",
