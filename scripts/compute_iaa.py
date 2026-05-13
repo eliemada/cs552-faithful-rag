@@ -21,7 +21,7 @@ LABEL_ORDER = ("supports", "contradicts", "unrelated")
 
 def _label_distribution(labels: list[str]) -> str:
     counts = Counter(labels)
-    return ", ".join(f"{l}={counts.get(l, 0)}" for l in LABEL_ORDER)
+    return ", ".join(f"{label}={counts.get(label, 0)}" for label in LABEL_ORDER)
 
 
 def _degeneracy_warning(annotator: list[str], reviewer: list[str]) -> str | None:
