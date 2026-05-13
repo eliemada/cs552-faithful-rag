@@ -38,7 +38,8 @@
         },
         "annotator": {
           "type": "string",
-          "enum": ["elie", "andrea", "faruk", "yusif"]
+          "enum": ["elie", "andrea", "faruk", "yusif", "adversarial"],
+          "description": "'adversarial' is a synthetic source used for control claims that deliberately do not entail their cited spans. Reviewer fields still come from a human (elie/andrea/faruk/yusif)."
         },
         "reviewer": {
           "type": ["string", "null"],
