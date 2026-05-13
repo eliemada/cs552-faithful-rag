@@ -39,8 +39,8 @@
     "difficulty": "multi-hop",
     "category": "comparison",
     "annotator": "faruk",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "elie",
+    "review_status": "approved",
     "iaa_subset": true,
     "claims": [
       {
@@ -61,7 +61,7 @@
           "char_start": 81139, "char_end": 81451,
           "quote": "indeed, the very need for IPR reform was repeatedly defined in terms of competition with Japanese semiconductor producers. Substantively, the dependence of foreign producers (particularly the Japanese) on the U.S. market gave advocates of sui generis reform reason to expect that coercive bilateralism would work"
         }],
-        "annotator_label": "supports", "reviewer_label": null
+        "annotator_label": "supports", "reviewer_label": "supports"
       },
       {
         "id": "c002",
@@ -75,7 +75,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       },
       {
         "id": "c003",
@@ -89,7 +89,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       }
     ]
   },
@@ -390,8 +390,8 @@
     "difficulty": "single-hop",
     "category": "policy_impact",
     "annotator": "faruk",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "elie",
+    "review_status": "approved",
     "iaa_subset": true,
     "claims": [
       {
@@ -406,7 +406,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       },
       {
         "id": "c002",
@@ -420,7 +420,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       },
       {
         "id": "c003",
@@ -434,7 +434,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       }
     ]
   },

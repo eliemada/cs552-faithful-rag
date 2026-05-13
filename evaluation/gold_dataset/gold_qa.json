@@ -803,8 +803,8 @@
     "difficulty": "multi-hop",
     "category": "comparison",
     "annotator": "faruk",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "elie",
+    "review_status": "approved",
     "iaa_subset": true,
     "claims": [
       {
@@ -831,7 +831,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       },
       {
         "id": "c002",
@@ -845,7 +845,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       },
       {
         "id": "c003",
@@ -859,7 +859,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       }
     ]
   },
@@ -1164,8 +1164,8 @@
     "difficulty": "single-hop",
     "category": "policy_impact",
     "annotator": "faruk",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "elie",
+    "review_status": "approved",
     "iaa_subset": true,
     "claims": [
       {
@@ -1180,7 +1180,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       },
       {
         "id": "c002",
@@ -1194,7 +1194,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       },
       {
         "id": "c003",
@@ -1208,7 +1208,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       }
     ]
   },
