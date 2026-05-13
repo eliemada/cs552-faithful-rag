@@ -754,5 +754,570 @@
         "reviewer_label": null
       }
     ]
+  },
+  {
+    "id": "q200",
+    "question": "Contrast the foundational justification for IPR as an innovation driver with the core argument of the dissenting tradition.",
+    "gold_answer": "The property rights view, supported by Kenneth J. Arrow (1962), holds that IPR rewards are necessary for socially optimal innovation. The dissenting tradition, starting with Arnold Plant (1934), argues that neither IPR nor government support is required for optimal innovation rates.",
+    "difficulty": "single-hop",
+    "category": "policy_impact",
+    "annotator": "faruk",
+    "reviewer": "elie",
+    "review_status": "approved",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Kenneth J. Arrow (1962) justifies IPR as necessary for optimal innovation.",
+        "supporting_spans": [
+          {
+            "paper_id": "00207_W2994601296",
+            "char_start": 19594,
+            "char_end": 19733,
+            "quote": "The classic justification for maintaining an IPR system is Kenneth J. Arrow, Economic Welfare and the Allocation of Resources for Invention"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c002",
+        "text": "The dissenting tradition argues IPR and government support are not necessary for optimal innovation.",
+        "supporting_spans": [
+          {
+            "paper_id": "00207_W2994601296",
+            "char_start": 19426,
+            "char_end": 19593,
+            "quote": "dissenting tradition that argues that neither IPR nor any other governmental support for innovative activity is necessary to achieve socially optimal innovation rates."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q201",
+    "question": "How do market structures in the semiconductor and biotechnology industries result in different IPR externalization styles?",
+    "gold_answer": "The semiconductor industry uses coercive and bilateral strategies due to its mature technology and zero-sum market share competition. Biotechnology uses cooperative and multilateral strategies because its technology is developing and competition is a positive-sum game over market creation.",
+    "difficulty": "multi-hop",
+    "category": "comparison",
+    "annotator": "faruk",
+    "reviewer": "elie",
+    "review_status": "approved",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Mature technology in zero-sum markets like semiconductors leads to coercive/bilateral strategies.",
+        "supporting_spans": [
+          {
+            "paper_id": "00207_W2994601296",
+            "char_start": 53939,
+            "char_end": 54016,
+            "quote": "in very developed markets involving mature technologies (like semiconductors)"
+          },
+          {
+            "paper_id": "00207_W2994601296",
+            "char_start": 53328,
+            "char_end": 53555,
+            "quote": "Competition involving mature technologies in highly developed markets tends to be a more contentious battle for market share; as technology disperses and markets become saturated, competition invariably becomes a zero-sum game."
+          },
+          {
+            "paper_id": "00207_W2994601296",
+            "char_start": 81139,
+            "char_end": 81451,
+            "quote": "indeed, the very need for IPR reform was repeatedly defined in terms of competition with Japanese semiconductor producers. Substantively, the dependence of foreign producers (particularly the Japanese) on the U.S. market gave advocates of sui generis reform reason to expect that coercive bilateralism would work"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": "supports"
+      },
+      {
+        "id": "c002",
+        "text": "The biotechnology industry involves developing technologies in new markets, where competition is a positive-sum game centered on market creation.",
+        "supporting_spans": [
+          {
+            "paper_id": "00207_W2994601296",
+            "char_start": 53176,
+            "char_end": 53327,
+            "quote": "competition involving emerging technologies in new markets tends to center on R & D and market creation -- that is, competition is a positive sum game."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": "supports"
+      },
+      {
+        "id": "c003",
+        "text": "The biotechnology industry utilizes a slow, cooperative externalization strategy relying on multilateral harmonization.",
+        "supporting_spans": [
+          {
+            "paper_id": "00207_W2994601296",
+            "char_start": 80254,
+            "char_end": 80423,
+            "quote": "Collectively, these circumstances have been conducive to a slow, cooperative externalization strategy that relies on the traditional method of multilateral harmonization"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": "supports"
+      }
+    ]
+  },
+  {
+    "id": "q202",
+    "question": "What triggered the U.S. software industry's shift from 'cooperative multilateralism' to 'coercive multilateralism' in the mid-1980s?",
+    "gold_answer": "The shift was triggered by the industry's internationalization and a move toward market-expansion competition, which increased exposure to foreign counterfeiting. Because the traditional copyright regime lacked enforcement power, the industry lobbied for the TRIPs proposal and used Section 301 tactics to pressure foreign nations for rapid IPR reform.",
+    "difficulty": "multi-hop",
+    "category": "policy_impact",
+    "annotator": "faruk",
+    "reviewer": "elie",
+    "review_status": "approved",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "The shift to coercive strategies in software was driven by market-expansion competition and increased exposure to counterfeiting.",
+        "supporting_spans": [
+          {
+            "paper_id": "00207_W2994601296",
+            "char_start": 66185,
+            "char_end": 66355,
+            "quote": "As the software industry internationalized and shifted toward market-expansion competition, U.S. firms became increasingly exposed and sensitive to foreign counterfeiting"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c002",
+        "text": "The international copyright regime's lack of enforcement power led the software industry to press for the TRIPs proposal.",
+        "supporting_spans": [
+          {
+            "paper_id": "00207_W2994601296",
+            "char_start": 66708,
+            "char_end": 67010,
+            "quote": "the regime's harmonization processes are slow, its minimum rules are quite weak, and it entirely lacks enforcement power. Consequently, the U.S. software industry created a powerful alliance with other copyright-sensitive industries and pressed for wholesale reform of the multilateral copyright regime"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c003",
+        "text": "Section 301 tactics were used as a bilateral tool to support the multilateral goals of the TRIPs agreement.",
+        "supporting_spans": [
+          {
+            "paper_id": "00207_W2994601296",
+            "char_start": 67927,
+            "char_end": 68079,
+            "quote": "the bilateral Section 301 cases and the multilateral TRIPs agreement as symbiotic exercises; the bilateral cases were designed to convey U.S. intentions"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q203",
+    "question": "What are the steps in the structured 'Rule of Reason' analysis used in pharmaceutical antitrust cases?",
+    "gold_answer": "The structured Rule of Reason involves first identifying a contract that restrains trade and assessing its competitive risk. If a risk exists, the burden shifts to the defendant to prove actual procompetitive benefits before determining if the restraint is the least restrictive means.",
+    "difficulty": "multi-hop",
+    "category": "multi_hop",
+    "annotator": "faruk",
+    "reviewer": "elie",
+    "review_status": "approved",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "The first step of the Rule of Reason is determining if there is a contract, combination, or conspiracy that restrains trade.",
+        "supporting_spans": [
+          {
+            "paper_id": "00214_W2119474366",
+            "char_start": 9120,
+            "char_end": 9230,
+            "quote": "Consider first whether there is a \"contract, combination, or conspiracy\" that restrains trade (in some sense)."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c002",
+        "text": "The analysis must consider whether the restraint poses a substantial risk of anticompetitive harm, such as increasing price.",
+        "supporting_spans": [
+          {
+            "paper_id": "00214_W2119474366",
+            "char_start": 9360,
+            "char_end": 9521,
+            "quote": "consider next whether the restraint poses any possible risk to competition. I.e., is the restraint at issue one that poses a substantial risk of increasing price"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c003",
+        "text": "The burden of proof shifts to the defendant to establish the actual procompetitive redeeming virtues of the action.",
+        "supporting_spans": [
+          {
+            "paper_id": "00214_W2119474366",
+            "char_start": 15536,
+            "char_end": 15660,
+            "quote": "the burden then shifts to the defendant to show that the challenged conduct promotes a sufficiently procompetitive objective"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c004",
+        "text": "The court evaluates whether the restraint is the least restrictive means of attaining the identified procompetitive benefits.",
+        "supporting_spans": [
+          {
+            "paper_id": "00214_W2119474366",
+            "char_start": 10842,
+            "char_end": 10937,
+            "quote": "consider next whether the restraint is the least restrictive means of attaining those benefits."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q204",
+    "question": "Why is the holding in FTC v. Actavis considered a 'de facto' rule of presumptive illegality?",
+    "gold_answer": "It is considered de facto presumptive illegality because reverse payment settlements typically satisfy the first four steps of the Rule of Reason automatically, effectively starting the judicial review at the point where the burden of proof is on the defendant.",
+    "difficulty": "single-hop",
+    "category": "policy_impact",
+    "annotator": "faruk",
+    "reviewer": "elie",
+    "review_status": "approved",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "In typical pay-for-delay cases, the first four steps of the structured Rule of Reason are satisfied by default.",
+        "supporting_spans": [
+          {
+            "paper_id": "00214_W2119474366",
+            "char_start": 14402,
+            "char_end": 14540,
+            "quote": "if, under the Court's own analysis, steps 1 through 4 are satisfied in the typical pay-for-delay case and review really kicks in at step 5"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c002",
+        "text": "At step 5 of the analysis, the defendant carries the burden of producing exonerating evidence.",
+        "supporting_spans": [
+          {
+            "paper_id": "00214_W2119474366",
+            "char_start": 14543,
+            "char_end": 14630,
+            "quote": "at which point the defendant has the burden of coming forward with exonerating evidence"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c003",
+        "text": "Starting the legal review with the burden of proof on the defendant makes the framework functionally identical to presumptive illegality.",
+        "supporting_spans": [
+          {
+            "paper_id": "00214_W2119474366",
+            "char_start": 14633,
+            "char_end": 14740,
+            "quote": "it is a little hard to see how that framework differs in any functional manner from presumptive illegality."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q205",
+    "question": "What factor suggests a reverse payment is a good-faith effort to avoid litigation costs?",
+    "gold_answer": "If the payment amount is less than the patent owner's expected litigation costs, it may be viewed as a good-faith effort to avoid expenses rather than an attempt to suppress competition.",
+    "difficulty": "single-hop",
+    "category": "factual",
+    "annotator": "faruk",
+    "reviewer": "elie",
+    "review_status": "approved",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "A reverse payment can be sufficient to rebut the presumption of illegality if it is less than the patent owner's expected litigation costs.",
+        "supporting_spans": [
+          {
+            "paper_id": "00214_W2119474366",
+            "char_start": 3897,
+            "char_end": 4046,
+            "quote": "Where that amount is less than the amount of the patent owner's expected litigation costs, this fact alone may be sufficient to rebut the presumption"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c002",
+        "text": "Payments below litigation costs may be interpreted as a good-faith effort to avoid the expenses of trial.",
+        "supporting_spans": [
+          {
+            "paper_id": "00214_W2119474366",
+            "char_start": 4198,
+            "char_end": 4314,
+            "quote": "Under these circumstances, the payment may represent nothing more than a good-faith effort to avoid litigation costs"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q206",
+    "question": "How can large reverse payments serve as a surrogate for patent strength in antitrust analysis?",
+    "gold_answer": "An unexplained large payment implies the patentee doubts the patent's survival, providing a workable surrogate for patent weakness without requiring a detailed trial on the patent's validity.",
+    "difficulty": "single-hop",
+    "category": "policy_impact",
+    "annotator": "faruk",
+    "reviewer": "elie",
+    "review_status": "approved",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "The size of an unexplained reverse payment can provide a workable surrogate for a patent's weakness.",
+        "supporting_spans": [
+          {
+            "paper_id": "00214_W2119474366",
+            "char_start": 18236,
+            "char_end": 18437,
+            "quote": "the size of the unexplained reverse payment can provide a workable surrogate for a patent's weakness, all without forcing a court to conduct a detailed exploration of the validity of the patent itself."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q207",
+    "question": "What was the significance of the 1978 Customs Procedural Reform and Simplification Act for Levi Strauss?",
+    "gold_answer": "The Act allowed Levi Strauss to add seizure and forfeiture provisions to Section 1526 of the Tariff Act of 1930 to combat foreign counterfeiting of trademark blue jeans.",
+    "difficulty": "single-hop",
+    "category": "factual",
+    "annotator": "faruk",
+    "reviewer": "elie",
+    "review_status": "approved",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Levi Strauss lobbied to add seizure and forfeiture provisions to Section 1526 of the Tariff Act of 1930 which Congress included as provisions in the Customs Procedural Reform and Simplification Act of 1978.",
+        "supporting_spans": [
+          {
+            "paper_id": "00207_W2994601296",
+            "char_start": 48088,
+            "char_end": 48319,
+            "quote": "Levi Strauss' first step was to strengthen border sanctions; it lobbied Congress to add seizure and forfeiture provisions to Section 1526 of the Tariff Act of 1930, and Congress promptly obliged in the Customs Procedural Reform and"
+          },
+          {
+            "paper_id": "00207_W2994601296",
+            "char_start": 48374,
+            "char_end": 48401,
+            "quote": "Simplification Act of 1978."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c002",
+        "text": "The legislative change was aimed at addressing foreign counterfeiting of trademarked blue jeans.",
+        "supporting_spans": [
+          {
+            "paper_id": "00207_W2994601296",
+            "char_start": 47970,
+            "char_end": 48087,
+            "quote": "the Levi Strauss Corporation began a concerted effort to combat foreign counterfeiting of their trademark blue jeans."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q208",
+    "question": "Which industry group opposed semiconductor copyright reform and why?",
+    "gold_answer": "The American Association of Publishers (AAP) opposed semiconductor copyright reform, viewing it as a breach of copyright principles that would ultimately undermine their own industry's legal protections.",
+    "difficulty": "single-hop",
+    "category": "policy_impact",
+    "annotator": "faruk",
+    "reviewer": "elie",
+    "review_status": "approved",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "The American Association of Publishers (AAP) represented an adversarial coalition that opposed semiconductor copyright reform.",
+        "supporting_spans": [
+          {
+            "paper_id": "00207_W2994601296",
+            "char_start": 82406,
+            "char_end": 82539,
+            "quote": "The AAP .represented a large and diverse group of industries that uniformly opposed copyright protection for semiconductor mask works"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": "supports"
+      },
+      {
+        "id": "c002",
+        "text": "The AAP viewed the proposed semiconductor IPR terms as a breach of fundamental copyright principles.",
+        "supporting_spans": [
+          {
+            "paper_id": "00207_W2994601296",
+            "char_start": 82545,
+            "char_end": 82626,
+            "quote": "viewed the proposed terms as a serious breach of fundamental copyright principles"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": "supports"
+      },
+      {
+        "id": "c003",
+        "text": "The coalition feared that the semiconductor reform would ultimately undermine their own industry's copyright protection.",
+        "supporting_spans": [
+          {
+            "paper_id": "00207_W2994601296",
+            "char_start": 82627,
+            "char_end": 82690,
+            "quote": "that would ultimately undermine their own copyright protection."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": "supports"
+      }
+    ]
+  },
+  {
+    "id": "q209",
+    "question": "How did U.S. software firms use 'Section 301' tactics in the mid-1980s?",
+    "gold_answer": "U.S. software firms used Section 301 tactics to develop the substantive basis for the TRIPs program and as a fail-safe in case the Uruguay Round of GATT negotiations failed.",
+    "difficulty": "single-hop",
+    "category": "factual",
+    "annotator": "faruk",
+    "reviewer": "elie",
+    "review_status": "approved",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Software industries used Section 301 tactics to support the TRIPs program and as a Uruguay Round fail-safe.",
+        "supporting_spans": [
+          {
+            "paper_id": "00207_W2994601296",
+            "char_start": 67661,
+            "char_end": 67888,
+            "quote": "the copyright coalition encouraged the use of Section 301 tactics to develop both the substantive basis and the political support for the TRIPs program, as well as to provide a fail-safe in case the Uruguay Round might collapse"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q210",
+    "question": "What is the relationship between 'trade leverage' and externalization strategies according to the IPR reform text?",
+    "gold_answer": "Higher trade leverage correlates with coercive and bilateral externalization strategies, while lower trade leverage leads to cooperative and multilateral strategies.",
+    "difficulty": "single-hop",
+    "category": "policy_impact",
+    "annotator": "faruk",
+    "reviewer": "elie",
+    "review_status": "approved",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Trade leverage determines if externalization strategies are coercive/bilateral or cooperative/multilateral.",
+        "supporting_spans": [
+          {
+            "paper_id": "00207_W2994601296",
+            "char_start": 56735,
+            "char_end": 56961,
+            "quote": "the higher the trade leverage, the more likely that externalization strategies will be coercive and bilateral; the lower the trade leverage, the more likely that externalization strategies will be cooperative and multilateral."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q211",
+    "question": "Under what condition is a restraint considered 'per se illegal' in the Rule of Reason framework?",
+    "gold_answer": "A restraint is per se illegal if it is a 'naked restraint of trade' that fails to provide any plausible, cognizable, procompetitive benefits.",
+    "difficulty": "single-hop",
+    "category": "factual",
+    "annotator": "faruk",
+    "reviewer": "elie",
+    "review_status": "approved",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Restraints without procompetitive benefits are naked restraints and per se illegal.",
+        "supporting_spans": [
+          {
+            "paper_id": "00214_W2119474366",
+            "char_start": 10212,
+            "char_end": 10340,
+            "quote": "If no, stop; it is a naked restraint of trade, likely only to increase price or reduce output or quality, and is per se illegal."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q212",
+    "question": "What does the text suggest about the impact of Diamond v. Chakrabarty on biotechnology?",
+    "gold_answer": "The landmark Diamond v. Chakrabarty decision in 1980 allowed for the patenting of biotechnology products, setting a critical precedent for the industry.",
+    "difficulty": "single-hop",
+    "category": "factual",
+    "annotator": "faruk",
+    "reviewer": "elie",
+    "review_status": "approved",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Diamond v. Chakrabarty (1980) allowed for patents on biotechnology products.",
+        "supporting_spans": [
+          {
+            "paper_id": "00207_W2994601296",
+            "char_start": 51125,
+            "char_end": 51245,
+            "quote": "set the precedent allowing patents for biotechnology products in 1980, with the landmark Diamond v. Chakrabarty decision"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
   }
 ]
