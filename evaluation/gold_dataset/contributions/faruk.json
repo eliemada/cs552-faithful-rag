@@ -6,8 +6,8 @@
     "difficulty": "single-hop",
     "category": "policy_impact",
     "annotator": "faruk",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "elie",
+    "review_status": "approved",
     "iaa_subset": false,
     "claims": [
       {
@@ -100,8 +100,8 @@
     "difficulty": "multi-hop",
     "category": "policy_impact",
     "annotator": "faruk",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "elie",
+    "review_status": "approved",
     "iaa_subset": false,
     "claims": [
       {
@@ -155,8 +155,8 @@
     "difficulty": "multi-hop",
     "category": "multi_hop",
     "annotator": "faruk",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "elie",
+    "review_status": "approved",
     "iaa_subset": false,
     "claims": [
       {
@@ -224,8 +224,8 @@
     "difficulty": "single-hop",
     "category": "policy_impact",
     "annotator": "faruk",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "elie",
+    "review_status": "approved",
     "iaa_subset": false,
     "claims": [
       {
@@ -279,8 +279,8 @@
     "difficulty": "single-hop",
     "category": "factual",
     "annotator": "faruk",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "elie",
+    "review_status": "approved",
     "iaa_subset": false,
     "claims": [
       {
@@ -320,8 +320,8 @@
     "difficulty": "single-hop",
     "category": "policy_impact",
     "annotator": "faruk",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "elie",
+    "review_status": "approved",
     "iaa_subset": false,
     "claims": [
       {
@@ -343,8 +343,8 @@
     "difficulty": "single-hop",
     "category": "factual",
     "annotator": "faruk",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "elie",
+    "review_status": "approved",
     "iaa_subset": false,
     "claims": [
       {
@@ -445,8 +445,8 @@
     "difficulty": "single-hop",
     "category": "factual",
     "annotator": "faruk",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "elie",
+    "review_status": "approved",
     "iaa_subset": false,
     "claims": [
       {
@@ -468,8 +468,8 @@
     "difficulty": "single-hop",
     "category": "policy_impact",
     "annotator": "faruk",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "elie",
+    "review_status": "approved",
     "iaa_subset": false,
     "claims": [
       {
@@ -491,8 +491,8 @@
     "difficulty": "single-hop",
     "category": "factual",
     "annotator": "faruk",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "elie",
+    "review_status": "approved",
     "iaa_subset": false,
     "claims": [
       {
@@ -514,8 +514,8 @@
     "difficulty": "single-hop",
     "category": "factual",
     "annotator": "faruk",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "elie",
+    "review_status": "approved",
     "iaa_subset": false,
     "claims": [
       {
