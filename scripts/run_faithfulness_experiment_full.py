@@ -106,16 +106,20 @@ def main():
 
     # Filter to answerable questions that have at least one claim with a span
     pairs = [
-        q for q in gold
+        q
+        for q in gold
         if q.get("claims")
         and q["difficulty"] != "unanswerable"
         and q["claims"][0].get("supporting_spans")
     ]
-    print(f"Loaded {len(pairs)} answerable questions x {len(models)} models = "
-          f"{len(pairs) * len(models)} runs\n")
+    print(
+        f"Loaded {len(pairs)} answerable questions x {len(models)} models = "
+        f"{len(pairs) * len(models)} runs\n"
+    )
 
     print("Loading NLI model...")
     from transformers import pipeline
+
     nli = pipeline("zero-shot-classification", model="cross-encoder/nli-deberta-v3-small")
 
     all_results = []
@@ -133,27 +137,33 @@ def main():
                 answer = ask_llm(question, model)
                 print(f"Answer: {answer[:200]}...")
                 result = evaluate_answer(answer, gold_passage, nli)
-                print(f"  Claims: {result['n_claims']}  "
-                      f"NLI: {result['nli_faithfulness']:.1%}  "
-                      f"Judge: {result['judge_faithfulness']:.1%}")
-                all_results.append({
-                    "question_id": pair["id"],
-                    "difficulty": pair["difficulty"],
-                    "category": pair["category"],
-                    "model": model,
-                    "answer": answer,
-                    "n_claims": result["n_claims"],
-                    "nli_faithfulness": result["nli_faithfulness"],
-                    "judge_faithfulness": result["judge_faithfulness"],
-                    "claims": result["claims"],
-                })
+                print(
+                    f"  Claims: {result['n_claims']}  "
+                    f"NLI: {result['nli_faithfulness']:.1%}  "
+                    f"Judge: {result['judge_faithfulness']:.1%}"
+                )
+                all_results.append(
+                    {
+                        "question_id": pair["id"],
+                        "difficulty": pair["difficulty"],
+                        "category": pair["category"],
+                        "model": model,
+                        "answer": answer,
+                        "n_claims": result["n_claims"],
+                        "nli_faithfulness": result["nli_faithfulness"],
+                        "judge_faithfulness": result["judge_faithfulness"],
+                        "claims": result["claims"],
+                    }
+                )
             except Exception as e:
                 print(f"  ERROR: {e}")
-                all_results.append({
-                    "question_id": pair["id"],
-                    "model": model,
-                    "error": str(e),
-                })
+                all_results.append(
+                    {
+                        "question_id": pair["id"],
+                        "model": model,
+                        "error": str(e),
+                    }
+                )
             time.sleep(0.3)
 
     # Save raw results
