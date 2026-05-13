@@ -53,7 +53,7 @@
         },
         {
           "paper_id": "00207_W2994601296",
-          "char_start": 53939, "char_end": 54016,
+          "char_start": 53328, "char_end": 53555,
           "quote": "Competition involving mature technologies in highly developed markets tends to be a more contentious battle for market share; as technology disperses and markets become saturated, competition invariably becomes a zero-sum game."
         },
         {
@@ -67,12 +67,6 @@
         "id": "c002",
         "text": "The biotechnology industry involves developing technologies in new markets, where competition is a positive-sum game centered on market creation.",
         "supporting_spans": [
-          {
-            "paper_id": "00207_W2994601296",
-            "char_start": 54105,
-            "char_end": 54174,
-            "quote": "In new markets involving developing technologies (like biotechnology), competition is a positive sum game."
-          },
           {
             "paper_id": "00207_W2994601296",
             "char_start": 53176,
@@ -361,7 +355,7 @@
             "paper_id": "00207_W2994601296",
             "char_start": 48088,
             "char_end": 48319,
-            "quote": "Levi Strauss' first step was to strengthen border sanctions; it lobbied Congress to add seizure and forfeiture provisions to Section 1526 of the Tariff Act of 1930, and Congress promptly obliged in the Customs Procedural Reform and "
+            "quote": "Levi Strauss' first step was to strengthen border sanctions; it lobbied Congress to add seizure and forfeiture provisions to Section 1526 of the Tariff Act of 1930, and Congress promptly obliged in the Customs Procedural Reform and"
           },
           {
             "paper_id": "00207_W2994601296",
