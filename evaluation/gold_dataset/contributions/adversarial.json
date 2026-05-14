@@ -1,0 +1,164 @@
+[
+  {
+    "id": "q900",
+    "question": "What did Bessen and Maskin find about the effect of strengthened software patent protection in the 1980s on R&D?",
+    "gold_answer": "ADVERSARIAL CONTROL — the cited span states the opposite: stronger software patents ushered in a period of stagnant, if not declining, R&D among the firms that patented most. The claim asserts a marked increase, which the span explicitly negates.",
+    "difficulty": "single-hop",
+    "category": "factual",
+    "annotator": "adversarial",
+    "reviewer": "elie",
+    "review_status": "approved",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Bessen and Maskin show that the 1980s strengthening of software patent protection led to a marked increase in R&D among the firms that patented most heavily.",
+        "supporting_spans": [
+          {
+            "paper_id": "00019_W2152132348",
+            "char_start": 3044,
+            "char_end": 3258,
+            "quote": "We will show that, far from unleashing a flurry of new innovative activity, these stronger property rights ushered in a period of stagnant, if not declining, R&D among those industries and firms that patented most."
+          }
+        ],
+        "annotator_label": "contradicts",
+        "reviewer_label": "contradicts"
+      }
+    ]
+  },
+  {
+    "id": "q901",
+    "question": "By how much did patents raise imitation costs in electronics, according to the studies cited by Bessen and Maskin?",
+    "gold_answer": "ADVERSARIAL CONTROL — Mansfield et al. estimate 7%, Levin et al. 7-15%. The claim's '30-40%' is fabricated; the span pins the numbers explicitly.",
+    "difficulty": "single-hop",
+    "category": "factual",
+    "annotator": "adversarial",
+    "reviewer": "elie",
+    "review_status": "approved",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Mansfield, Schwartz and Wagner and Levin et al. estimate that patents raise imitation costs in electronics industries by roughly 30-40%.",
+        "supporting_spans": [
+          {
+            "paper_id": "00019_W2152132348",
+            "char_start": 5242,
+            "char_end": 5390,
+            "quote": "Patents in electronics industries were estimated to increase imitation costs by only 7% [Mansfield, Schwartz and Wagner] and 7 - 15% [Levin, et al]."
+          }
+        ],
+        "annotator_label": "contradicts",
+        "reviewer_label": "contradicts"
+      }
+    ]
+  },
+  {
+    "id": "q902",
+    "question": "How does Lemley characterise the relationship between intellectual property and zero-sum competition?",
+    "gold_answer": "ADVERSARIAL CONTROL — the span describes REAL property as zero-sum specifically to contrast it with IP. Lemley's actual claim, established later in the paper, is that 'invention and creation are not zero-sum'. The adversarial claim mis-attributes the zero-sum framing from real property to IP.",
+    "difficulty": "single-hop",
+    "category": "policy_impact",
+    "annotator": "adversarial",
+    "reviewer": "elie",
+    "review_status": "approved",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Lemley argues that intellectual property is a zero-sum environment, because the use of an invention by one party precludes its use by others.",
+        "supporting_spans": [
+          {
+            "paper_id": "00021_W79756392",
+            "char_start": 5022,
+            "char_end": 5216,
+            "quote": "real property tends to be a zero-sum environment – if I use a piece of land, you can't use it.. If I overgraze a commons, that overgrazing imposes costs on anyone else who might use the commons."
+          }
+        ],
+        "annotator_label": "contradicts",
+        "reviewer_label": "contradicts"
+      }
+    ]
+  },
+  {
+    "id": "q903",
+    "question": "What do Sandner and Block find about how investors value patent portfolios?",
+    "gold_answer": "ADVERSARIAL CONTROL — entity swap. The span finds investors value firms with larger TRADEMARK portfolios; the claim re-attributes this finding to PATENT portfolios. The paper does discuss patents elsewhere, but this span does not address the patent-portfolio claim.",
+    "difficulty": "single-hop",
+    "category": "factual",
+    "annotator": "adversarial",
+    "reviewer": "elie",
+    "review_status": "approved",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Sandner and Block find that investors clearly assign a higher value to companies with larger patent portfolios.",
+        "supporting_spans": [
+          {
+            "paper_id": "00018_W3122026742",
+            "char_start": 6681,
+            "char_end": 6769,
+            "quote": "Investors clearly assigned a higher value to companies with larger trademark portfolios."
+          }
+        ],
+        "annotator_label": "unrelated",
+        "reviewer_label": "unrelated"
+      }
+    ]
+  },
+  {
+    "id": "q904",
+    "question": "What does Sell argue about U.S. externalization strategy across all of its trade-policy targets?",
+    "gold_answer": "ADVERSARIAL CONTROL — scope overreach. The span states a CONDITIONAL: strategy depends on leverage (high → coercive/bilateral, low → cooperative/multilateral). The claim drops the conditional and asserts a universal 'always coercive bilateral' position, which the span explicitly negates with its low-leverage branch.",
+    "difficulty": "single-hop",
+    "category": "policy_impact",
+    "annotator": "adversarial",
+    "reviewer": "elie",
+    "review_status": "approved",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Sell shows that U.S. trade policy on IPR follows a coercive, bilateral externalization strategy across all target countries, regardless of trade leverage.",
+        "supporting_spans": [
+          {
+            "paper_id": "00207_W2994601296",
+            "char_start": 56735,
+            "char_end": 56961,
+            "quote": "the higher the trade leverage, the more likely that externalization strategies will be coercive and bilateral; the lower the trade leverage, the more likely that externalization strategies will be cooperative and multilateral."
+          }
+        ],
+        "annotator_label": "contradicts",
+        "reviewer_label": "contradicts"
+      }
+    ]
+  },
+  {
+    "id": "q905",
+    "question": "What time period does Sandner and Block's market-value dataset cover?",
+    "gold_answer": "ADVERSARIAL CONTROL — date drift. The span specifies 1996-2002 (6757 obs / 1216 companies); the claim states 1980-1995. The two periods do not overlap.",
+    "difficulty": "single-hop",
+    "category": "factual",
+    "annotator": "adversarial",
+    "reviewer": "elie",
+    "review_status": "approved",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Sandner and Block estimate their market-value equation on firm-level data covering the years 1980 through 1995.",
+        "supporting_spans": [
+          {
+            "paper_id": "00018_W3122026742",
+            "char_start": 6140,
+            "char_end": 6322,
+            "quote": "The dataset employed to estimate the market value equation has the structure of an unbalanced panel and comprises 6757 observations of 1216 companies for the years 1996 through 2002."
+          }
+        ],
+        "annotator_label": "contradicts",
+        "reviewer_label": "contradicts"
+      }
+    ]
+  }
+]
