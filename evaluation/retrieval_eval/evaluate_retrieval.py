@@ -119,10 +119,12 @@ def _empty_metrics(k_values: Iterable[int]) -> dict:
 
 def _aggregate(per_query: list[dict], key: str, k_values: Iterable[int]) -> dict:
     """Mean each metric over queries where the key's metrics are populated."""
-    metric_names = [f"precision@{k}" for k in k_values] + \
-                   [f"recall@{k}" for k in k_values] + \
-                   [f"hit_rate@{k}" for k in k_values] + \
-                   ["mrr"]
+    metric_names = (
+        [f"precision@{k}" for k in k_values]
+        + [f"recall@{k}" for k in k_values]
+        + [f"hit_rate@{k}" for k in k_values]
+        + ["mrr"]
+    )
     agg: dict[str, float | None] = {}
     for m in metric_names:
         values = [row[key][m] for row in per_query if row[key][m] is not None]
@@ -164,19 +166,23 @@ def evaluate_config(
         else:
             chunk_metrics = _empty_metrics(k_values)
 
-        per_query.append({
-            "query_id": q.query_id,
-            "category": q.category,
-            "difficulty": q.difficulty,
-            "gold_paper_count": len(q.gold_paper_ids),
-            "gold_chunk_count": len(chunk_gold),
-            "has_chunk_coverage": bool(chunk_gold),
-            "latency_ms": round(elapsed_ms, 1),
-            "paper": paper_metrics,
-            "chunk": chunk_metrics,
-        })
+        per_query.append(
+            {
+                "query_id": q.query_id,
+                "category": q.category,
+                "difficulty": q.difficulty,
+                "gold_paper_count": len(q.gold_paper_ids),
+                "gold_chunk_count": len(chunk_gold),
+                "has_chunk_coverage": bool(chunk_gold),
+                "latency_ms": round(elapsed_ms, 1),
+                "paper": paper_metrics,
+                "chunk": chunk_metrics,
+            }
+        )
         if progress:
-            print(f" {elapsed_ms:6.0f}ms  paper-hit@10={paper_metrics['hit_rate@10']:.0f}", flush=True)
+            print(
+                f" {elapsed_ms:6.0f}ms  paper-hit@10={paper_metrics['hit_rate@10']:.0f}", flush=True
+            )
 
     return {
         "config": adapter.config.name,
@@ -235,22 +241,24 @@ def main(argv: list[str] | None = None) -> int:
     adapter = load_adapter(args.config, indexes_dir=args.indexes_dir)
 
     print("Running evaluation ...")
-    result = evaluate_config(
-        adapter, queries, k_values=tuple(args.ks), progress=not args.quiet
-    )
+    result = evaluate_config(adapter, queries, k_values=tuple(args.ks), progress=not args.quiet)
 
     output.write_text(json.dumps(result, indent=2))
     print(f"\nWrote {output}")
-    print(f"  paper-level n={result['aggregate']['paper']['n']}: "
-          f"hit@5={result['aggregate']['paper']['hit_rate@5']:.3f}  "
-          f"hit@10={result['aggregate']['paper']['hit_rate@10']:.3f}  "
-          f"mrr={result['aggregate']['paper']['mrr']:.3f}")
-    chunk_agg = result['aggregate']['chunk']
-    if chunk_agg['n']:
-        print(f"  chunk-level n={chunk_agg['n']}: "
-              f"hit@5={chunk_agg['hit_rate@5']:.3f}  "
-              f"hit@10={chunk_agg['hit_rate@10']:.3f}  "
-              f"mrr={chunk_agg['mrr']:.3f}")
+    print(
+        f"  paper-level n={result['aggregate']['paper']['n']}: "
+        f"hit@5={result['aggregate']['paper']['hit_rate@5']:.3f}  "
+        f"hit@10={result['aggregate']['paper']['hit_rate@10']:.3f}  "
+        f"mrr={result['aggregate']['paper']['mrr']:.3f}"
+    )
+    chunk_agg = result["aggregate"]["chunk"]
+    if chunk_agg["n"]:
+        print(
+            f"  chunk-level n={chunk_agg['n']}: "
+            f"hit@5={chunk_agg['hit_rate@5']:.3f}  "
+            f"hit@10={chunk_agg['hit_rate@10']:.3f}  "
+            f"mrr={chunk_agg['mrr']:.3f}"
+        )
     else:
         print("  chunk-level: no queries with chunk coverage at this granularity")
     return 0

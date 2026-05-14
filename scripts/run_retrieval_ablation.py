@@ -33,8 +33,14 @@ def _run_config(name: str) -> None:
     """Invoke the evaluate_retrieval CLI for one config."""
     print(f"Running {name} ...", flush=True)
     subprocess.run(
-        [sys.executable, "-m", "evaluation.retrieval_eval.evaluate_retrieval",
-         "--config", name, "--quiet"],
+        [
+            sys.executable,
+            "-m",
+            "evaluation.retrieval_eval.evaluate_retrieval",
+            "--config",
+            name,
+            "--quiet",
+        ],
         cwd=REPO_ROOT,
         check=True,
     )
@@ -51,7 +57,7 @@ def _row_for(config_name: str, agg: dict, granularity: str, ks: tuple[int, ...])
     for k in ks:
         cells.append(_fmt(g.get(f"hit_rate@{k}")))
     cells.append(_fmt(g.get(f"precision@{k}")))  # noqa: B023 — last k value
-    cells.append(_fmt(g.get(f"recall@{k}")))     # noqa: B023
+    cells.append(_fmt(g.get(f"recall@{k}")))  # noqa: B023
     cells.append(_fmt(g.get("mrr")))
     return cells
 
@@ -154,8 +160,11 @@ detail (per-query metrics, latency, gold-set sizes) lives in
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
     parser.add_argument("--results-dir", type=Path, default=RESULTS_DIR)
-    parser.add_argument("--run-missing", action="store_true",
-                        help="Invoke evaluate_retrieval for any config that has no result JSON yet.")
+    parser.add_argument(
+        "--run-missing",
+        action="store_true",
+        help="Invoke evaluate_retrieval for any config that has no result JSON yet.",
+    )
     parser.add_argument("--ks", type=int, nargs="+", default=list(DEFAULT_KS))
     args = parser.parse_args(argv)
     ks = tuple(args.ks)
@@ -167,8 +176,11 @@ def main(argv: list[str] | None = None) -> int:
 
     comparison = build_comparison(args.results_dir, ks)
     if not comparison["results"]:
-        print("No per-config results found. Run with --run-missing or run "
-              "`evaluate_retrieval` first.", file=sys.stderr)
+        print(
+            "No per-config results found. Run with --run-missing or run "
+            "`evaluate_retrieval` first.",
+            file=sys.stderr,
+        )
         return 1
 
     args.results_dir.mkdir(parents=True, exist_ok=True)

@@ -117,6 +117,10 @@ def load_adapter(
         zeroentropy_api_key=zeroentropy_api_key if config.use_reranker else None,
         chunk_type=config.chunk_type,
     )
-    logger.info("Loaded retriever config %s (chunk_type=%s, rerank=%s)",
-                config.name, config.chunk_type, config.use_reranker)
+    logger.info(
+        "Loaded retriever config %s (chunk_type=%s, rerank=%s)",
+        config.name,
+        config.chunk_type,
+        config.use_reranker,
+    )
     return RetrieverAdapter(hybrid, config)
