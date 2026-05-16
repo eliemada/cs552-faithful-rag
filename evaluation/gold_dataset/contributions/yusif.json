@@ -1,1 +1,539 @@
-[]
+[
+  {
+    "id": "q300",
+    "question": "What is the 'replacement effect' and how does it change as a patent's expiration date approaches?",
+    "gold_answer": "The replacement effect occurs when a technology leader's incentive to invest in R&D is reduced because new technologies cannibalize rents from their existing products. This effect is nonstationary, meaning it weakens as the patent's expiration date nears, causing the leader's R&D investment to increase over time.",
+    "difficulty": "single-hop",
+    "category": "policy_impact",
+    "annotator": "yusif",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Cannibalization of existing rents reduces a leader's incentive to replace their patented technology.",
+        "supporting_spans": [
+          {
+            "paper_id": "00303_W2954190558",
+            "char_start": 1066,
+            "char_end": 1228,
+            "quote": "When new technologies cannibalize rents from existing products, the cannibalization reduces the leader's incentives to invest in replacing its patented technology"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c002",
+        "text": "A leader's R&D incentives increase as the patent term runs out because the replacement effect is nonstationary.",
+        "supporting_spans": [
+          {
+            "paper_id": "00303_W2954190558",
+            "char_start": 1373,
+            "char_end": 1502,
+            "quote": "A leader's incentives to invest in R & D, therefore, increase as the patent term runs out. Time mitigates the replacement effect."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q301",
+    "question": "Under what specific condition does 'Arrow's traditional result' regarding follower innovation reverse?",
+    "gold_answer": "Arrow's result reverses when forward protection is sufficiently strong. In these protective systems, followers internalize the leader’s replacement effect through expected license fees, leading them to invest less in R&D than the leaders throughout the entire life of the patent.",
+    "difficulty": "single-hop",
+    "category": "policy_impact",
+    "annotator": "yusif",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Under sufficiently high forward protection, followers invest less in R&D than leaders.",
+        "supporting_spans": [
+          {
+            "paper_id": "00303_W2954190558",
+            "char_start": 3533,
+            "char_end": 3711,
+            "quote": "Under sufficiently high protection against future innovations, Arrow's result reverses: followers have less incentive to invest than leaders at every moment of the patent's life."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c002",
+        "text": "Followers internalize the leader's replacement effect through the payment of license fees.",
+        "supporting_spans": [
+          {
+            "paper_id": "00303_W2954190558",
+            "char_start": 1909,
+            "char_end": 1982,
+            "quote": "followers internalize the cost of replacing the leader, discouraging them"
+          },
+          {
+            "paper_id": "00303_W2954190558",
+            "char_start": 3455,
+            "char_end": 3477,
+            "quote": "from investing in R&D."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q302",
+    "question": "Contrast the optimal patent policy for the pharmaceutical sector versus the software industry as described by Parra.",
+    "gold_answer": "In the pharmaceutical sector, where innovations are costlier, the optimal policy uses long patents with little forward protection. In the software industry, where innovations are more frequent and less costly, the optimal policy uses short patents combined with strong forward protection to maximize innovation pace.",
+    "difficulty": "multi-hop",
+    "category": "policy_impact",
+    "annotator": "yusif",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "The pharmaceutical sector is best served by long patents with little forward protection.",
+        "supporting_spans": [
+          {
+            "paper_id": "00303_W2954190558",
+            "char_start": 9166,
+            "char_end": 9425,
+            "quote": "among markets in which innovations take longer to produce or are costlier to develop, such as the pharmaceutical sector, patent length is a more effective tool for promoting innovation; long patents with little forward protection maximize innovative activity."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c002",
+        "text": "The software industry is best served by short patents with protective forward protection.",
+        "supporting_spans": [
+          {
+            "paper_id": "00303_W2954190558",
+            "char_start": 9444,
+            "char_end": 9727,
+            "quote": "markets in which innovations are less costly to produce or are more frequently generated, such as the software industry, forward protection is a more effective tool for promoting innovation; short patents that are protective against future breakthroughs maximize the innovation pace."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q303",
+    "question": "How does an increase in patent length (T) specifically affect the leader's R&D investment strategy?",
+    "gold_answer": "An increase in patent length delays the leader's investments. It reduces R&D at the beginning of the patent's life due to an increased replacement effect, while increasing it toward the end as the expiration date approaches.",
+    "difficulty": "single-hop",
+    "category": "factual",
+    "annotator": "yusif",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Longer patent length decreases the leader's R&D at the beginning of the patent's life, but increases it toward the end..",
+        "supporting_spans": [
+          {
+            "paper_id": "00303_W2954190558",
+            "char_start": 49263,
+            "char_end": 49437,
+            "quote": "An increase in patent length T delays the leader's investments; that is, it decreases the leader's R&D at the beginning of the patent's life, but increases it toward the end."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q304",
+    "question": "According to the article, what are the two dimensions that characterize a patent policy?",
+    "gold_answer": "A patent policy is characterized by its statutory length (T), which is the time a leader can exclude others from using the technology, and forward protection (b), which is the probability that a new innovation will be found to infringe on the leader's patent.",
+    "difficulty": "single-hop",
+    "category": "factual",
+    "annotator": "yusif",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Patent length determines how long a leader can exclude others from using their technology.",
+        "supporting_spans": [
+          {
+            "paper_id": "00303_W2954190558",
+            "char_start": 4884,
+            "char_end": 4999,
+            "quote": "policy determining how long a leader will be able to exclude others from using its current technology—patent length"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c002",
+        "text": "Forward protection is the probability that a new innovation infringes on a leader's patent.",
+        "supporting_spans": [
+          {
+            "paper_id": "00303_W2954190558",
+            "char_start": 5004,
+            "char_end": 5086,
+            "quote": "how enforceable its patent will be against future innovations—forward protection ."
+          },
+          {
+            "paper_id": "00303_W2954190558",
+            "char_start": 5156,
+            "char_end": 5199,
+            "quote": "I treat forward protection as probabilistic"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q305",
+    "question": "What is the impact of 'overly protective' policies on market entry for followers?",
+    "gold_answer": "Overly protective policies discourage the entry of followers by decreasing their potential innovation rents through higher expected license fees. In some cases, longer patent protection under strong forward protection can actually decrease the number of firms performing R&D.",
+    "difficulty": "single-hop",
+    "category": "policy_impact",
+    "annotator": "yusif",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "High forward protection discourages entry by reducing followers' innovation rents via license fees.",
+        "supporting_spans": [
+          {
+            "paper_id": "00303_W2954190558",
+            "char_start": 9903,
+            "char_end": 10038,
+            "quote": "Greater forward protection has an immediate effect on entry by decreasing followers' innovation rents via higher expected license fees."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c002",
+        "text": "Overly protective policies can decrease innovation pace by reducing the number of firms performing R&D.",
+        "supporting_spans": [
+          {
+            "paper_id": "00303_W2954190558",
+            "char_start": 10657,
+            "char_end": 10793,
+            "quote": "overly protective policies may decrease innovation rates: delaying firms' investments and reducing the number of firms investing in R&D."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q306",
+    "question": "Why do companies in the US typically accept university IP policies in exploratory research but find them problematic in focused collaborations?",
+    "gold_answer": "In exploratory or 'blue-sky' research, companies often find intangible benefits like new perspectives and exposure to frontier science more important than early-stage IP rights. However, in focused collaborations, the research addresses specific, near-term business needs where exclusive control is seen as vital for competitive advantage.",
+    "difficulty": "multi-hop",
+    "category": "policy_impact",
+    "annotator": "yusif",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "In blue-sky research, companies prioritize intangible benefits and frontier science exposure over patent rights.",
+        "supporting_spans": [
+          {
+            "paper_id": "00306_W2111678950",
+            "char_start": 78541,
+            "char_end": 78745,
+            "quote": "companies perceive that intangible benefits, such as new perspectives and exposure to frontier areas of science and engineering, are more important than rights to patents covering early stage discoveries."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c002",
+        "text": "Focused collaborations target specific business needs where proprietary control is necessary for competitive advantage.",
+        "supporting_spans": [
+          {
+            "paper_id": "00306_W2111678950",
+            "char_start": 105522,
+            "char_end": 106021,
+            "quote": "In the case of a focused project largely determined by the company, the university stepping back and letting the company have exclusive rights (e.g., granting the company a royalty-free exclusive license or perhaps even outright ownership) would eliminate much of the frustration expressed by companies. In such projects, the risk of the company locking up, but not developing, valuable discoveries is probably small, because these projects are oriented to clear, specific, near-term business needs."
+          },
+          {
+            "paper_id": "00306_W2111678950",
+            "char_start": 61496,
+            "char_end": 61626,
+            "quote": "competitive business environment that pushes companies to try to obtain competitive advantage either through proprietary positions"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q307",
+    "question": "Explain the 'Full Economic Cost' (FEC) requirement in the UK's Lambert Model Agreements.",
+    "gold_answer": "Under the Lambert Model Agreements, if a company wants to own the resulting IP or control academic publications, it must pay the 'full economic cost' (FEC) of the research, which includes all direct and indirect expenses, such as salaries and infrastructure depreciation.",
+    "difficulty": "single-hop",
+    "category": "factual",
+    "annotator": "yusif",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "The Lambert Agreement requires companies to pay the full economic cost to own collaborative IP.",
+        "supporting_spans": [
+          {
+            "paper_id": "00306_W2111678950",
+            "char_start": 88709,
+            "char_end": 88927,
+            "quote": "The UK has done so through the Lambert Model Agreements, which were formulated by representatives of industry and universities in 2003-2004 and began to be broadly used by 2008 [note S18]. The five model agreements are"
+          },
+          {
+            "paper_id": "00306_W2111678950",
+            "char_start": 88929,
+            "char_end": 89780,
+            "quote": "voluntary. However, they embody the principle that universities and companies should decide in advance what rights the company will have over resulting IP and publications. Agreements 4 and 5 give the company automatic ownership rights over IP, with agreement 5 giving the company the right to control over publication. (All the other model agreements uphold the right to publish after the company has had several months to review manuscripts to ensure that none of its own confidential information is divulged and to prepare patent applications.) However, if the company is to own the IP, it should pay at least the full economic cost (FEC) of the collaboration, including attributable portions of the salaries and stipends of university researchers and staff, and all other direct and indirect costs, including infrastructure costs and depreciation."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q308",
+    "question": "How does the legal definition of patent co-ownership in Japan contribute to the 'lock-up' of university inventions?",
+    "gold_answer": "In Japan, the law requires the permission of all co-owners for any license or assignment. Since companies often co-own collaborative inventions, they can effectively block others from using the technology, creating a 'lock-up' where the invention is neither developed by the company nor available to third parties.",
+    "difficulty": "single-hop",
+    "category": "policy_impact",
+    "annotator": "yusif",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "In Japan, permission from all co-owners is required for any license or assignment of a patent.",
+        "supporting_spans": [
+          {
+            "paper_id": "00306_W2111678950",
+            "char_start": 83473,
+            "char_end": 83700,
+            "quote": "thus making patent co-ownership of a US patent equivalent to a transferable, royalty-free, non-exclusive license. In all other industrialized countries, the permission of all co-owners is necessary for any license or assignment"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c002",
+        "text": "Co-ownership allows companies to lock up inventions without an obligation to develop them.",
+        "supporting_spans": [
+          {
+            "paper_id": "00306_W2111678950",
+            "char_start": 83711,
+            "char_end": 83792,
+            "quote": "co-ownership is equivalent to a non-transferable, royalty-free, exclusive license"
+          },
+          {
+            "paper_id": "00306_W2111678950",
+            "char_start": 84151,
+            "char_end": 84220,
+            "quote": "co-ownership comes automatic control without development obligations."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q309",
+    "question": "What role do 'boundary spanners' play in successful industry-university collaborations?",
+    "gold_answer": "Boundary spanners are individuals within both universities and companies who facilitate communication of needs and capabilities between the organizations. They are vital for increasing the 'absorptive capacity' of companies, helping them successfully embed university knowledge.",
+    "difficulty": "single-hop",
+    "category": "factual",
+    "annotator": "yusif",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Boundary spanners are individuals within both universities and companies who facilitate communication between organizations and increase a company's absorptive capacity.",
+        "supporting_spans": [
+          {
+            "paper_id": "00306_W2111678950",
+            "char_start": 10489,
+            "char_end": 10799,
+            "quote": "The 2009 report also emphasized the importance of individuals in both universities and companies who can communicate needs and capabilities between organizations and within organizations. It stressed their roles as boundary spanners between organizations and in increasing the absorptive capacity of companies."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q310",
+    "question": "Contrast the typical complaints about university IP management made by companies in the UK versus those in the US.",
+    "gold_answer": "UK companies primarily complain about university technology transfer offices overvaluing IP or being 'incompetent'. In the US, complaints are more fundamental, focusing on the inability to secure exclusive rights and the belief that paying for research should entitle the company to ownership without 'paying twice.'",
+    "difficulty": "multi-hop",
+    "category": "policy_impact",
+    "annotator": "yusif",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "UK companies often criticize universities for overvaluing IP and lack of staff competence.",
+        "supporting_spans": [
+          {
+            "paper_id": "00306_W2111678950",
+            "char_start": 55820,
+            "char_end": 56190,
+            "quote": "About half the UK companies said IP was not an issue and that IP was not expected to arise from the collaborations. However the great majority of these companies were engaged in Knowledge Transfer Partnerships (KTPs) with universities [Note S9] [Cases S11, Cases S15] or were large corporations engaged in software or data management collaborations [Case S3, Cases S12]."
+          },
+          {
+            "paper_id": "00306_W2111678950",
+            "char_start": 56192,
+            "char_end": 56389,
+            "quote": "Among the ten collaborations in which the company considered IP to be important, four cited problems related to university IP management. The most frequent was that universities overvalued their IP"
+          },
+          {
+            "paper_id": "00306_W2111678950",
+            "char_start": 121168,
+            "char_end": 121346,
+            "quote": "Three UK companies engaged in “ typical ” collaborations describe overvaluation of IP and “ incompetent ” practices by technology management offices in prominent UK universities."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c002",
+        "text": "US companies focus on fundamental issues like exclusive rights and the 'paying twice' objection.",
+        "supporting_spans": [
+          {
+            "paper_id": "00306_W2111678950",
+            "char_start": 57639,
+            "char_end": 57757,
+            "quote": "American complaints more often dealt with fundamental issues, such as companies' ability to obtain exclusive IP rights"
+          },
+          {
+            "paper_id": "00306_W2111678950",
+            "char_start": 66971,
+            "char_end": 67013,
+            "quote": "company does not want to have to pay twice"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q311",
+    "question": "Why do some Japanese manufacturers choose to keep collaborative discoveries as trade secrets instead of filing for patents?",
+    "gold_answer": "They prefer trade secrets because patent applications are published after 18 months, which could reveal manufacturing details to foreign competitors. They utilize 'prior user rights' to preserve their right to use the technology while keeping it secret.",
+    "difficulty": "single-hop",
+    "category": "factual",
+    "annotator": "yusif",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Japanese firms use trade secrets to prevent technology leakage to competitors that would occur through patent publication.",
+        "supporting_spans": [
+          {
+            "paper_id": "00306_W2111678950",
+            "char_start": 114087,
+            "char_end": 114248,
+            "quote": "not even patent applications are being filed, because the applications would be published after eighteen months and details about the technologies thus revealed."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c002",
+        "text": "Prior user rights allow companies to use technologies kept secret while preventing others from patenting them.",
+        "supporting_spans": [
+          {
+            "paper_id": "00306_W2111678950",
+            "char_start": 114249,
+            "char_end": 114648,
+            "quote": "The gist of the article was not to criticize this practice, but rather to advocate an expansion of “ prior user rights ” under Japan's patent law [61] . Prior user rights permit companies that have made inventions (perhaps in collaboration with universities) to keep such discoveries secret while preserving their right to use the inventions in the event some other entity patents them in the future"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "q312",
+    "question": "What are the primary reasons startups require exclusive IP rights over university discoveries, according to the study?",
+    "gold_answer": "Startups need exclusive IP rights to provide a sense of ownership that attracts alliance partners and investment. Additionally, they lack the resources for large-scale in-house development or trade secret protection that larger companies use to block copycats.",
+    "difficulty": "single-hop",
+    "category": "factual",
+    "annotator": "yusif",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "IP ownership and exclusive control are necessary for startups to attract investment and alliance partners.",
+        "supporting_spans": [
+          {
+            "paper_id": "00306_W2111678950",
+            "char_start": 50282,
+            "char_end": 50476,
+            "quote": "IP provided a degree of ownership and exclusive control over their discoveries, and defined those discoveries and control in a way that was important to attract alliance partners and investment."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c002",
+        "text": "Startups lack alternative protections like trade secrets or large-scale in-house development capabilities to prevent copying.",
+        "supporting_spans": [
+          {
+            "paper_id": "00306_W2111678950",
+            "char_start": 50477,
+            "char_end": 50657,
+            "quote": "Second, they lacked other means, such as trade secrets and the ability to conduct large-scale development in-house, to prevent potential competitors from copying their discoveries."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  }
+]
