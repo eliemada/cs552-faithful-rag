@@ -1,0 +1,179 @@
+{
+  "config": {
+    "sample_size": 8,
+    "seed": 42,
+    "retriever_config": "coarse_rerank",
+    "answer_model_rag": "api:openrouter/openai/gpt-4o-mini",
+    "answer_model_lc": "api:openrouter/google/gemini-2.5-flash",
+    "judge_model": "openai/gpt-4o-mini",
+    "embed_model": "text-embedding-3-small",
+    "top_k": 5,
+    "lc_chars_per_paper": 60000
+  },
+  "rag": {
+    "n": 8,
+    "aggregate": {
+      "faithfulness": 0.805952380952381,
+      "answer_relevancy": 0.6616334878743035,
+      "context_precision": 0.9791666666339583,
+      "context_recall": 0.7916666666666666
+    },
+    "per_sample": [
+      {
+        "query_id": "q204",
+        "pipeline": "rag",
+        "question": "Why is the holding in FTC v. Actavis considered a 'de facto' rule of presumptive illegality?",
+        "faithfulness": 0.3333333333333333,
+        "answer_relevancy": 0.641883585601506,
+        "context_precision": 0.99999999998,
+        "context_recall": 0.0
+      },
+      {
+        "query_id": "q002",
+        "pipeline": "rag",
+        "question": "What does the literature say about patents holding back follow-on innovation in technology-heavy industries?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.99999999998,
+        "context_recall": 0.3333333333333333
+      },
+      {
+        "query_id": "q007",
+        "pipeline": "rag",
+        "question": "According to Mendon\u00e7a et al. (2004), what advantage do trademarks have over patents and R&D as innovation indicators in terms of firm coverage?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.772117657151436,
+        "context_precision": 0.99999999998,
+        "context_recall": 1.0
+      },
+      {
+        "query_id": "q205",
+        "pipeline": "rag",
+        "question": "What factor suggests a reverse payment is a good-faith effort to avoid litigation costs?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.5882476118804825,
+        "context_precision": 0.99999999998,
+        "context_recall": 1.0
+      },
+      {
+        "query_id": "q016",
+        "pipeline": "rag",
+        "question": "According to Sell and Prakash's (2004) summary of Kingdon (1984), what two types of changes can open a policy window?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8098664683367406,
+        "context_precision": 0.9999999999,
+        "context_recall": 1.0
+      },
+      {
+        "query_id": "q012",
+        "pipeline": "rag",
+        "question": "How do Jorde and Teece (1990) characterize the standard view of cooperation among competitors in antitrust thinking?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9785999549587981,
+        "context_precision": 0.8333333332916666,
+        "context_recall": 1.0
+      },
+      {
+        "query_id": "q010",
+        "pipeline": "rag",
+        "question": "How do Lemley and Shapiro (2005) reframe what a patent grants its owner, and what two dimensions of uncertainty do they identify?",
+        "faithfulness": 0.4,
+        "answer_relevancy": 0.7200254228882368,
+        "context_precision": 0.99999999998,
+        "context_recall": 1.0
+      },
+      {
+        "query_id": "q201",
+        "pipeline": "rag",
+        "question": "How do market structures in the semiconductor and biotechnology industries result in different IPR externalization styles?",
+        "faithfulness": 0.7142857142857143,
+        "answer_relevancy": 0.7823272021772278,
+        "context_precision": 0.99999999998,
+        "context_recall": 1.0
+      }
+    ]
+  },
+  "long_context": {
+    "n": 8,
+    "aggregate": {
+      "faithfulness": 0.975,
+      "answer_relevancy": 0.7993831790619753,
+      "context_precision": 0.99999999990625,
+      "context_recall": 1.0
+    },
+    "per_sample": [
+      {
+        "query_id": "q204",
+        "pipeline": "long_context",
+        "question": "Why is the holding in FTC v. Actavis considered a 'de facto' rule of presumptive illegality?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8843972831574424,
+        "context_precision": 0.9999999999,
+        "context_recall": 1.0
+      },
+      {
+        "query_id": "q002",
+        "pipeline": "long_context",
+        "question": "What does the literature say about patents holding back follow-on innovation in technology-heavy industries?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8064175287827765,
+        "context_precision": 0.99999999995,
+        "context_recall": 1.0
+      },
+      {
+        "query_id": "q007",
+        "pipeline": "long_context",
+        "question": "According to Mendon\u00e7a et al. (2004), what advantage do trademarks have over patents and R&D as innovation indicators in terms of firm coverage?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.697281234167893,
+        "context_precision": 0.9999999999,
+        "context_recall": 1.0
+      },
+      {
+        "query_id": "q205",
+        "pipeline": "long_context",
+        "question": "What factor suggests a reverse payment is a good-faith effort to avoid litigation costs?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.6838829762009724,
+        "context_precision": 0.9999999999,
+        "context_recall": 1.0
+      },
+      {
+        "query_id": "q016",
+        "pipeline": "long_context",
+        "question": "According to Sell and Prakash's (2004) summary of Kingdon (1984), what two types of changes can open a policy window?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8099378793668998,
+        "context_precision": 0.9999999999,
+        "context_recall": 1.0
+      },
+      {
+        "query_id": "q012",
+        "pipeline": "long_context",
+        "question": "How do Jorde and Teece (1990) characterize the standard view of cooperation among competitors in antitrust thinking?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9786016938332254,
+        "context_precision": 0.9999999999,
+        "context_recall": 1.0
+      },
+      {
+        "query_id": "q010",
+        "pipeline": "long_context",
+        "question": "How do Lemley and Shapiro (2005) reframe what a patent grants its owner, and what two dimensions of uncertainty do they identify?",
+        "faithfulness": 0.8,
+        "answer_relevancy": 0.695919267308339,
+        "context_precision": 0.9999999999,
+        "context_recall": 1.0
+      },
+      {
+        "query_id": "q201",
+        "pipeline": "long_context",
+        "question": "How do market structures in the semiconductor and biotechnology industries result in different IPR externalization styles?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8386275696782538,
+        "context_precision": 0.9999999999,
+        "context_recall": 1.0
+      }
+    ]
+  }
+}
