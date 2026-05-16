@@ -79,6 +79,16 @@ cli = [
     "markdown>=3.5.1",
 ]
 
+# RAG evaluation (RAGAS metrics — faithfulness, answer_relevancy,
+# context_precision, context_recall). RAGAS pulls in datasets +
+# langchain_openai which we point at OpenRouter for the judge LLM.
+eval = [
+    "ragas>=0.2.10",
+    "datasets>=2.20.0",
+    "langchain-openai>=0.2.0",
+    "litellm>=1.80.10",
+]
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
