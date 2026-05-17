@@ -51,6 +51,13 @@ mkdir -p /scratch/hf_cache /scratch/uv_cache
 export HF_HOME=/scratch/hf_cache
 export UV_CACHE_DIR=/scratch/uv_cache
 
+# The course image exports HF_HUB_ENABLE_HF_TRANSFER=1 because it ships
+# hf_transfer installed system-wide. Our uv-managed venv doesn't carry
+# hf_transfer, so huggingface_hub hard-fails with the env var set. Force
+# it off here; the speedup it buys is small relative to a one-off
+# 339 MB chunks pull + ~2 GB of model weights.
+unset HF_HUB_ENABLE_HF_TRANSFER
+
 # Run:AI pods come up with different UIDs across submissions, so a repo
 # cloned by a previous pod trips git's "dubious ownership" guard. Trust
 # everything under /scratch (it's already group-scoped by the PVC).
