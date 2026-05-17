@@ -34,40 +34,60 @@ elsewhere, the latter have no supporting spans by schema invariant.
 
 ## Configurations
 
-Three embedder families crossed with two granularities and ±reranker,
-12 configs total. OpenAI is the original index; BGE-M3 and E5-large
-indices are built locally by `scripts.build_hf_index` from the chunk
-JSONs in `data/s3_archive/chunks/`.
+Four embedder families crossed with two granularities and ±reranker,
+**16 configs total**. The four families:
 
-| family | configs |
-|--------|---------|
-| `openai` (`text-embedding-3-small`, 1536-dim) | `coarse_faiss`, `coarse_rerank`, `fine_faiss`, `fine_rerank` |
-| `bge_m3` (`BAAI/bge-m3`, 1024-dim) | `bge_m3_coarse_faiss`, `bge_m3_coarse_rerank`, `bge_m3_fine_faiss`, `bge_m3_fine_rerank` |
-| `e5_large` (`intfloat/e5-large-v2`, 1024-dim) | `e5_large_coarse_faiss`, ..., `e5_large_fine_rerank` |
+| family | model | dim | retriever backend | configs |
+|--------|-------|-----|---------|---------|
+| `openai` | `text-embedding-3-small` | 1536 | FAISS L2 | `coarse_faiss`, `coarse_rerank`, `fine_faiss`, `fine_rerank` |
+| `bge_m3` | `BAAI/bge-m3` | 1024 | FAISS L2 | `bge_m3_coarse_faiss`, ..., `bge_m3_fine_rerank` |
+| `e5_large` | `intfloat/e5-large-v2` | 1024 | FAISS L2 | `e5_large_coarse_faiss`, ..., `e5_large_fine_rerank` |
+| `colbert` | `colbert-ir/colbertv2.0` | per-token | PyLate PLAID (MaxSim) | `colbert_coarse_faiss`, ..., `colbert_fine_rerank` |
 
-ColBERTv2 stays out: it is late-interaction multi-vector retrieval and
-needs the PLAID index format, not a drop-in dense-vector swap.
+The first three share the same `FAISSRetriever` + `HybridRetriever`
+code path. ColBERTv2 is a different paradigm — one vector per token,
+scored by MaxSim — and uses a separate `ColBERTRetriever` that conforms
+to a small shared `BaseRetriever` protocol. The reranker layer
+(`HybridRetriever`) composes any base, so a single eval pipeline drives
+both.
+
+> **Naming caveat.** The historical `_faiss` suffix is preserved for
+> ColBERT configs even though they use a PLAID index. The suffix now
+> means "no reranker" rather than "FAISS backend". A future cleanup may
+> rename everything to `_base` / `_rerank`.
 
 ### Building the alternative-embedder indices
 
-The HF indices are not tracked (each is ~200 MB–1.4 GB). Build them once
-on a GPU cluster:
+The dense indices (~200 MB–1.4 GB each) and the PyLate PLAID folders
+are not tracked. Build them once on a GPU cluster:
 
 ```bash
-# all four indices, ~30–60 min on CUDA
+# dense (BGE-M3 + E5-large) — ~30–60 min on one A100
 uv run python -m scripts.build_all_hf_indices --device cuda --batch-size 256
+
+# ColBERTv2 (coarse + fine) — ~1–3 h on one A100 (per-token encoding is heavier)
+uv run python -m scripts.build_all_colbert_indices --device cuda --batch-size 64
 
 # or build just one
 uv run python -m scripts.build_hf_index --model bge-m3 --chunk-type coarse --device cuda
+uv run python -m scripts.build_colbert_index --chunk-type fine --device cuda
 ```
 
-The script reads `data/s3_archive/chunks/*_<type>.json`, batch-encodes
-with the requested HF model (L2-normalised, ``max_seq_length=512``), and
-writes `data/s3_archive/indexes/<embedder>_<chunk_type>.{faiss,_metadata.json}`
-in the same layout the OpenAI indices use.
+Dense indexers write `data/s3_archive/indexes/<embedder>_<chunk_type>.{faiss,_metadata.json}`.
+The ColBERT indexer writes `data/s3_archive/indexes/colbert_<chunk_type>/`
+(a PLAID folder) plus a `colbert_<chunk_type>_metadata.json` sidecar.
 
-On Apple MPS expect ~7 h for the full set; on an A100 it drops to under
-an hour.
+On Apple MPS expect ~7 h for the dense set + ~6 h for ColBERT; on an
+A100 the dense set takes under an hour and ColBERT takes 1–3 h.
+
+### Run:AI launchers
+
+Use `rcp_support/submit_embed.sh` for the dense indices and
+`rcp_support/submit_colbert.sh` for the ColBERT indices. Both default to
+`GROUP=g68` (Team CiteRight) and read `GASPAR` from the environment.
+After either job finishes, push the artefacts to the team's HF dataset
+with `rcp_support/submit_upload.sh` (the upload patterns now cover
+`colbert_*` paths in addition to `bge_m3_*` and `e5_large_*`).
 
 ## Run one config
 

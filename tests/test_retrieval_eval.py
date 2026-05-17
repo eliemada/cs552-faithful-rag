@@ -258,11 +258,11 @@ def test_ndcg_bounded_by_one() -> None:
 # ---- retriever configs ----------------------------------------------------
 
 
-def test_config_matrix_covers_three_embedders_x_two_chunks_x_pm_rerank() -> None:
-    # 3 embedders × 2 granularities × 2 ±rerank
-    assert len(CONFIGS) == 12
+def test_config_matrix_covers_four_embedders_x_two_chunks_x_pm_rerank() -> None:
+    # 4 embedders × 2 granularities × 2 ±rerank
+    assert len(CONFIGS) == 16
     embedders = {c.embedder for c in CONFIGS}
-    assert embedders == {"openai", "bge_m3", "e5_large"}
+    assert embedders == {"openai", "bge_m3", "e5_large", "colbert"}
     granularities = {c.chunk_type for c in CONFIGS}
     assert granularities == {"coarse", "fine"}
 
@@ -276,6 +276,16 @@ def test_openai_configs_keep_legacy_index_basename() -> None:
 def test_alt_embedder_configs_prefix_their_basename() -> None:
     assert CONFIGS_BY_NAME["bge_m3_coarse_faiss"].index_basename() == "bge_m3_coarse"
     assert CONFIGS_BY_NAME["e5_large_fine_rerank"].index_basename() == "e5_large_fine"
+    assert CONFIGS_BY_NAME["colbert_coarse_faiss"].index_basename() == "colbert_coarse"
+    assert CONFIGS_BY_NAME["colbert_fine_rerank"].index_basename() == "colbert_fine"
+
+
+def test_only_colbert_configs_report_is_colbert() -> None:
+    colbert_configs = [c for c in CONFIGS if c.embedder == "colbert"]
+    other_configs = [c for c in CONFIGS if c.embedder != "colbert"]
+    assert len(colbert_configs) == 4  # 2 granularities × 2 ±rerank
+    assert all(c.is_colbert() for c in colbert_configs)
+    assert not any(c.is_colbert() for c in other_configs)
 
 
 def test_requires_openai_only_for_openai_embedder_configs() -> None:
@@ -290,6 +300,75 @@ def test_requires_zeroentropy_only_for_rerank_configs() -> None:
     plain_configs = [c for c in CONFIGS if not c.use_reranker]
     assert all(c.requires_zeroentropy() for c in rerank_configs)
     assert not any(c.requires_zeroentropy() for c in plain_configs)
+
+
+# ---- BaseRetriever protocol + HybridRetriever composition ----------------
+
+
+class _FakeRetriever:
+    """Minimal BaseRetriever stand-in for tests.
+
+    Records the queries it sees and returns a synthetic ranked list. Lets us
+    exercise HybridRetriever's composition logic without instantiating FAISS
+    or any HF model.
+    """
+
+    def __init__(self, results: list) -> None:
+        self._results = results
+        self.seen_queries: list[tuple[str, int]] = []
+
+    def search(self, query: str, top_k: int = 50):  # noqa: ANN201 — duck-typed
+        self.seen_queries.append((query, top_k))
+        return list(self._results[:top_k])
+
+
+def _make_search_result(rank: int, chunk_id: str = "c", paper_id: str = "p"):
+    # Late import keeps the module test-importable without faiss at parse time.
+    from rag_pipeline.rag.retriever import SearchResult
+
+    return SearchResult(
+        chunk_id=chunk_id,
+        paper_id=paper_id,
+        paper_title="",
+        text="",
+        section_hierarchy=[],
+        score=1.0 - rank * 0.1,
+        rank=rank,
+    )
+
+
+def test_hybrid_retriever_accepts_arbitrary_base_via_protocol() -> None:
+    from rag_pipeline.rag.retriever import HybridRetriever
+    from rag_pipeline.rag.retriever_base import BaseRetriever
+
+    base = _FakeRetriever([_make_search_result(i) for i in range(20)])
+    # Runtime-checkable Protocol — duck-typed conformance.
+    assert isinstance(base, BaseRetriever)
+
+    hybrid = HybridRetriever(base_retriever=base, reranker=None, faiss_candidates=10)
+    results = hybrid.search("q", top_k=3, use_reranker=False)
+    assert [r.rank for r in results] == [0, 1, 2]
+    # Verify the base saw the candidate budget, not the top_k.
+    assert base.seen_queries == [("q", 10)]
+
+
+def test_hybrid_retriever_legacy_positional_still_works() -> None:
+    """Old callers passed the retriever positionally as ``faiss_retriever``."""
+    from rag_pipeline.rag.retriever import HybridRetriever
+
+    base = _FakeRetriever([_make_search_result(i) for i in range(5)])
+    hybrid = HybridRetriever(base, None, faiss_candidates=5)  # legacy positional form
+    assert hybrid.base_retriever is base
+    # The historical ``faiss_retriever`` attribute is preserved for callers
+    # like ``api/main.py`` that introspect ``hybrid.faiss_retriever.index``.
+    assert hybrid.faiss_retriever is base
+
+
+def test_hybrid_retriever_refuses_construction_without_base() -> None:
+    from rag_pipeline.rag.retriever import HybridRetriever
+
+    with pytest.raises(TypeError, match="base retriever"):
+        HybridRetriever()
 
 
 def test_retriever_config_is_frozen() -> None:
