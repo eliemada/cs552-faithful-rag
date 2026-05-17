@@ -26,6 +26,7 @@ import requests
 
 from rag_pipeline.rag.embedder import Embedder, OpenAIEmbedderAdapter
 from rag_pipeline.rag.openai_embedder import OpenAIEmbedder
+from rag_pipeline.rag.retriever_base import BaseRetriever
 
 logger = logging.getLogger(__name__)
 
@@ -260,29 +261,48 @@ class ZeroEntropyReranker:
 
 
 class HybridRetriever:
-    """
-    Hybrid retriever combining FAISS retrieval with ZeroEntropy reranking.
+    """Compose any :class:`BaseRetriever` with an optional reranker.
 
     Flow:
-    1. FAISS retrieves top-N candidates (fast, embedding similarity)
-    2. ZeroEntropy reranks to top-K (accurate, relevance scoring)
+
+    1. The base retriever produces ``faiss_candidates`` ranked results.
+    2. If a reranker is wired in, it scores those candidates and
+       returns the top-K. Otherwise the top-K of the base ranking is
+       returned as-is.
+
+    The class is named ``HybridRetriever`` for historical reasons (the
+    original implementation paired FAISS with the ZeroEntropy reranker).
+    It now accepts any object satisfying :class:`BaseRetriever`, so the
+    same pipeline drives FAISS (single-vector) *and* ColBERT
+    (late-interaction multi-vector) retrievers.
     """
 
     def __init__(
         self,
-        faiss_retriever: FAISSRetriever,
+        faiss_retriever: BaseRetriever | None = None,
         reranker: Optional[ZeroEntropyReranker] = None,
         faiss_candidates: int = 75,
+        *,
+        base_retriever: BaseRetriever | None = None,
     ):
-        """
-        Initialize hybrid retriever.
+        """Wire the base retriever and (optional) reranker together.
 
-        Args:
-            faiss_retriever: FAISS retriever for initial search
-            reranker: Optional ZeroEntropy reranker
-            faiss_candidates: Number of candidates to retrieve from FAISS
+        ``base_retriever`` is the preferred kwarg name; ``faiss_retriever``
+        is kept for backwards compatibility with existing callers
+        (``api/main.py``, ``scripts/dev/test_retriever.py``) that pass a
+        positional ``FAISSRetriever``.
         """
-        self.faiss_retriever = faiss_retriever
+        base = base_retriever if base_retriever is not None else faiss_retriever
+        if base is None:
+            raise TypeError(
+                "HybridRetriever needs a base retriever; pass it as "
+                "``base_retriever=...`` or as the first positional argument."
+            )
+        self.base_retriever: BaseRetriever = base
+        # Backwards-compat alias. Older code (api/main.py) reads
+        # ``hybrid.faiss_retriever.index.ntotal`` for stats; that keeps
+        # working as long as the base actually is a ``FAISSRetriever``.
+        self.faiss_retriever = base
         self.reranker = reranker
         self.faiss_candidates = faiss_candidates
 
@@ -342,8 +362,8 @@ class HybridRetriever:
         Returns:
             List of SearchResult objects
         """
-        # Step 1: FAISS retrieval
-        candidates = self.faiss_retriever.search(query, self.faiss_candidates)
+        # Step 1: candidate retrieval from the base backend.
+        candidates = self.base_retriever.search(query, self.faiss_candidates)
 
         # Step 2: Reranking (if available and enabled)
         if use_reranker and self.reranker:
