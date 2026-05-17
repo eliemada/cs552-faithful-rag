@@ -51,6 +51,11 @@ mkdir -p /scratch/hf_cache /scratch/uv_cache
 export HF_HOME=/scratch/hf_cache
 export UV_CACHE_DIR=/scratch/uv_cache
 
+# Run:AI pods come up with different UIDs across submissions, so a repo
+# cloned by a previous pod trips git's "dubious ownership" guard. Trust
+# everything under /scratch (it's already group-scoped by the PVC).
+git config --global --add safe.directory '*'
+
 # 1. fetch or update the repo
 if [[ ! -d "${REPO_DIR}/.git" ]]; then
     git clone "${REPO_URL}" "${REPO_DIR}"
