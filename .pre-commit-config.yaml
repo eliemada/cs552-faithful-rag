@@ -55,3 +55,11 @@ repos:
         language: system
         pass_filenames: false
         files: ^evaluation/gold_dataset/.*\.(json|md|txt)$
+
+      - id: export-marimo-notebooks
+        name: export marimo notebooks → ipynb
+        description: regenerate notebooks/<firstname>_<lastname>_<sciper>.ipynb from notebooks/marimo/*.py
+        entry: uv run python -m scripts.export_marimo_notebooks
+        language: system
+        pass_filenames: false
+        files: ^notebooks/marimo/.*\.py$
