@@ -1,0 +1,160 @@
+\pdfoutput=1
+\documentclass[11pt]{article}
+
+\usepackage{ACL2023}
+\usepackage{times}
+\usepackage{latexsym}
+\usepackage[T1]{fontenc}
+
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{fancyhdr}
+\usepackage{natbib}
+\usepackage{booktabs}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,RO]{EPFL -- Spring Semester 2026}
+\fancyhead[RE,LO]{Modern Natural Language Processing - Open Project Progress Report}
+\rfoot{Page \thepage \hspace{1pt}}
+\renewcommand{\headrulewidth}{1pt}
+
+%%%%%%%%%%%%%%%%%%% TITLE AND AUTHORS %%%%%%%%%%%%%%%%%%%
+
+\title{Progress Report: Faithful RAG -- Evaluating Citation Accuracy and Retrieval Robustness in Domain-Specific Scientific Literature}
+
+\author{\normalfont
+Elie Bruno | 355932 | \texttt{elie.bruno@epfl.ch} \\
+Andrea Trugenberger | SCIPER | \texttt{andrea.trugenberger@epfl.ch} \\
+Faruk Zahiragić | SCIPER | \texttt{faruk.zahiragic@epfl.ch} \\
+Yusif | SCIPER | \texttt{yusif@epfl.ch} \\
+Team Faithful RAG \\
+}
+
+%%%%%%%%%%%%%%%%%%% PROGRESS REPORT %%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+
+\section{Progress Summary}
+
+% TODO 1-2 sentences: where the project stands. Reference proposal's 4 components, name which are done vs. in progress.
+% Suggested seed sentence: "Three of the four evaluation components committed in the proposal are implemented with preliminary results; the fourth (Corrective RAG) is wired but not yet measured."
+
+\section{Gold Benchmark Construction}
+
+% TODO methodology of the gold dataset — this is the section Rubi explicitly asked for.
+% Cover:
+%   - per-claim atomic decomposition (one verifiable proposition per claim)
+%   - (paper_id, char_start, char_end, quote) verbatim spans on LF-normalised document.md
+%   - validator that byte-checks the slice against the quote field
+%   - 13 pairs per annotator × 4 annotators + 6 shared adversarial controls (q900-q905)
+%   - IAA: 5/13 pairs per annotator flagged iaa_subset=true; reviewer labels supports/contradicts/unrelated; Cohen's κ
+%   - adversarial controls populate the contradicts/unrelated regions of the label space — without them κ collapses into the single-class degeneracy (p_e ≈ 1.0)
+%   - challenges encountered:
+%       * fabricated concatenations caught by strict validator
+%       * anaphoric span dependencies fixed during peer review
+%       * single-hop vs multi-hop disambiguation when claims pull from multiple passages in the same paper
+% Reference: evaluation/gold_dataset/RUBRIC.md, SCHEMA.md, contributions/README.md
+
+\section{Retrieval Ablation (Bruno)}
+
+% TODO Introduce: pre-built FAISS over OpenAI text-embedding-3-small, 4 configs spanning chunk granularity × ±ZeroEntropy reranker. 37 evaluable queries.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lcccc}
+\toprule
+config & hit@5 & hit@10 & hit@20 & MRR \\
+\midrule
+coarse\_faiss   & 0.784 & 0.865 & 0.946 & 0.661 \\
+coarse\_rerank  & \textbf{0.946} & 0.946 & 0.946 & \textbf{0.842} \\
+fine\_faiss     & 0.784 & 0.892 & 0.946 & 0.625 \\
+fine\_rerank    & 0.865 & \textbf{0.973} & 0.973 & 0.705 \\
+\bottomrule
+\end{tabular}
+\caption{Paper-level retrieval metrics, $n{=}37$ evaluable gold queries.}
+\label{tab:retrieval}
+\end{table}
+
+% TODO 2-3 sentence interpretation:
+%   - ZeroEntropy reranking improves both hit@5 and MRR consistently (+6 to +16 pp on hit@5)
+%   - coarse_rerank wins MRR (right paper at rank 1 in 84% of queries); fine_rerank wins hit@10 (right paper in top-10 for 36/37)
+%   - Per-category, comparison and methodology questions saturate at 100% hit@10; policy_impact shows the widest spread across configs.
+% Limitation to acknowledge: the existing semantic chunker drops 40-80% of document content between section boundaries. Chunk-level retrieval is evaluated on the ~50% subset of queries with chunk coverage; rebuilding chunks with a no-gap windowing scheme is M3 work.
+
+\section{Faithfulness Verification (Trugenberger)}
+
+% TODO Intro: extends the proposal's NLI verification with an LLM-judge comparison. 24 answerable gold questions × 3 models = 72 closed-book LLM answers, each verified by NLI (DeBERTa-v3-large-mnli) AND by an LLM judge against the gold passage.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lcc r}
+\toprule
+generator & NLI & LLM-judge & gap \\
+\midrule
+gpt-4o-mini             & 0.750 & 0.138 & +0.612 \\
+claude-3.5-haiku        & 0.750 & 0.173 & +0.577 \\
+deepseek-chat           & 0.750 & 0.198 & +0.552 \\
+\bottomrule
+\end{tabular}
+\caption{Fraction of closed-book answers labelled \emph{faithful} by each verifier ($n{=}24$ per row).}
+\label{tab:nli-vs-judge}
+\end{table}
+
+% TODO 2-3 sentences:
+%   - NLI rubber-stamps ~75% of hallucinated closed-book answers as faithful across three different model providers; the LLM judge correctly catches them.
+%   - The ~57 pp gap is stable across providers, replicating a known NLI failure mode in the literature (FActScore, ALCE).
+%   - Implication for the pipeline: NLI alone is insufficient as a faithfulness gate; the LLM judge or an ensemble is required.
+% Scope caveat: this experiment evaluates closed-book answers (no retrieval). The next iteration tests retrieved-context answers, which we expect to narrow the gap.
+
+\section{End-to-End RAG vs Long-Context (Yusif)}
+
+% TODO Intro: four canonical RAGAS metrics (faithfulness, answer_relevancy, context_precision, context_recall) over two pipelines — chunked RAG using the retriever from Section 3 vs. a long-context baseline that places the full document.md of every cited paper into a 1M-token model's window.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lcc r}
+\toprule
+metric & chunked RAG & long-context & $\Delta$ \\
+\midrule
+faithfulness        & 0.806 & 0.975 & +0.169 \\
+answer\_relevancy   & 0.662 & 0.799 & +0.138 \\
+context\_precision  & 0.979 & 1.000 & +0.021 \\
+context\_recall     & 0.792 & 1.000 & +0.208 \\
+\bottomrule
+\end{tabular}
+\caption{RAGAS metrics, $n{=}8$ stratified gold questions. Long-context uses Gemini~2.5~Flash; RAG uses GPT-4o-mini over \texttt{coarse\_rerank}.}
+\label{tab:ragas}
+\end{table}
+
+% TODO 2-3 sentences:
+%   - Long-context outperforms chunked RAG on every metric; the gaps are largest on context_recall (+21 pp) and faithfulness (+17 pp).
+%   - context_recall=1.000 for LC is partially mechanical (full document trivially contains the answer's claims) — the interesting signal is faithfulness, where LC also wins, indicating chunked RAG is hiding ~17 pp of available factual support behind chunk boundaries.
+%   - Two metrics, one root cause: the chunker coverage gaps from Section 3 also bottleneck end-to-end answer quality.
+% Caveat to acknowledge: n=8 is preliminary; the full 37-pair sweep is the natural M3 starting point.
+
+\section{Corrective RAG (Zahiragić)}
+
+% TODO 1-2 sentences on Faruk's component.
+%   - If implemented: report the configuration tried and any preliminary number.
+%   - If still in progress: state explicitly what's wired up (retrieval-quality scorer, query reformulation hook) and what's still pending.
+% Honest deferral is better than overclaiming.
+
+\section{Limitations and Plan for the Final Milestone}
+
+% TODO 1 paragraph covering:
+%   - n size: RAGAS sweep currently at n=8; full sweep is one CLI invocation away and lands in M3.
+%   - Chunker coverage gaps: rebuild with no-gap windowing is the highest-leverage M3 fix; would unlock chunk-level retrieval metrics on full coverage.
+%   - Retrieval ablation breadth: only OpenAI text-embedding-3-small is currently indexed; BGE-M3, E5-large, and ColBERTv2 are queued for M3.
+%   - Dataset scale: 50 → 80-100 pairs once the construction pipeline is verified (per TA guidance).
+%   - Faithfulness scope: Section 4 measures closed-book hallucination; Section 5 measures retrieved-context faithfulness via a different verifier (LLM-judge inside RAGAS). M3 will unify these by running the same gold set through both verifiers in both retrieval regimes.
+
+\bibliography{anthology,custom}
+\bibliographystyle{acl_natbib}
+
+\end{document}
