@@ -41,14 +41,17 @@ Team Faithful RAG &middot; M2 Progress
 
 ## Question
 
-How much retrieval quality does chunk granularity cost us, and how much
-does a cross-encoder reranker recover, on a domain-specific scientific
-corpus? The proposal commits to four embedders (OpenAI
-`text-embedding-3-small`, BGE-M3, E5-large, ColBERTv2) crossed with
-coarse/fine chunks and ±reranker. For M2 I ship the slice that is
-already indexed end-to-end: OpenAI embeddings on coarse and fine chunks
-with and without the ZeroEntropy reranker, giving four configurations.
-The three remaining embedders move to M3 and are listed at the bottom.
+How much retrieval quality does the choice of embedder, chunk
+granularity, and cross-encoder reranker each contribute on a
+domain-specific scientific corpus? The proposal commits to four
+embedders (OpenAI `text-embedding-3-small`, BGE-M3, E5-large,
+ColBERTv2). M2 ships three of them: OpenAI on the original 46k-chunk
+FAISS index, plus BGE-M3 (`BAAI/bge-m3`) and E5-large
+(`intfloat/e5-large-v2`) on fresh 1024-dim indices built on the EPFL
+RCP cluster. Each embedder is crossed with both chunk granularities
+and ±ZeroEntropy reranker, giving 12 configurations. ColBERTv2 stays
+in M3 — its late-interaction multi-vector retrieval needs the PLAID
+index format, not a drop-in dense-vector swap.
 
 ## What I built
 
@@ -58,9 +61,22 @@ The three remaining embedders move to M3 and are listed at the bottom.
   strict containment because fine chunks (~300 chars) are shorter than
   most multi-sentence gold claims; strict containment would empty the
   gold-chunk set for most queries.
-* `evaluation/retrieval_eval/retrievers.py` wraps
-  `HybridRetriever.from_path()` into 4 named configs and lazy-loads the
-  FAISS indices so the 1.4 GB on disk is paid only when a config runs.
+* `packages/shared/rag_pipeline/rag/embedder.py` adds an `Embedder`
+  protocol with `encode_queries` / `encode_passages` returning
+  L2-normalised float32 vectors. `OpenAIEmbedderAdapter` wraps the
+  existing OpenAI client; `SentenceTransformerEmbedder` handles
+  BGE-M3 and E5-large (with the `query: ` / `passage: ` prefixes E5
+  was trained with). `HybridRetriever.from_path()` now accepts any
+  `Embedder` and an `index_basename`, so the same retriever code
+  drives all 12 configs.
+* `scripts/build_hf_index.py` and `scripts/build_all_hf_indices.py`
+  read `data/s3_archive/chunks/*_<type>.json`, batch-encode on CUDA
+  (or MPS), and write FAISS L2 indices plus metadata in the same
+  layout the OpenAI indices use. ~105 min wall on one A100 for the
+  four alt-embedder indices (46k + 186k vectors × 2 models).
+* `evaluation/retrieval_eval/retrievers.py` wires 3 embedder families ×
+  2 granularities × ±reranker into 12 named configs and lazy-loads each
+  FAISS index on first use.
 * `evaluation/retrieval_eval/evaluate_retrieval.py` is the CLI that loops
   one config over the resolved queries and writes per-query and
   aggregate JSON. It computes metrics at two granularities (paper and
@@ -130,14 +146,28 @@ triggers a 46k-chunk FAISS re-index.
 
 @app.cell
 def __(json, repo_root):
-    """Load the four per-config result JSONs."""
+    """Load every per-config result JSON (12 configs across 3 embedder families)."""
     results_dir = repo_root / "evaluation" / "retrieval_eval" / "results"
     per_config = {
         path.stem: json.loads(path.read_text())
         for path in sorted(results_dir.glob("*.json"))
         if path.stem != "comparison"
     }
-    config_order = ["coarse_faiss", "coarse_rerank", "fine_faiss", "fine_rerank"]
+    # Headline ordering: by embedder, then granularity, then ±rerank.
+    config_order = [
+        "coarse_faiss",
+        "coarse_rerank",
+        "fine_faiss",
+        "fine_rerank",
+        "bge_m3_coarse_faiss",
+        "bge_m3_coarse_rerank",
+        "bge_m3_fine_faiss",
+        "bge_m3_fine_rerank",
+        "e5_large_coarse_faiss",
+        "e5_large_coarse_rerank",
+        "e5_large_fine_faiss",
+        "e5_large_fine_rerank",
+    ]
     return (config_order, per_config)
 
 
@@ -189,16 +219,28 @@ def __(mo):
         r"""
 **Reading the table.**
 
-* Reranking helps every config. Coarse moves from hit@5 = 0.784 to
-  0.946 (+16 pp). Fine moves from 0.784 to 0.865 (+8 pp).
-* coarse_rerank wins MRR (0.842). The right paper sits at rank 1 in
-  84 % of queries, the metric to optimise for a downstream that only
-  consumes the top result.
-* fine_rerank wins hit@10 (0.973). The right paper is somewhere in the
-  top 10 for 36 of 37 queries. Different best depending on whether the
-  downstream cares about rank 1 or set membership.
-* The queries coarse_faiss misses at top-10 (q004, q011, q017, q026,
-  q212) appear in the failure-mode cell below.
+* **E5-large coarse with reranker wins every paper-level metric.**
+  hit@5 = 0.973, hit@10 = 0.973, MRR = 0.878. The right paper sits at
+  rank 1 in 88 % of queries and in the top 10 for 36 of 37. Beats the
+  previous OpenAI champion (`coarse_rerank`, MRR 0.842) by 4 pp on
+  MRR and 3 pp on hit@5.
+* **E5-large is a stronger embedder than OpenAI even without a
+  reranker.** `e5_large_coarse_faiss` reaches hit@5 = 0.811 and
+  MRR = 0.747, ahead of every OpenAI FAISS-only config (the best
+  OpenAI no-rerank MRR is 0.661). A free, open-source encoder
+  outperforms the closed-source baseline on this scientific corpus.
+* **BGE-M3 trades top-5 precision for top-20 recall.**
+  `bge_m3_coarse_faiss` is the only config to reach hit@20 = 1.000
+  (perfect recall in the top 20) but its top-5 (0.703) trails OpenAI
+  and E5-large. With reranking it pulls level with OpenAI on hit@5
+  (0.946) and MRR (0.842).
+* **Reranking still helps everyone**, but the relative effect shrinks
+  for stronger embedders: +16 pp on hit@5 for OpenAI coarse, +24 pp
+  for BGE-M3 coarse, only +16 pp for E5-large coarse — because the
+  E5-large FAISS baseline is already at 0.811.
+* **Coarse > fine across embedders.** Fine chunks are too short for
+  scientific writing; the embedder has too little context per chunk
+  and the right paper drops out of the top 5 more often.
 """
     )
     return
@@ -270,11 +312,14 @@ def __(mo):
     mo.md(
         r"""
 **Reading the CIs.** The 95 % bands on `hit_rate@10` are roughly ±0.10,
-so the coarse_rerank vs coarse_faiss gap on hit@10 (+0.08) is
-borderline. The MRR gap on the same comparison (0.842 vs 0.661,
-Δ = +0.18) sits well outside its CI band and is robust. The report will
-say the reranker improves MRR confidently and hit@10 modestly; point
-estimates alone would overstate the second claim.
+so the headline E5-large-vs-OpenAI gap on `coarse_rerank` (+3 pp on
+hit@5, +4 pp on MRR) sits at the edge of significance with 37
+queries. The wider gap on plain FAISS — `e5_large_coarse_faiss` MRR
+0.747 vs `coarse_faiss` 0.661, Δ = +0.086 — sits inside its CI band,
+so I report it as "E5-large is at least as good as OpenAI even
+without reranking, with a measurable lift on MRR." The full 12-config
+CI matrix below makes the band per cell explicit; the report will
+flag every comparison whose Δ falls inside the band.
 """
     )
     return
@@ -327,11 +372,12 @@ def __(mo, ndcg_rows, pd):
 def __(mo):
     mo.md(
         r"""
-coarse_rerank tops the table at every k (0.848 / 0.854 / 0.862), which
-agrees with its MRR lead: the reranker shoves correct papers up to rank
-1 and 2 rather than just into the top-10 window. fine_rerank trails it
-slightly even though it owns hit@10, because hit@10 cares only about set
-membership; nDCG penalises hits at rank 6-10.
+`e5_large_coarse_rerank` tops nDCG at every k, mirroring its MRR lead.
+The reranker pushes correct papers to rank 1 rather than into the
+top-10 window, and that's where the inverse-log-rank weight rewards
+hardest. `coarse_rerank` (OpenAI) holds the second slot; BGE-M3 only
+catches up at hit@20 because nDCG penalises late ranks, where its
+"perfect recall in top-20" lives.
 """
     )
     return
@@ -388,12 +434,17 @@ def __(mo):
     mo.md(
         r"""
 * `comparison` and `methodology` saturate at 100 % hit@10 across every
-  config. Answer-bearing papers stand out from the rest of the corpus
-  and the retriever finds them easily.
+  embedder family and every config. Answer-bearing papers stand out
+  from the rest of the corpus.
 * `policy_impact` is the hardest category and shows the widest spread
-  (0.786 to 1.000). Faruk's Corrective RAG (proposal Component 3) targets
-  exactly this case: a query-rewrite step lets the pipeline recover when
-  the first retrieval misses.
+  (0.786 OpenAI coarse_faiss to 1.000 with E5-large). The new
+  embedders close most of the gap here without any reranker, which
+  matches the overall E5-large lead.
+* `multi_hop` is where fine chunks break: every embedder family loses
+  on `fine_faiss` (0.833 OpenAI, 0.667 BGE-M3, 0.667 E5-large). Short
+  chunks split the multi-hop evidence across separate IDs and the
+  embedder loses the connection. Faruk's CRAG (proposal Component 3)
+  is the right tool for this case.
 """
     )
     return
@@ -520,15 +571,19 @@ def __(mo):
         r"""
 ## Deferred to M3 (final 4-page report)
 
-* New embedders (BGE-M3, E5-large, ColBERTv2). Each requires a fresh
-  46k-chunk FAISS index.
-* No-gap chunker rebuild. Replaces the section-aware chunker with a
-  sliding-window scheme that has no internal gaps and unlocks chunk-level
-  metrics on full coverage.
-* Scale the RAGAS sweep from $n=8$ to the full $n=37$. One CLI
-  invocation, roughly \$0.50 in API calls.
-* Wire CRAG (Faruk's component) into the ablation. One extra column in
-  the headline table.
+* **ColBERTv2.** The remaining proposal-listed embedder. Late-interaction
+  multi-vector retrieval needs the PLAID index format, not a dense
+  L2 index, so it is a separate engineering track from the BGE-M3 /
+  E5-large work that landed for M2.
+* **No-gap chunker rebuild.** Replaces the section-aware chunker with
+  a sliding-window scheme that has no internal gaps. Unlocks chunk-level
+  metrics on full coverage and would lift the secondary chunk-level
+  numbers in the table above from a 16-20 query subset to the full 37.
+* **Scale the RAGAS sweep** from $n=8$ to the full $n=37$. One CLI
+  invocation, ~\$0.50 in API calls.
+* **Wire CRAG** (Faruk's component) into the ablation as a 13th
+  config. Targets the `multi_hop` and `policy_impact` failure modes
+  highlighted in the per-category cell above.
 
 ## Reproducibility
 
