@@ -121,9 +121,9 @@ cat <<EOF
 
 >>> Embed job submitted: ${JOB_NAME}
 
-Watch it start:    runai describe job ${JOB_NAME} -p ${PROJECT}
-Stream logs:       runai logs -f ${JOB_NAME} -p ${PROJECT}
-Stop the job:      runai delete job ${JOB_NAME} -p ${PROJECT}
+Watch it start:    runai training describe ${JOB_NAME} -p ${PROJECT}
+Stream logs:       runai training logs -f ${JOB_NAME} -p ${PROJECT}
+Stop the job:      runai training delete ${JOB_NAME} -p ${PROJECT}
 
 When the job finishes, the four indices land in:
   /scratch/cs552-faithful-rag/data/s3_archive/indexes/
@@ -133,6 +133,6 @@ When the job finishes, the four indices land in:
     e5_large_fine.faiss        e5_large_fine_metadata.json
 
 Pull them locally (~1.9 GB total) so the evaluator can score them:
-  runai bash ${JOB_NAME} -p ${PROJECT}
+  runai training bash ${JOB_NAME} -p ${PROJECT}
   # then from inside, scp / curl / push to citeright/corpus HF dataset
 EOF
