@@ -15,11 +15,13 @@
 
 set -euo pipefail
 
-# ============== EDIT THESE LINES ==============
-GASPAR="gaspar"              # <-- YOUR GASPAR EPFL username.
-GROUP="gXX"                  # <-- YOUR TEAM, e.g. g07.
-GIT_REF="feat/elie-marimo-notebook"  # branch/tag with the embedder code
-# ==============================================
+# ============== EDIT OR OVERRIDE VIA ENV ==============
+# Run as:   GASPAR=enbruno ./rcp_support/submit_embed.sh
+# GROUP is team CiteRight (CS-552 Spring 2026), confirmed by TAs.
+GASPAR="${GASPAR:-gaspar}"
+GROUP="${GROUP:-g68}"
+GIT_REF="${GIT_REF:-feat/elie-marimo-notebook}"
+# ======================================================
 
 if [[ "${GASPAR}" == "gaspar" || -z "${GASPAR}" ]]; then
     echo "ERROR: edit submit_embed.sh and set GASPAR to your EPFL GASPAR username." >&2
