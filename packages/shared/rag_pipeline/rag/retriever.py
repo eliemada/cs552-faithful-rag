@@ -22,9 +22,9 @@ from pathlib import Path
 from typing import Dict, List, Optional, Union
 
 import faiss
-import numpy as np
 import requests
 
+from rag_pipeline.rag.embedder import Embedder, OpenAIEmbedderAdapter
 from rag_pipeline.rag.openai_embedder import OpenAIEmbedder
 
 logger = logging.getLogger(__name__)
@@ -46,14 +46,14 @@ class SearchResult:
 class FAISSRetriever:
     """FAISS-based vector similarity search."""
 
-    def __init__(self, index: faiss.Index, metadata: Dict[str, Dict], embedder: OpenAIEmbedder):
+    def __init__(self, index: faiss.Index, metadata: Dict[str, Dict], embedder: Embedder):
         """
         Initialize FAISS retriever.
 
         Args:
             index: FAISS index
             metadata: Dict mapping index position to chunk metadata
-            embedder: OpenAI embedder for query encoding
+            embedder: any object satisfying the :class:`Embedder` protocol
         """
         self.index = index
         self.metadata = metadata
@@ -64,20 +64,26 @@ class FAISSRetriever:
         cls,
         indexes_dir: Union[str, Path],
         chunk_type: str,
-        openai_api_key: str,
+        openai_api_key: Optional[str] = None,
+        *,
+        embedder: Optional[Embedder] = None,
+        index_basename: Optional[str] = None,
     ) -> "FAISSRetriever":
-        """Load a FAISS retriever from a directory holding ``<chunk_type>.faiss``
-        and ``<chunk_type>_metadata.json``.
+        """Load a FAISS retriever from a directory holding ``<basename>.faiss``
+        and ``<basename>_metadata.json``.
 
-        This is the preferred constructor: it works against the local archive
-        (``data/s3_archive/indexes/``), the RCP scratch cache
-        (``/scratch/citeright_artifacts/indexes/``), or any HuggingFace
-        ``snapshot_download`` target — the public dataset replaces the original
-        S3 bucket.
+        By default the basename is ``<chunk_type>`` (the OpenAI layout).
+        Alternative embedders use ``<embedder.name>_<chunk_type>``, e.g.
+        ``bge_m3_coarse.faiss``.
+
+        If ``embedder`` is omitted, the OpenAI ``text-embedding-3-small``
+        encoder is instantiated from ``openai_api_key`` so existing callers
+        keep working.
         """
         indexes_dir = Path(indexes_dir)
-        index_path = indexes_dir / f"{chunk_type}.faiss"
-        metadata_path = indexes_dir / f"{chunk_type}_metadata.json"
+        basename = index_basename or chunk_type
+        index_path = indexes_dir / f"{basename}.faiss"
+        metadata_path = indexes_dir / f"{basename}_metadata.json"
 
         if not index_path.exists():
             raise FileNotFoundError(f"FAISS index missing: {index_path}")
@@ -86,11 +92,14 @@ class FAISSRetriever:
 
         index = faiss.read_index(str(index_path))
         metadata = json.loads(metadata_path.read_text())
-        embedder = OpenAIEmbedder(api_key=openai_api_key, model="text-embedding-3-small")
+        if embedder is None:
+            if not openai_api_key:
+                raise ValueError("Either embedder or openai_api_key must be provided.")
+            embedder = OpenAIEmbedderAdapter(
+                OpenAIEmbedder(api_key=openai_api_key, model="text-embedding-3-small")
+            )
 
-        logger.info(
-            "Loaded %s index with %d vectors from %s", chunk_type, index.ntotal, indexes_dir
-        )
+        logger.info("Loaded %s index with %d vectors from %s", basename, index.ntotal, indexes_dir)
         return cls(index, metadata, embedder)
 
     @classmethod
@@ -128,7 +137,9 @@ class FAISSRetriever:
             Bucket=bucket_name, Key=f"{index_prefix}{chunk_type}_metadata.json"
         )
         metadata = json.loads(response["Body"].read().decode("utf-8"))
-        embedder = OpenAIEmbedder(api_key=openai_api_key, model="text-embedding-3-small")
+        embedder: Embedder = OpenAIEmbedderAdapter(
+            OpenAIEmbedder(api_key=openai_api_key, model="text-embedding-3-small")
+        )
 
         logger.info("Loaded %s index with %d vectors", chunk_type, index.ntotal)
         return cls(index, metadata, embedder)
@@ -144,10 +155,8 @@ class FAISSRetriever:
         Returns:
             List of SearchResult objects
         """
-        # Embed query
-        query_embedding = self.embedder.generate_embedding(query)
-        query_vector = np.array([query_embedding], dtype=np.float32)
-        faiss.normalize_L2(query_vector)
+        # Embed query (encoder returns L2-normalised float32 vectors)
+        query_vector = self.embedder.encode_queries([query])
 
         # Search
         distances, indices = self.index.search(query_vector, top_k)
@@ -281,19 +290,26 @@ class HybridRetriever:
     def from_path(
         cls,
         indexes_dir: Union[str, Path],
-        openai_api_key: str,
+        openai_api_key: Optional[str] = None,
         zeroentropy_api_key: Optional[str] = None,
         chunk_type: str = "coarse",
         faiss_candidates: int = 75,
+        *,
+        embedder: Optional[Embedder] = None,
+        index_basename: Optional[str] = None,
     ) -> "HybridRetriever":
         """Load a hybrid retriever from a local directory of FAISS indexes.
 
-        Use this in CS-552 evaluation notebooks: it works against the cached
-        artefacts on RCP, the local archive on a laptop, or anything the
-        HuggingFace ``citeright/corpus`` dataset has been downloaded to.
+        Backwards-compat default: the OpenAI ``text-embedding-3-small`` index
+        named ``<chunk_type>.faiss``. Pass ``embedder`` and ``index_basename``
+        to load an alternative-embedder index (e.g. ``bge_m3_coarse.faiss``).
         """
         faiss_retriever = FAISSRetriever.from_path(
-            indexes_dir=indexes_dir, chunk_type=chunk_type, openai_api_key=openai_api_key
+            indexes_dir=indexes_dir,
+            chunk_type=chunk_type,
+            openai_api_key=openai_api_key,
+            embedder=embedder,
+            index_basename=index_basename,
         )
         reranker = ZeroEntropyReranker(api_key=zeroentropy_api_key) if zeroentropy_api_key else None
         return cls(faiss_retriever, reranker, faiss_candidates)

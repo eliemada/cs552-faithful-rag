@@ -17,8 +17,11 @@ from pathlib import Path
 
 import pytest
 
+import math
+
 from evaluation.retrieval_eval.evaluate_retrieval import (
     hit_rate_at_k,
+    ndcg_at_k,
     precision_at_k,
     recall_at_k,
     reciprocal_rank,
@@ -27,6 +30,11 @@ from evaluation.retrieval_eval.gold_resolver import (
     ResolvedQuery,
     _intervals_overlap,
     resolve,
+)
+from evaluation.retrieval_eval.retrievers import (
+    CONFIGS,
+    CONFIGS_BY_NAME,
+    RetrieverConfig,
 )
 
 
@@ -197,3 +205,104 @@ def test_reciprocal_rank() -> None:
     assert reciprocal_rank(["x", "y", "a"], {"a"}) == pytest.approx(1 / 3)
     # No hit → RR = 0
     assert reciprocal_rank(["x", "y"], {"a"}) == 0.0
+
+
+def test_ndcg_single_gold_rank_one_is_one() -> None:
+    assert ndcg_at_k(["a", "b", "c"], {"a"}, 3) == pytest.approx(1.0)
+
+
+def test_ndcg_single_gold_rank_three() -> None:
+    # rank 3 → DCG = 1/log2(4) = 0.5; IDCG = 1 → nDCG = 0.5
+    assert ndcg_at_k(["x", "y", "a"], {"a"}, 5) == pytest.approx(0.5)
+
+
+def test_ndcg_no_hit_is_zero() -> None:
+    assert ndcg_at_k(["x", "y"], {"a"}, 5) == 0.0
+
+
+def test_ndcg_two_gold_both_in_topk() -> None:
+    # gold ranks 1 and 3 → DCG = 1/log2(2) + 1/log2(4) = 1 + 0.5
+    # IDCG (G=2 ideal at ranks 1, 2) = 1/log2(2) + 1/log2(3)
+    retrieved = ["a", "x", "b"]
+    gold = {"a", "b"}
+    expected = (1.0 + 1 / math.log2(4)) / (1.0 + 1 / math.log2(3))
+    assert ndcg_at_k(retrieved, gold, 3) == pytest.approx(expected)
+
+
+def test_ndcg_caps_at_k() -> None:
+    # gold at rank 4 → outside top-3 → nDCG@3 = 0
+    assert ndcg_at_k(["x", "y", "z", "a"], {"a"}, 3) == 0.0
+    # but inside top-5
+    assert ndcg_at_k(["x", "y", "z", "a"], {"a"}, 5) == pytest.approx(1 / math.log2(5))
+
+
+def test_ndcg_empty_gold_is_zero() -> None:
+    assert ndcg_at_k(["a", "b"], set(), 5) == 0.0
+
+
+def test_ndcg_dedupes_repeated_gold_paper() -> None:
+    # Paper-level retrieval can repeat a paper across chunks. The gold paper
+    # must count once, at rank 1; subsequent repeats add nothing.
+    retrieved = ["paperA"] * 20
+    assert ndcg_at_k(retrieved, {"paperA"}, 10) == pytest.approx(1.0)
+
+
+def test_ndcg_bounded_by_one() -> None:
+    # Random-ish ranking with duplicates — value must stay in [0, 1].
+    retrieved = ["a", "a", "b", "a", "b", "c", "a"]
+    gold = {"a", "b"}
+    score = ndcg_at_k(retrieved, gold, 5)
+    assert 0.0 <= score <= 1.0
+
+
+# ---- retriever configs ----------------------------------------------------
+
+
+def test_config_matrix_covers_three_embedders_x_two_chunks_x_pm_rerank() -> None:
+    # 3 embedders × 2 granularities × 2 ±rerank
+    assert len(CONFIGS) == 12
+    embedders = {c.embedder for c in CONFIGS}
+    assert embedders == {"openai", "bge_m3", "e5_large"}
+    granularities = {c.chunk_type for c in CONFIGS}
+    assert granularities == {"coarse", "fine"}
+
+
+def test_openai_configs_keep_legacy_index_basename() -> None:
+    # Legacy OpenAI indices live at coarse.faiss / fine.faiss, unprefixed.
+    assert CONFIGS_BY_NAME["coarse_faiss"].index_basename() == "coarse"
+    assert CONFIGS_BY_NAME["fine_rerank"].index_basename() == "fine"
+
+
+def test_alt_embedder_configs_prefix_their_basename() -> None:
+    assert CONFIGS_BY_NAME["bge_m3_coarse_faiss"].index_basename() == "bge_m3_coarse"
+    assert CONFIGS_BY_NAME["e5_large_fine_rerank"].index_basename() == "e5_large_fine"
+
+
+def test_requires_openai_only_for_openai_embedder_configs() -> None:
+    openai_configs = [c for c in CONFIGS if c.embedder == "openai"]
+    hf_configs = [c for c in CONFIGS if c.embedder != "openai"]
+    assert all(c.requires_openai() for c in openai_configs)
+    assert not any(c.requires_openai() for c in hf_configs)
+
+
+def test_requires_zeroentropy_only_for_rerank_configs() -> None:
+    rerank_configs = [c for c in CONFIGS if c.use_reranker]
+    plain_configs = [c for c in CONFIGS if not c.use_reranker]
+    assert all(c.requires_zeroentropy() for c in rerank_configs)
+    assert not any(c.requires_zeroentropy() for c in plain_configs)
+
+
+def test_retriever_config_is_frozen() -> None:
+    cfg = CONFIGS[0]
+    with pytest.raises(Exception):
+        setattr(cfg, "name", "modified")
+    # Equality / hashing works for ``frozen=True``.
+    assert (
+        RetrieverConfig(
+            name=cfg.name,
+            chunk_type=cfg.chunk_type,
+            use_reranker=cfg.use_reranker,
+            embedder=cfg.embedder,
+        )
+        == cfg
+    )

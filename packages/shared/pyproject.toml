@@ -41,6 +41,10 @@ pdf = [
     "accelerate>=1.12.0",
     "safetensors>=0.4.0",
     "sentence-transformers>=5.2.0",
+    # Multi-threaded HF downloads — the course base-vllm:v1 image sets
+    # HF_HUB_ENABLE_HF_TRANSFER=1 and huggingface_hub hard-fails when the
+    # package is missing in the active venv, so we ship it as a hard dep.
+    "hf-transfer>=0.1.9",
 ]
 
 # Vector operations (for API and workers)
