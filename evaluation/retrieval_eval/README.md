@@ -32,22 +32,42 @@ Adversarial pairs (`annotator == "adversarial"`) and unanswerable pairs
 the former have deliberately wrong claims that test the faithfulness scorer
 elsewhere, the latter have no supporting spans by schema invariant.
 
-## Configurations (M2 scope)
+## Configurations
 
-Four configs sharing the same OpenAI `text-embedding-3-small` embeddings:
+Three embedder families crossed with two granularities and ±reranker,
+12 configs total. OpenAI is the original index; BGE-M3 and E5-large
+indices are built locally by `scripts.build_hf_index` from the chunk
+JSONs in `data/s3_archive/chunks/`.
 
-| Name | Chunk granularity | ZeroEntropy reranker |
-|------|--------------------|-----------------------|
-| `coarse_faiss` | coarse (~2000 chars) | off |
-| `coarse_rerank` | coarse | on |
-| `fine_faiss` | fine (~300 chars) | off |
-| `fine_rerank` | fine | on |
+| family | configs |
+|--------|---------|
+| `openai` (`text-embedding-3-small`, 1536-dim) | `coarse_faiss`, `coarse_rerank`, `fine_faiss`, `fine_rerank` |
+| `bge_m3` (`BAAI/bge-m3`, 1024-dim) | `bge_m3_coarse_faiss`, `bge_m3_coarse_rerank`, `bge_m3_fine_faiss`, `bge_m3_fine_rerank` |
+| `e5_large` (`intfloat/e5-large-v2`, 1024-dim) | `e5_large_coarse_faiss`, ..., `e5_large_fine_rerank` |
 
-Alternative embedding models from the proposal — **BGE-M3**, **E5-large**,
-**ColBERTv2** — are deferred to M3. Each requires building a fresh
-46k-chunk FAISS index, which is hours of GPU + embedding API time and not
-on the M2 path. The M2 result already answers Rubi's "2–3 retrieval
-configurations" ask cleanly.
+ColBERTv2 stays out: it is late-interaction multi-vector retrieval and
+needs the PLAID index format, not a drop-in dense-vector swap.
+
+### Building the alternative-embedder indices
+
+The HF indices are not tracked (each is ~200 MB–1.4 GB). Build them once
+on a GPU cluster:
+
+```bash
+# all four indices, ~30–60 min on CUDA
+uv run python -m scripts.build_all_hf_indices --device cuda --batch-size 256
+
+# or build just one
+uv run python -m scripts.build_hf_index --model bge-m3 --chunk-type coarse --device cuda
+```
+
+The script reads `data/s3_archive/chunks/*_<type>.json`, batch-encodes
+with the requested HF model (L2-normalised, ``max_seq_length=512``), and
+writes `data/s3_archive/indexes/<embedder>_<chunk_type>.{faiss,_metadata.json}`
+in the same layout the OpenAI indices use.
+
+On Apple MPS expect ~7 h for the full set; on an A100 it drops to under
+an hour.
 
 ## Run one config
 

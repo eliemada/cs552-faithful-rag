@@ -31,6 +31,11 @@ from evaluation.retrieval_eval.gold_resolver import (
     _intervals_overlap,
     resolve,
 )
+from evaluation.retrieval_eval.retrievers import (
+    CONFIGS,
+    CONFIGS_BY_NAME,
+    RetrieverConfig,
+)
 
 
 # ---- _intervals_overlap ----------------------------------------------------
@@ -248,3 +253,56 @@ def test_ndcg_bounded_by_one() -> None:
     gold = {"a", "b"}
     score = ndcg_at_k(retrieved, gold, 5)
     assert 0.0 <= score <= 1.0
+
+
+# ---- retriever configs ----------------------------------------------------
+
+
+def test_config_matrix_covers_three_embedders_x_two_chunks_x_pm_rerank() -> None:
+    # 3 embedders × 2 granularities × 2 ±rerank
+    assert len(CONFIGS) == 12
+    embedders = {c.embedder for c in CONFIGS}
+    assert embedders == {"openai", "bge_m3", "e5_large"}
+    granularities = {c.chunk_type for c in CONFIGS}
+    assert granularities == {"coarse", "fine"}
+
+
+def test_openai_configs_keep_legacy_index_basename() -> None:
+    # Legacy OpenAI indices live at coarse.faiss / fine.faiss, unprefixed.
+    assert CONFIGS_BY_NAME["coarse_faiss"].index_basename() == "coarse"
+    assert CONFIGS_BY_NAME["fine_rerank"].index_basename() == "fine"
+
+
+def test_alt_embedder_configs_prefix_their_basename() -> None:
+    assert CONFIGS_BY_NAME["bge_m3_coarse_faiss"].index_basename() == "bge_m3_coarse"
+    assert CONFIGS_BY_NAME["e5_large_fine_rerank"].index_basename() == "e5_large_fine"
+
+
+def test_requires_openai_only_for_openai_embedder_configs() -> None:
+    openai_configs = [c for c in CONFIGS if c.embedder == "openai"]
+    hf_configs = [c for c in CONFIGS if c.embedder != "openai"]
+    assert all(c.requires_openai() for c in openai_configs)
+    assert not any(c.requires_openai() for c in hf_configs)
+
+
+def test_requires_zeroentropy_only_for_rerank_configs() -> None:
+    rerank_configs = [c for c in CONFIGS if c.use_reranker]
+    plain_configs = [c for c in CONFIGS if not c.use_reranker]
+    assert all(c.requires_zeroentropy() for c in rerank_configs)
+    assert not any(c.requires_zeroentropy() for c in plain_configs)
+
+
+def test_retriever_config_is_frozen() -> None:
+    cfg = CONFIGS[0]
+    with pytest.raises(Exception):
+        setattr(cfg, "name", "modified")
+    # Equality / hashing works for ``frozen=True``.
+    assert (
+        RetrieverConfig(
+            name=cfg.name,
+            chunk_type=cfg.chunk_type,
+            use_reranker=cfg.use_reranker,
+            embedder=cfg.embedder,
+        )
+        == cfg
+    )
