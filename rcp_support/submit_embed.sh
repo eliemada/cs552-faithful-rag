@@ -107,7 +107,6 @@ runai submit \
   --node-pools "${NODE}" \
   --working-dir /scratch \
   --environment HF_HOME=/scratch/hf_cache \
-  --environment HF_HUB_ENABLE_HF_TRANSFER=1 \
   --environment UV_CACHE_DIR=/scratch/uv_cache \
   --environment REPO_URL="${REPO_URL}" \
   --environment REPO_DIR="${REPO_DIR}" \
