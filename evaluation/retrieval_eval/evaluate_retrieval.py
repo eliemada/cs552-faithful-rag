@@ -38,6 +38,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import math
 import time
 from pathlib import Path
 from typing import Final, Iterable
@@ -93,6 +94,26 @@ def reciprocal_rank(retrieved: list[str], gold: set[str]) -> float:
     return 0.0
 
 
+def ndcg_at_k(retrieved: list[str], gold: set[str], k: int) -> float:
+    """Binary-relevance nDCG@k. Each gold item counts once at its first rank.
+
+    Deduplicates gold hits so a paper appearing in several retrieved chunks
+    contributes only at its earliest position. Without this, paper-level nDCG
+    (where retrieved IDs can repeat across chunks) would exceed 1.
+    """
+    if not gold or not retrieved or k <= 0:
+        return 0.0
+    seen_gold: set[str] = set()
+    dcg = 0.0
+    for i, d in enumerate(retrieved[:k]):
+        if d in gold and d not in seen_gold:
+            seen_gold.add(d)
+            dcg += 1.0 / math.log2(i + 2)
+    ideal_hits = min(len(gold), k)
+    idcg = sum(1.0 / math.log2(i + 2) for i in range(ideal_hits))
+    return dcg / idcg if idcg > 0 else 0.0
+
+
 # ---- per-query metric record ----------------------------------------------
 
 
@@ -102,6 +123,7 @@ def _metrics_for(retrieved_ids: list[str], gold_ids: set[str], k_values: Iterabl
         out[f"precision@{k}"] = precision_at_k(retrieved_ids, gold_ids, k)
         out[f"recall@{k}"] = recall_at_k(retrieved_ids, gold_ids, k)
         out[f"hit_rate@{k}"] = hit_rate_at_k(retrieved_ids, gold_ids, k)
+        out[f"ndcg@{k}"] = ndcg_at_k(retrieved_ids, gold_ids, k)
     out["mrr"] = reciprocal_rank(retrieved_ids, gold_ids)
     return out
 
@@ -113,6 +135,7 @@ def _empty_metrics(k_values: Iterable[int]) -> dict:
         out[f"precision@{k}"] = None
         out[f"recall@{k}"] = None
         out[f"hit_rate@{k}"] = None
+        out[f"ndcg@{k}"] = None
     out["mrr"] = None
     return out
 
@@ -123,6 +146,7 @@ def _aggregate(per_query: list[dict], key: str, k_values: Iterable[int]) -> dict
         [f"precision@{k}" for k in k_values]
         + [f"recall@{k}" for k in k_values]
         + [f"hit_rate@{k}" for k in k_values]
+        + [f"ndcg@{k}" for k in k_values]
         + ["mrr"]
     )
     agg: dict[str, float | None] = {}
@@ -175,6 +199,8 @@ def evaluate_config(
                 "gold_chunk_count": len(chunk_gold),
                 "has_chunk_coverage": bool(chunk_gold),
                 "latency_ms": round(elapsed_ms, 1),
+                "retrieved_papers": retrieved_papers,
+                "retrieved_chunks": retrieved_chunks,
                 "paper": paper_metrics,
                 "chunk": chunk_metrics,
             }

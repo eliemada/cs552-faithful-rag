@@ -17,8 +17,11 @@ from pathlib import Path
 
 import pytest
 
+import math
+
 from evaluation.retrieval_eval.evaluate_retrieval import (
     hit_rate_at_k,
+    ndcg_at_k,
     precision_at_k,
     recall_at_k,
     reciprocal_rank,
@@ -197,3 +200,51 @@ def test_reciprocal_rank() -> None:
     assert reciprocal_rank(["x", "y", "a"], {"a"}) == pytest.approx(1 / 3)
     # No hit → RR = 0
     assert reciprocal_rank(["x", "y"], {"a"}) == 0.0
+
+
+def test_ndcg_single_gold_rank_one_is_one() -> None:
+    assert ndcg_at_k(["a", "b", "c"], {"a"}, 3) == pytest.approx(1.0)
+
+
+def test_ndcg_single_gold_rank_three() -> None:
+    # rank 3 → DCG = 1/log2(4) = 0.5; IDCG = 1 → nDCG = 0.5
+    assert ndcg_at_k(["x", "y", "a"], {"a"}, 5) == pytest.approx(0.5)
+
+
+def test_ndcg_no_hit_is_zero() -> None:
+    assert ndcg_at_k(["x", "y"], {"a"}, 5) == 0.0
+
+
+def test_ndcg_two_gold_both_in_topk() -> None:
+    # gold ranks 1 and 3 → DCG = 1/log2(2) + 1/log2(4) = 1 + 0.5
+    # IDCG (G=2 ideal at ranks 1, 2) = 1/log2(2) + 1/log2(3)
+    retrieved = ["a", "x", "b"]
+    gold = {"a", "b"}
+    expected = (1.0 + 1 / math.log2(4)) / (1.0 + 1 / math.log2(3))
+    assert ndcg_at_k(retrieved, gold, 3) == pytest.approx(expected)
+
+
+def test_ndcg_caps_at_k() -> None:
+    # gold at rank 4 → outside top-3 → nDCG@3 = 0
+    assert ndcg_at_k(["x", "y", "z", "a"], {"a"}, 3) == 0.0
+    # but inside top-5
+    assert ndcg_at_k(["x", "y", "z", "a"], {"a"}, 5) == pytest.approx(1 / math.log2(5))
+
+
+def test_ndcg_empty_gold_is_zero() -> None:
+    assert ndcg_at_k(["a", "b"], set(), 5) == 0.0
+
+
+def test_ndcg_dedupes_repeated_gold_paper() -> None:
+    # Paper-level retrieval can repeat a paper across chunks. The gold paper
+    # must count once, at rank 1; subsequent repeats add nothing.
+    retrieved = ["paperA"] * 20
+    assert ndcg_at_k(retrieved, {"paperA"}, 10) == pytest.approx(1.0)
+
+
+def test_ndcg_bounded_by_one() -> None:
+    # Random-ish ranking with duplicates — value must stay in [0, 1].
+    retrieved = ["a", "a", "b", "a", "b", "c", "a"]
+    gold = {"a", "b"}
+    score = ndcg_at_k(retrieved, gold, 5)
+    assert 0.0 <= score <= 1.0
