@@ -6,8 +6,8 @@
     "difficulty": "single-hop",
     "category": "policy_impact",
     "annotator": "yusif",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "elie",
+    "review_status": "approved",
     "iaa_subset": false,
     "claims": [
       {
@@ -22,7 +22,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       },
       {
         "id": "c002",
@@ -36,7 +36,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       }
     ]
   },
@@ -47,8 +47,8 @@
     "difficulty": "single-hop",
     "category": "policy_impact",
     "annotator": "yusif",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "elie",
+    "review_status": "approved",
     "iaa_subset": true,
     "claims": [
       {
@@ -63,7 +63,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       },
       {
         "id": "c002",
@@ -83,7 +83,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "unrelated"
       }
     ]
   },
@@ -94,8 +94,8 @@
     "difficulty": "multi-hop",
     "category": "policy_impact",
     "annotator": "yusif",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "elie",
+    "review_status": "approved",
     "iaa_subset": false,
     "claims": [
       {
@@ -110,7 +110,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       },
       {
         "id": "c002",
@@ -124,7 +124,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       }
     ]
   },
@@ -135,8 +135,8 @@
     "difficulty": "single-hop",
     "category": "factual",
     "annotator": "yusif",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "elie",
+    "review_status": "approved",
     "iaa_subset": false,
     "claims": [
       {
@@ -151,7 +151,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       }
     ]
   },
@@ -162,8 +162,8 @@
     "difficulty": "single-hop",
     "category": "factual",
     "annotator": "yusif",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "elie",
+    "review_status": "approved",
     "iaa_subset": false,
     "claims": [
       {
@@ -178,7 +178,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       },
       {
         "id": "c002",
@@ -198,7 +198,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       }
     ]
   },
@@ -209,8 +209,8 @@
     "difficulty": "single-hop",
     "category": "policy_impact",
     "annotator": "yusif",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "elie",
+    "review_status": "approved",
     "iaa_subset": false,
     "claims": [
       {
@@ -225,7 +225,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       },
       {
         "id": "c002",
@@ -239,7 +239,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       }
     ]
   },
@@ -250,8 +250,8 @@
     "difficulty": "multi-hop",
     "category": "policy_impact",
     "annotator": "yusif",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "elie",
+    "review_status": "approved",
     "iaa_subset": false,
     "claims": [
       {
@@ -266,7 +266,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       },
       {
         "id": "c002",
@@ -286,7 +286,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       }
     ]
   },
@@ -297,8 +297,8 @@
     "difficulty": "single-hop",
     "category": "factual",
     "annotator": "yusif",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "elie",
+    "review_status": "approved",
     "iaa_subset": false,
     "claims": [
       {
@@ -319,7 +319,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       }
     ]
   },
@@ -330,8 +330,8 @@
     "difficulty": "single-hop",
     "category": "policy_impact",
     "annotator": "yusif",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "elie",
+    "review_status": "approved",
     "iaa_subset": true,
     "claims": [
       {
@@ -346,7 +346,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       },
       {
         "id": "c002",
@@ -366,7 +366,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       }
     ]
   },
@@ -377,8 +377,8 @@
     "difficulty": "single-hop",
     "category": "factual",
     "annotator": "yusif",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "elie",
+    "review_status": "approved",
     "iaa_subset": false,
     "claims": [
       {
@@ -393,7 +393,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       }
     ]
   },
@@ -404,8 +404,8 @@
     "difficulty": "multi-hop",
     "category": "policy_impact",
     "annotator": "yusif",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "elie",
+    "review_status": "approved",
     "iaa_subset": false,
     "claims": [
       {
@@ -432,7 +432,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       },
       {
         "id": "c002",
@@ -452,7 +452,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       }
     ]
   },
@@ -463,8 +463,8 @@
     "difficulty": "single-hop",
     "category": "factual",
     "annotator": "yusif",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "elie",
+    "review_status": "approved",
     "iaa_subset": false,
     "claims": [
       {
@@ -479,7 +479,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       },
       {
         "id": "c002",
@@ -491,7 +491,8 @@
             "char_end": 114648,
             "quote": "The gist of the article was not to criticize this practice, but rather to advocate an expansion of “ prior user rights ” under Japan's patent law [61] . Prior user rights permit companies that have made inventions (perhaps in collaboration with universities) to keep such discoveries secret while preserving their right to use the inventions in the event some other entity patents them in the future"
           }
-        ]
+        ],
+        "reviewer_label": "supports"
       }
     ]
   },
@@ -502,8 +503,8 @@
     "difficulty": "single-hop",
     "category": "factual",
     "annotator": "yusif",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "elie",
+    "review_status": "approved",
     "iaa_subset": false,
     "claims": [
       {
@@ -518,7 +519,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       },
       {
         "id": "c002",
@@ -532,7 +533,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       }
     ]
   }
