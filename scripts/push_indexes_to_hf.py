@@ -36,12 +36,16 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--patterns",
         nargs="+",
-        default=["bge_m3_*", "e5_large_*"],
-        help="Filename glob patterns (faiss + metadata both match by default).",
+        default=["bge_m3_*", "e5_large_*", "colbert_*"],
+        help=(
+            "Filename glob patterns. Defaults cover BGE-M3, E5-large, and "
+            "ColBERTv2 outputs (both the PLAID index folders and their "
+            "metadata sidecars)."
+        ),
     )
     parser.add_argument(
         "--commit-message",
-        default="add BGE-M3 and E5-large FAISS indices (coarse + fine)",
+        default="add alternative-embedder FAISS / PLAID indices",
     )
     args = parser.parse_args(argv)
 

@@ -45,13 +45,20 @@ How much retrieval quality does the choice of embedder, chunk
 granularity, and cross-encoder reranker each contribute on a
 domain-specific scientific corpus? The proposal commits to four
 embedders (OpenAI `text-embedding-3-small`, BGE-M3, E5-large,
-ColBERTv2). M2 ships three of them: OpenAI on the original 46k-chunk
-FAISS index, plus BGE-M3 (`BAAI/bge-m3`) and E5-large
-(`intfloat/e5-large-v2`) on fresh 1024-dim indices built on the EPFL
-RCP cluster. Each embedder is crossed with both chunk granularities
-and ±ZeroEntropy reranker, giving 12 configurations. ColBERTv2 stays
-in M3 — its late-interaction multi-vector retrieval needs the PLAID
-index format, not a drop-in dense-vector swap.
+ColBERTv2); M2 closes the loop on all four:
+
+* **OpenAI `text-embedding-3-small`** (1536-dim) — original index.
+* **BGE-M3** (`BAAI/bge-m3`, 1024-dim) — dense single-vector, multilingual.
+* **E5-large** (`intfloat/e5-large-v2`, 1024-dim) — dense single-vector,
+  query/passage prefixed.
+* **ColBERTv2** (`colbert-ir/colbertv2.0`) — **late-interaction
+  multi-vector**, one embedding per token, scored via MaxSim over a
+  PLAID-quantised index (PyLate / fast-plaid backend).
+
+Each embedder is crossed with both chunk granularities and ±ZeroEntropy
+reranker, giving **16 configurations**. The four FAISS / PLAID indices
+needed for BGE-M3, E5-large, and ColBERTv2 were built on the EPFL RCP
+cluster (one A100 each, ~2 h total wall time).
 
 ## What I built
 
@@ -146,7 +153,7 @@ triggers a 46k-chunk FAISS re-index.
 
 @app.cell
 def __(json, repo_root):
-    """Load every per-config result JSON (12 configs across 3 embedder families)."""
+    """Load every per-config result JSON (16 configs across 4 embedder families)."""
     results_dir = repo_root / "evaluation" / "retrieval_eval" / "results"
     per_config = {
         path.stem: json.loads(path.read_text())
@@ -167,6 +174,10 @@ def __(json, repo_root):
         "e5_large_coarse_rerank",
         "e5_large_fine_faiss",
         "e5_large_fine_rerank",
+        "colbert_coarse_faiss",
+        "colbert_coarse_rerank",
+        "colbert_fine_faiss",
+        "colbert_fine_rerank",
     ]
     return (config_order, per_config)
 
@@ -226,21 +237,30 @@ def __(mo):
   MRR and 3 pp on hit@5.
 * **E5-large is a stronger embedder than OpenAI even without a
   reranker.** `e5_large_coarse_faiss` reaches hit@5 = 0.811 and
-  MRR = 0.747, ahead of every OpenAI FAISS-only config (the best
-  OpenAI no-rerank MRR is 0.661). A free, open-source encoder
-  outperforms the closed-source baseline on this scientific corpus.
-* **BGE-M3 trades top-5 precision for top-20 recall.**
-  `bge_m3_coarse_faiss` is the only config to reach hit@20 = 1.000
-  (perfect recall in the top 20) but its top-5 (0.703) trails OpenAI
-  and E5-large. With reranking it pulls level with OpenAI on hit@5
-  (0.946) and MRR (0.842).
+  MRR = 0.747, ahead of every OpenAI FAISS-only config (best OpenAI
+  no-rerank MRR is 0.661). A free, open-source encoder outperforms the
+  closed-source baseline on this scientific corpus.
+* **BGE-M3 and ColBERTv2 both reach perfect top-20 recall** (hit@20
+  = 1.000) on coarse chunks. BGE-M3 trades top-5 precision for that
+  (0.703); ColBERTv2 keeps top-5 reasonable (0.838) but loses on MRR
+  (0.618 vs E5-large's 0.747).
+* **ColBERTv2 is the only family that prefers fine chunks.**
+  `colbert_fine_rerank` beats `colbert_coarse_rerank` on hit@5 (0.919
+  vs 0.892) and hit@10 (0.946 vs 0.919). Late-interaction MaxSim was
+  trained on MS-MARCO-style short passages, and fine chunks (~300
+  chars) sit closer to that distribution than coarse ones (~2000
+  chars). Every dense family does the opposite — coarse > fine —
+  because a single pooled vector benefits from more local context.
+* **ColBERTv2 doesn't beat E5-large here.** Best ColBERT config
+  (`colbert_fine_rerank`, MRR 0.704) trails E5-large's best
+  (`e5_large_coarse_rerank`, MRR 0.878) by 17 pp. The late-interaction
+  architecture is more expressive in principle but its MS-MARCO
+  pretraining distribution doesn't transfer well to scholarly text in
+  this corpus.
 * **Reranking still helps everyone**, but the relative effect shrinks
   for stronger embedders: +16 pp on hit@5 for OpenAI coarse, +24 pp
   for BGE-M3 coarse, only +16 pp for E5-large coarse — because the
   E5-large FAISS baseline is already at 0.811.
-* **Coarse > fine across embedders.** Fine chunks are too short for
-  scientific writing; the embedder has too little context per chunk
-  and the right paper drops out of the top 5 more often.
 """
     )
     return
@@ -571,19 +591,22 @@ def __(mo):
         r"""
 ## Deferred to M3 (final 4-page report)
 
-* **ColBERTv2.** The remaining proposal-listed embedder. Late-interaction
-  multi-vector retrieval needs the PLAID index format, not a dense
-  L2 index, so it is a separate engineering track from the BGE-M3 /
-  E5-large work that landed for M2.
 * **No-gap chunker rebuild.** Replaces the section-aware chunker with
   a sliding-window scheme that has no internal gaps. Unlocks chunk-level
   metrics on full coverage and would lift the secondary chunk-level
-  numbers in the table above from a 16-20 query subset to the full 37.
+  numbers in the table above from a 16–20 query subset to the full 37.
+  Highest-leverage M3 task given the ColBERTv2 result — late-interaction
+  retrievers benefit most from short, focused passages, so a no-gap
+  chunker could close some of the gap to E5-large.
 * **Scale the RAGAS sweep** from $n=8$ to the full $n=37$. One CLI
   invocation, ~\$0.50 in API calls.
-* **Wire CRAG** (Faruk's component) into the ablation as a 13th
+* **Wire CRAG** (Faruk's component) into the ablation as a 17th
   config. Targets the `multi_hop` and `policy_impact` failure modes
   highlighted in the per-category cell above.
+* **Domain-adapt ColBERTv2** on a synthetic query/passage dataset built
+  from the gold set. The off-the-shelf MS-MARCO checkpoint trails
+  E5-large here; a few thousand domain-specific contrastive pairs
+  should narrow the gap without retraining from scratch.
 
 ## Reproducibility
 

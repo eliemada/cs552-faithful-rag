@@ -14,7 +14,10 @@ set -euo pipefail
 
 GASPAR="${GASPAR:-gaspar}"
 GROUP="${GROUP:-g68}"
-GIT_REF="${GIT_REF:-feat/elie-marimo-notebook}"
+# Tracks the latest branch that ships the upload script's default patterns
+# (dense + ColBERT). After ``feat/colbert-integration`` lands, bump this to
+# ``main``.
+GIT_REF="${GIT_REF:-feat/colbert-integration}"
 
 if [[ "${GASPAR}" == "gaspar" || -z "${GASPAR}" ]]; then
     echo "ERROR: GASPAR=<username> ./rcp_support/submit_upload.sh" >&2
@@ -82,6 +85,10 @@ snapshot_download(
     'citeright/corpus',
     repo_type='dataset',
     local_dir='data/s3_archive',
-    allow_patterns=['indexes/bge_m3_*', 'indexes/e5_large_*'],
+    allow_patterns=[
+        'indexes/bge_m3_*',
+        'indexes/e5_large_*',
+        'indexes/colbert_*',
+    ],
 )"
 EOF

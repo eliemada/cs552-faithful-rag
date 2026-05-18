@@ -35,21 +35,33 @@ Output schema::
 
 from __future__ import annotations
 
-import argparse
-import json
-import logging
-import math
-import time
-from pathlib import Path
-from typing import Final, Iterable
+import os
 
-from evaluation.gold_dataset._validator import DEFAULT_GOLD_QA, REPO_ROOT
-from evaluation.retrieval_eval.gold_resolver import (
+# faiss-cpu and torch both ship their own libomp on macOS. When they're loaded
+# in the same process and try to use multiple OMP threads simultaneously,
+# torch's state_dict loader segfaults (the same crash hits any pipeline that
+# combines a FAISS retriever with a torch-backed encoder, e.g. our ColBERTv2
+# configs). Forcing single-threaded OMP sidesteps the conflict; the eval
+# itself runs 37 queries sequentially, so threading buys nothing here.
+# Set ``setdefault`` so callers can still override on CUDA hosts where the
+# conflict doesn't exist.
+os.environ.setdefault("OMP_NUM_THREADS", "1")
+
+import argparse  # noqa: E402  — must follow the OMP env-var pin.
+import json  # noqa: E402
+import logging  # noqa: E402
+import math  # noqa: E402
+import time  # noqa: E402
+from pathlib import Path  # noqa: E402
+from typing import Final, Iterable  # noqa: E402
+
+from evaluation.gold_dataset._validator import DEFAULT_GOLD_QA, REPO_ROOT  # noqa: E402
+from evaluation.retrieval_eval.gold_resolver import (  # noqa: E402
     DEFAULT_CHUNKS_DIR,
     ResolvedQuery,
     resolve_from_file,
 )
-from evaluation.retrieval_eval.retrievers import (
+from evaluation.retrieval_eval.retrievers import (  # noqa: E402
     CONFIGS_BY_NAME,
     DEFAULT_INDEXES_DIR,
     RetrieverAdapter,
