@@ -4800,6 +4800,9 @@ provides-extras = ["pdf", "vector", "cloud", "analysis", "cli"]
 name = "rag-pipeline-monorepo"
 version = "1.0.1"
 source = { virtual = "." }
+dependencies = [
+    { name = "pandas" },
+]
 
 [package.dev-dependencies]
 dev = [
@@ -4818,6 +4821,7 @@ dev = [
 ]
 
 [package.metadata]
+requires-dist = [{ name = "pandas", specifier = ">=2.3.3" }]
 
 [package.metadata.requires-dev]
 dev = [
