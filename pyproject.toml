@@ -11,7 +11,9 @@ authors = [
 ]
 
 # Minimal root dependencies
-dependencies = []
+dependencies = [
+    "pandas>=2.3.3",
+]
 
 [tool.uv.workspace]
 members = [
