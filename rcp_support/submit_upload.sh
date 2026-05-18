@@ -17,7 +17,7 @@ GROUP="${GROUP:-g68}"
 # Tracks the latest branch that ships the upload script's default patterns
 # (dense + ColBERT). After ``feat/colbert-integration`` lands, bump this to
 # ``main``.
-GIT_REF="${GIT_REF:-feat/colbert-integration}"
+GIT_REF="${GIT_REF:-main}"
 
 if [[ "${GASPAR}" == "gaspar" || -z "${GASPAR}" ]]; then
     echo "ERROR: GASPAR=<username> ./rcp_support/submit_upload.sh" >&2
