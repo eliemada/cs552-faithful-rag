@@ -20,7 +20,7 @@ set -euo pipefail
 # GROUP is team CiteRight (CS-552 Spring 2026), confirmed by TAs.
 GASPAR="${GASPAR:-gaspar}"
 GROUP="${GROUP:-g68}"
-GIT_REF="${GIT_REF:-feat/elie-marimo-notebook}"
+GIT_REF="${GIT_REF:-main}"
 # ======================================================
 
 if [[ "${GASPAR}" == "gaspar" || -z "${GASPAR}" ]]; then

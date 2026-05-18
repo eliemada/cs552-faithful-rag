@@ -18,7 +18,7 @@ set -euo pipefail
 
 GASPAR="${GASPAR:-gaspar}"
 GROUP="${GROUP:-g68}"
-GIT_REF="${GIT_REF:-feat/colbert-integration}"
+GIT_REF="${GIT_REF:-main}"
 
 if [[ "${GASPAR}" == "gaspar" || -z "${GASPAR}" ]]; then
     echo "ERROR: GASPAR=<username> ./rcp_support/submit_colbert.sh" >&2
