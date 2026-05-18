@@ -1,0 +1,139 @@
+\pdfoutput=1
+\documentclass[11pt]{article}
+
+\usepackage{ACL2023}
+\usepackage{times}
+\usepackage{latexsym}
+\usepackage[T1]{fontenc}
+
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{fancyhdr}
+\usepackage{natbib}
+\usepackage{booktabs}
+\usepackage{array}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,RO]{EPFL -- Spring Semester 2026}
+\fancyhead[RE,LO]{Modern NLP -- Open Project M2 Progress Report}
+\rfoot{Page \thepage \hspace{1pt}}
+\renewcommand{\headrulewidth}{1pt}
+
+\setlength{\textfloatsep}{4pt}
+\setlength{\intextsep}{4pt}
+\setlength{\abovecaptionskip}{2pt}
+\setlength{\belowcaptionskip}{0pt}
+
+% Tighten section spacing for the 1-page brief.
+\usepackage{titlesec}
+\titlespacing*{\section}{0pt}{6pt}{2pt}
+
+%%%%%%%%%%%%%%%%%%% TITLE AND AUTHORS %%%%%%%%%%%%%%%%%%%
+
+\title{M2 Progress Report -- Faithful RAG: Evaluating Citation Accuracy and Retrieval Robustness in Domain-Specific Scientific Literature}
+
+\author{\normalfont
+Elie Bruno | 355932 | \texttt{elie.bruno@epfl.ch} \\
+Andrea Trugenberger | SCIPER | \texttt{andrea.trugenberger@epfl.ch} \\
+Faruk Zahiragi\'c | SCIPER | \texttt{faruk.zahiragic@epfl.ch} \\
+Yusif | SCIPER | \texttt{yusif@epfl.ch} \\
+Team Faithful RAG \\
+}
+
+%%%%%%%%%%%%%%%%%%% PROGRESS REPORT %%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+
+\section{Progress Summary}
+
+Three of the four proposal components run end-to-end on a 37-question gold benchmark of intellectual-property and innovation-policy papers. The retrieval ablation grew from four to sixteen configurations (new corpus-level SOTA); the faithfulness verifier exposes a 55--61\,pp gap between NLI and LLM-judge labels; the RAGAS pipeline pits chunked RAG against a 1M-token long-context baseline; the Corrective RAG hook is wired and awaits threshold ablations in M3.
+
+\section{Gold Benchmark}
+\label{sec:gold}
+
+Each team member contributed $\sim$10 question-passage pairs across policy impact, methodology, comparison, factual extraction, and multi-hop reasoning. A pair encodes an atomic claim, the source \texttt{paper\_id}, character-span offsets on a line-feed-normalised \texttt{document.md}, and a verbatim quote. A validator byte-checks every span against its quote, and CI rejects fabricated concatenations. Inter-annotator agreement uses five pairs per annotator labelled \emph{supports}/\emph{contradicts}/\emph{unrelated}; six adversarial controls (q900--q905) populate the rejection cells and break the single-class Cohen-$\kappa$ paradox \citep{cohen1960kappa} that the first IAA round triggered.
+
+\section{Retrieval Ablation}
+\label{sec:retrieval}
+
+The ablation crosses four embedder families (OpenAI \texttt{text-embedding-3-small}; BGE-M3 \citep{chen2024bgem3}; E5-large \citep{wang2024e5}; ColBERTv2 \citep{santhanam2022colbertv2}), two chunk granularities (coarse $\sim$2000\,chars, fine $\sim$300\,chars), and an optional ZeroEntropy cross-encoder reranker. Sixteen configurations share one \texttt{HybridRetriever} code path and report hit@$k$, MRR, and nDCG over $n{=}37$ paper-level gold pairs.
+
+\begin{table}[h]
+\centering
+\footnotesize
+\begin{tabular}{lccc}
+\toprule
+config (\texttt{coarse\_rerank}) & hit@5 & hit@10 & MRR \\
+\midrule
+OpenAI \texttt{text-emb-3-small}     & 0.946          & 0.946          & 0.842 \\
+BGE-M3                                & 0.946          & 0.946          & 0.842 \\
+\textbf{E5-large}                     & \textbf{0.973} & \textbf{0.973} & \textbf{0.878} \\
+ColBERTv2                             & 0.892          & 0.919          & 0.786 \\
+\bottomrule
+\end{tabular}
+\caption{Best configuration per embedder family. Full 16-config grid lives in the repo \texttt{retrieval\_eval/} results.}
+\label{tab:retrieval}
+\end{table}
+
+E5-large with the reranker wins every paper-level metric and beats OpenAI even without it ($+10.8$\,pp hit@10, $+8.6$\,pp MRR): a 335M-parameter open-source encoder edges out the closed-source baseline. ColBERTv2 trails E5-large by $17$\,pp MRR despite a more expressive per-token similarity; its MS-MARCO pretraining fails to transfer to scholarly text. ColBERTv2 is the only family that prefers fine chunks. Multi-hop questions saturate hit@10 at $1.000$ on coarse and fall to $0.667$--$0.833$ on fine across every family, locating the chunker as the dominant bottleneck.
+
+\section{Faithfulness Verification}
+\label{sec:faith}
+
+The verifier extends the proposal's NLI pipeline (DeBERTa-v3-large-mnli, \citealp{he2021debertav3}) with an LLM-judge head. Three generators (GPT-4o-mini, Claude-3.5-haiku, DeepSeek-chat) answer the 24 answerable gold questions closed-book; both verifiers label each (claim, gold-passage) pair.
+
+\begin{table}[h]
+\centering
+\footnotesize
+\begin{tabular}{lccr}
+\toprule
+generator & NLI & LLM-judge & gap \\
+\midrule
+gpt-4o-mini             & 0.750 & 0.138 & $+0.612$ \\
+claude-3.5-haiku        & 0.750 & 0.173 & $+0.577$ \\
+deepseek-chat           & 0.750 & 0.198 & $+0.552$ \\
+\bottomrule
+\end{tabular}
+\caption{Fraction labelled \emph{faithful} by each verifier ($n{=}24$).}
+\label{tab:nli-vs-judge}
+\end{table}
+
+NLI labels three-quarters of hallucinated closed-book answers as faithful at every provider; the LLM judge flags them. The 55--61\,pp gap is stable across generators and replicates a known NLI failure mode \citep{min-etal-2023-factscore,gao2023enabling}. NLI alone fails as a faithfulness gate on this benchmark.
+
+\section{End-to-End RAG vs Long-Context}
+\label{sec:ragas}
+
+Two pipelines run through the four RAGAS metrics \citep{es2024ragas}: chunked RAG (the \S\ref{sec:retrieval} retriever, GPT-4o-mini) and a long-context baseline that loads every cited \texttt{document.md} into a 1M-token Gemini~2.5~Flash window.
+
+\begin{table}[h]
+\centering
+\footnotesize
+\begin{tabular}{lccr}
+\toprule
+metric & RAG & long-context & $\Delta$ \\
+\midrule
+faithfulness        & 0.806 & 0.975 & $+0.169$ \\
+answer\_relevancy   & 0.662 & 0.799 & $+0.138$ \\
+context\_precision  & 0.979 & 1.000 & $+0.021$ \\
+context\_recall     & 0.792 & 1.000 & $+0.208$ \\
+\bottomrule
+\end{tabular}
+\caption{RAGAS metrics, $n{=}8$ stratified subset.}
+\label{tab:ragas}
+\end{table}
+
+Long-context wins every metric. The widest gaps fall on context\_recall ($+20.8$\,pp) and faithfulness ($+16.9$\,pp): chunked RAG hides $\sim$17\,pp of available factual support behind chunk boundaries. Two metrics point at one root cause and reinforce the chunker bottleneck from Table~\ref{tab:retrieval}.
+
+\section{Limitations and M3 Plan}
+\label{sec:m3}
+
+Three scope ceilings remain: RAGAS at $n{=}8$, partial chunk-level coverage (16--20 of 37 queries), and a closed-book versus retrieved-context split between the two faithfulness verifiers. M3 delivers four fixes. (i) A no-gap sliding-window chunker: the multi-hop fine-chunk failures, partial chunk coverage, and the $+17$\,pp long-context advantage share one root cause. (ii) Domain-adaptation of ColBERTv2 on synthetic contrastive pairs from the gold set, sized to close the $17$\,pp MRR gap. (iii) The full 37-question RAGAS sweep across all 16 retriever configurations. (iv) Activation of the wired CRAG \citep{yan2024corrective} scorer as a 17th configuration aimed at the multi-hop \texttt{fine} failures isolated in \S\ref{sec:retrieval}.
+
+\newpage
+\bibliography{custom}
+\bibliographystyle{acl_natbib}
+
+\end{document}
