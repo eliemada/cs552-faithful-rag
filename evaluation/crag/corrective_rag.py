@@ -20,6 +20,14 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import Enum
+import logging
+from typing import Iterable
+
+import math
+
+from evaluation.common import available_models, generate
+
+logger = logging.getLogger(__name__)
 
 
 class RetrievalQuality(str, Enum):
@@ -62,7 +70,20 @@ def evaluate_retrieval_quality(
     Returns:
         (quality_label, confidence_score)
     """
-    raise NotImplementedError("Implement retrieval quality evaluator")
+    if not documents:
+        return RetrievalQuality.INCORRECT, 0.0
+
+    scorer = _get_cross_encoder()
+    pairs = [(query, _doc_text(doc)) for doc in documents]
+    scores = scorer.predict(pairs, show_progress_bar=False)
+    best = float(max(scores)) if len(scores) else 0.0
+    norm = _normalize_score(best)
+
+    if norm >= config.confidence_threshold_high:
+        return RetrievalQuality.CORRECT, norm
+    if norm >= config.confidence_threshold_low:
+        return RetrievalQuality.AMBIGUOUS, norm
+    return RetrievalQuality.INCORRECT, norm
 
 
 def refine_query(query: str, failed_documents: list[dict]) -> str:
@@ -71,7 +92,85 @@ def refine_query(query: str, failed_documents: list[dict]) -> str:
 
     TODO: Implement using LLM-based query rewriting.
     """
-    raise NotImplementedError("Implement query refinement")
+    model_spec = _pick_refine_model()
+    if model_spec is None:
+        return query
+
+    snippets = _summarize_docs(failed_documents, max_docs=3, max_chars=800)
+    prompt = (
+        "Rewrite the user question to retrieve better evidence. "
+        "Keep the original intent, add missing specifics, and avoid new facts.\n\n"
+        f"Question: {query}\n\n"
+        f"Retrieved snippets:\n{snippets}\n\n"
+        "Rewritten question (one sentence):"
+    )
+
+    try:
+        refined = generate(model_spec, prompt, max_tokens=64, temperature=0.2).strip()
+    except Exception as exc:  # pragma: no cover - defensive fallback
+        _warn_refine_once(exc)
+        return query
+
+    return refined or query
+
+
+_REFINE_WARNED = False
+
+
+def _warn_refine_once(exc: Exception) -> None:
+    global _REFINE_WARNED
+    if _REFINE_WARNED:
+        return
+    logger.warning("Query refinement failed: %s", exc)
+    _REFINE_WARNED = True
+
+
+def _doc_text(doc: dict) -> str:
+    if isinstance(doc, dict):
+        return str(doc.get("text", ""))
+    return str(getattr(doc, "text", ""))
+
+
+def _summarize_docs(docs: Iterable[dict], *, max_docs: int, max_chars: int) -> str:
+    lines = []
+    for idx, doc in enumerate(docs):
+        if idx >= max_docs:
+            break
+        text = _doc_text(doc).replace("\n", " ").strip()
+        lines.append(f"[{idx + 1}] {text[:max_chars]}")
+    return "\n".join(lines)
+
+
+def _normalize_score(score: float) -> float:
+    if 0.0 <= score <= 1.0:
+        return score
+    # Cross-encoders sometimes return logits; squash to 0-1 range.
+    return 1.0 / (1.0 + math.exp(-score))
+
+
+_CROSS_ENCODER = None
+
+
+def _get_cross_encoder():
+    global _CROSS_ENCODER
+    if _CROSS_ENCODER is not None:
+        return _CROSS_ENCODER
+
+    try:
+        from sentence_transformers import CrossEncoder
+    except ImportError as exc:  # pragma: no cover
+        raise RuntimeError("sentence-transformers is required for CRAG scoring") from exc
+
+    model_id = "cross-encoder/ms-marco-MiniLM-L-6-v2"
+    _CROSS_ENCODER = CrossEncoder(model_id)
+    return _CROSS_ENCODER
+
+
+def _pick_refine_model() -> str | None:
+    specs = available_models(include_api=False)
+    if not specs:
+        return None
+    return specs[0]
 
 
 def corrective_rag(
