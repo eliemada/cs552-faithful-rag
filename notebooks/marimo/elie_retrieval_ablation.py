@@ -112,6 +112,123 @@ uv run python -m scripts.run_retrieval_ablation --run-missing
 
 @app.cell
 def __(mo):
+    mo.md(
+        r"""
+## How we built the corpus the ablation runs on
+
+Before any retrieval comparison was possible, the team had to ingest
+a domain-specific corpus from raw PDFs to indexable chunks. The
+ablation below treats those chunks as *inputs*, so a short tour of how
+they were produced is the right preamble.
+
+### Harvesting innovation / IP papers from OpenAlex
+
+`rag_pipeline/openalex/{fetcher,downloader}.py` cursor-paginates the
+OpenAlex API with `primary_topic.id=t10856` (innovation and
+intellectual property) and `open_access.is_oa=true`, polite-rate-limited
+and resumable. A Sci-Hub fallback fills the small fraction of records
+whose OA URL 404s. The harvester pulls bibliographic metadata into
+`raw_metadata/<paper_id>.json` and the corresponding PDF into
+`raw_pdfs/<paper_id>.pdf`. The filter targets ~4,920 works; the M2
+corpus settles on **999 successfully fetched + parsed papers** after
+removing scans, broken downloads, and non-English outliers.
+
+### Parsing PDFs with the Dolphin 1.5 VLM on GPU workers
+
+We chose this architecture because, at the time the corpus needed to
+be parsed, the team did not yet have access to the EPFL RCP cluster
+and we wanted the data layer ready before assignment work started.
+The pragmatic answer was **Vast.ai** spot GPU instances — pay per hour,
+no quota negotiation, and disposable when the run finishes. The whole
+batch design is documented in
+`docs/plans/2025-11-07-vastai-batch-processing-design.md`; the rough
+budget was ~\$12–25 for 1,000 PDFs.
+
+`packages/worker/worker/distributed_worker.py` runs the Dolphin 1.5
+vision–language model in a Docker container with CUDA on rented
+Vast.ai GPUs. Three workers shard the PDF list modulo-3, each
+processing three PDFs in parallel, so a fresh corpus pass takes a few
+hours of GPU time, not days of CPU. The workers are stateless: input
+PDFs pull from S3, outputs upload back to S3, so an instance dying
+mid-batch only costs the in-flight PDFs (which the next pass will
+retry from `failures/`). Once RCP access landed later, the same Docker
+image and the same worker code ran there unchanged — Vast.ai was a
+bridge, not a lock-in.
+
+Output per paper is layout-aware:
+
+* `document.md` — markdown with preserved section hierarchy, tables,
+  equations, and inline citation markers.
+* `metadata.json` — page-level layout metadata (block bounding boxes,
+  reading order, figure refs).
+* `figures/*.png` — extracted figure crops, addressable from the
+  markdown.
+
+Failed parses go to `failures/worker-*.json` so reruns are targeted
+rather than full-corpus replays.
+
+### Hybrid markdown chunking
+
+`rag_pipeline/rag/markdown_chunker.py` reads the Dolphin markdown and
+emits two granularities, both section-aware so heading hierarchy
+survives downstream:
+
+* **Coarse chunks** — ~2,000 chars with 10 % overlap, ~50 k total
+  across the corpus. Designed for broad-context retrieval.
+* **Fine chunks** — ~300 chars with 20 % overlap, ~200 k total.
+  Designed for precise snippet extraction once a candidate set has
+  been narrowed.
+
+Each chunk carries its source `paper_id`, character offsets into the
+original markdown, and the section path it came from. That last field
+is what makes paper-level vs chunk-level metrics in the next section
+well-defined.
+
+### Publishing the corpus as a HuggingFace dataset
+
+The corpus originally lived in a private S3 bucket whose lifetime is
+shorter than the project's. To make every artefact persist and to let
+graders, future readers, and the RCP notebooks pull data without any
+private credentials, we packaged the parsed corpus and pushed it to
+HuggingFace:
+
+[`huggingface.co/datasets/citeright/corpus`](https://huggingface.co/datasets/citeright/corpus)
+(~3 GB, public).
+
+The migration script `scripts/migrate_archive_to_hf.py` uploads four
+subtrees of the local archive:
+
+* `chunks/` — pre-computed coarse + fine chunks, one JSON per paper ×
+  granularity. **This is what the ablation reads.**
+* `processed/` — Dolphin markdown + page layout JSON per paper.
+* `raw_metadata/` — OpenAlex bibliographic record per paper.
+* `indexes/` — the pre-built retrieval indices the ablation compares.
+
+Original PDFs are deliberately excluded — the project doesn't have
+blanket redistribution rights for every Bronze-OA paper, and anyone
+who needs them can refetch from the `id` field in `raw_metadata/`.
+
+The notebooks pick up the data via two environment variables that the
+RCP launcher (`notebooks/submit.sh`) sets:
+
+```bash
+CITERIGHT_HF_REPO=citeright/corpus
+CITERIGHT_DATA_DIR=/scratch/citeright_artifacts
+```
+
+On first run the dataset is snapshotted into `CITERIGHT_DATA_DIR`; on
+subsequent runs the cache is used. Reproducing this notebook on a
+laptop or a fresh RCP pod is therefore one `snapshot_download` away.
+
+With the chunks resolved, the rest of the notebook compares retrieval
+configurations on top of them.
+"""
+    )
+    return
+
+
+@app.cell
+def __(mo):
     """Wire `sys.path` so the in-repo `evaluation.*` packages import cleanly."""
     import json
     import sys
