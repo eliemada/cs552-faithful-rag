@@ -37,6 +37,15 @@ def __(mo):
 **Elie Bruno** &middot; SCIPER 355932 &middot; CS-552 Spring 2026 &middot;
 Team Faithful RAG &middot; M2 Progress
 
+> *Authoring note.* This notebook is authored in [marimo](https://marimo.io)
+> and exported to `.ipynb` via `marimo export ipynb --include-outputs` for
+> submission. The choice has no effect on results, methodology, or
+> reproducibility — it only enforces a deterministic, acyclic execution
+> graph (no hidden cell-order state, every variable has a single defining
+> cell). The exported notebook reads exactly like a regular Jupyter
+> notebook; `mo.md(...)` and `mo.ui.table(...)` render as static
+> markdown / HTML in the baked outputs.
+
 ---
 
 ## Question
