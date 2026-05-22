@@ -1,0 +1,134 @@
+name: Tag milestone
+
+# Creates an annotated git tag + GitHub Release for a course-project
+# milestone (M2 progress report, M3 final submission, or the proposal).
+#
+# Triggered manually via the Actions tab or `gh workflow run tag-milestone.yml`.
+# Idempotent: refuses to overwrite an existing tag — bump the suffix if you need
+# to retag a corrected submission (e.g. m2-2026-05-24-corrected).
+
+on:
+  workflow_dispatch:
+    inputs:
+      milestone:
+        description: 'Which milestone to tag'
+        required: true
+        type: choice
+        options:
+          - m2-progress-report
+          - m3-final
+          - proposal
+          - other
+      suffix:
+        description: 'Optional suffix appended to the tag (e.g. "corrected", "v2"). Leave blank for the dated default.'
+        required: false
+        type: string
+        default: ''
+      notes:
+        description: 'Short summary shown at the top of the release notes (auto-changelog is appended below).'
+        required: true
+        type: string
+      target_sha:
+        description: 'Commit SHA to tag. Defaults to the workflow run ref (usually the main HEAD when run from the UI).'
+        required: false
+        type: string
+        default: ''
+
+permissions:
+  contents: write
+
+concurrency:
+  group: tag-milestone-${{ inputs.milestone }}
+  cancel-in-progress: false
+
+jobs:
+  tag:
+    name: Create tag and release
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for auto-changelog.
+          ref: ${{ inputs.target_sha || github.ref }}
+
+      - name: Resolve tag name
+        id: tag
+        env:
+          MILESTONE: ${{ inputs.milestone }}
+          SUFFIX: ${{ inputs.suffix }}
+        run: |
+          set -euo pipefail
+          DATE=$(date -u +%Y-%m-%d)
+          if [[ -n "${SUFFIX}" ]]; then
+            TAG="submission/${MILESTONE}-${DATE}-${SUFFIX}"
+          else
+            TAG="submission/${MILESTONE}-${DATE}"
+          fi
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "date=${DATE}" >> "$GITHUB_OUTPUT"
+
+      - name: Refuse to overwrite existing tag
+        env:
+          TAG: ${{ steps.tag.outputs.tag }}
+        run: |
+          set -euo pipefail
+          if git rev-parse -q --verify "refs/tags/${TAG}" >/dev/null; then
+            echo "Tag '${TAG}' already exists — refusing to overwrite." >&2
+            echo "Re-run with a 'suffix' input (e.g. 'corrected') to make a new tag." >&2
+            exit 1
+          fi
+
+      - name: Create annotated tag
+        env:
+          TAG: ${{ steps.tag.outputs.tag }}
+          MILESTONE: ${{ inputs.milestone }}
+          NOTES: ${{ inputs.notes }}
+          ACTOR: ${{ github.actor }}
+          DATE: ${{ steps.tag.outputs.date }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "${TAG}" -m "CS-552 ${MILESTONE} submission (${DATE})
+
+          ${NOTES}
+
+          Triggered by: @${ACTOR}"
+          git push origin "${TAG}"
+
+      - name: Create GitHub Release with auto-generated notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.tag.outputs.tag }}
+          MILESTONE: ${{ inputs.milestone }}
+          NOTES: ${{ inputs.notes }}
+          DATE: ${{ steps.tag.outputs.date }}
+        run: |
+          set -euo pipefail
+          PREV_TAG=$(git tag --list 'submission/*' --sort=-creatordate | sed -n '2p' || true)
+          NOTES_BODY="${NOTES}"
+          if [[ -n "${PREV_TAG}" ]]; then
+            NOTES_BODY="${NOTES_BODY}
+
+          ---
+          Auto-changelog is generated below by GitHub from commits since ${PREV_TAG}."
+          fi
+          gh release create "${TAG}" \
+            --title "${MILESTONE} — ${DATE}" \
+            --notes "${NOTES_BODY}" \
+            --generate-notes \
+            --verify-tag
+
+      - name: Summary
+        env:
+          TAG: ${{ steps.tag.outputs.tag }}
+        run: |
+          {
+            echo "# Milestone tag created"
+            echo
+            echo "**Tag:** \`${TAG}\`"
+            echo
+            echo "**Release:** ${{ github.server_url }}/${{ github.repository }}/releases/tag/${TAG}"
+          } >> "$GITHUB_STEP_SUMMARY"
