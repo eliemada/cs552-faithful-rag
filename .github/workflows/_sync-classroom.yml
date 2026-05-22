@@ -121,12 +121,32 @@ jobs:
 
           git commit -m "sync: ${SOURCE_MSG} (${SOURCE_SHA})"
 
-          INITIAL_COMMIT=$(git log --reverse --format="%H" | head -1)
-          git reset --soft "${INITIAL_COMMIT}"
+          # Squash on top of the latest milestone tag if one exists, otherwise
+          # on top of the initial classroom commit. Effect: the classroom main
+          # history is a stable chain of preserved milestones plus one
+          # rolling sync commit on top of the most recent milestone, e.g.
+          #   initial -> [sync] -> M2 tag commit -> [sync rolling on top of M2]
+          # When M3 is later tagged, the chain becomes
+          #   initial -> [sync] -> M2 -> [sync] -> M3 -> [sync on top of M3]
+          # Each `[sync]` slot is force-pushed and replaced each run; the
+          # milestone commits are never rewritten because we never reset past
+          # them.
+          LATEST_MILESTONE_TAG=$(git tag --list 'submission/*' --sort=-creatordate | head -n1 || true)
+          if [[ -n "${LATEST_MILESTONE_TAG}" ]]; then
+            BASE_COMMIT=$(git rev-list -n 1 "${LATEST_MILESTONE_TAG}")
+            BASE_DESC="milestone tag '${LATEST_MILESTONE_TAG}' (${BASE_COMMIT:0:7})"
+          else
+            BASE_COMMIT=$(git log --reverse --format="%H" | head -n1)
+            BASE_DESC="initial classroom commit (${BASE_COMMIT:0:7})"
+          fi
+          echo "Squash base: ${BASE_DESC}"
+
+          git reset --soft "${BASE_COMMIT}"
           git commit -m "sync: latest from cs552-faithful-rag @ ${SOURCE_SHA}
 
           Auto-synced from source repository.
           Source commit: ${SOURCE_SHA} — ${SOURCE_MSG}
+          Base: ${BASE_DESC}
           Synced at: $(date -u '+%Y-%m-%d %H:%M UTC')"
 
           git push --force-with-lease origin main
