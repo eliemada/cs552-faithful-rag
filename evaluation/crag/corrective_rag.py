@@ -62,10 +62,9 @@ def evaluate_retrieval_quality(
     """
     Score whether retrieved documents are relevant to the query.
 
-    TODO: Implement using one of:
-    - LLM-prompted relevance scoring
-    - Cross-encoder from HuggingFace (e.g., ms-marco-MiniLM)
-    - NLI-based relevance check
+    Uses a HuggingFace cross-encoder (ms-marco-MiniLM-L-6-v2) to score
+    (query, doc) pairs, takes the best score, normalises to [0, 1], and
+    maps to CORRECT / AMBIGUOUS / INCORRECT via the config thresholds.
 
     Returns:
         (quality_label, confidence_score)
@@ -90,7 +89,9 @@ def refine_query(query: str, failed_documents: list[dict]) -> str:
     """
     Reformulate query when retrieval quality is AMBIGUOUS.
 
-    TODO: Implement using LLM-based query rewriting.
+    Asks a local LLM to rewrite the question, conditioned on snippets of
+    the unsatisfying retrieved docs. Falls back to the original query if
+    no model is available or generation fails.
     """
     model_spec = _pick_refine_model()
     if model_spec is None:
