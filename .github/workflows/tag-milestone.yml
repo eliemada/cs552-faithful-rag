@@ -1,0 +1,239 @@
+name: Tag milestone
+
+# Creates the official submission tag + GitHub Release on the CS-552
+# *classroom* repo (the graded mirror), not on this source repo.
+#
+# Triggers:
+#   - Schedule: fires automatically on the M2 (2026-05-24) and M3-final
+#     (2026-06-07) deadlines at 20:00 UTC (= 22:00 Europe/Zurich CEST),
+#     two hours before midnight local. The cron entries below match the
+#     date every year, but the year gate in the `meta` job skips runs
+#     outside 2026 so this workflow won't accidentally fire in a future
+#     iteration of the course without explicit reconfiguration.
+#   - Manual: workflow_dispatch with milestone / suffix / notes inputs
+#     for ad-hoc tagging (e.g. re-tagging after a corrected submission,
+#     or tagging the proposal retroactively).
+#
+# Flow:
+#   1. Sync source -> classroom (reusable _sync-classroom.yml). This
+#      guarantees the tagged commit captures the absolute latest source
+#      state, not whatever last night's nightly sync produced.
+#   2. Create an annotated tag on the classroom repo under the
+#      `submission/` namespace.
+#   3. Create a GitHub Release on the classroom repo with auto-generated
+#      release notes.
+
+on:
+  schedule:
+    # M2 progress report — May 24, 20:00 UTC (22:00 CEST).
+    - cron: '0 20 24 5 *'
+    # M3 final submission — June 7, 20:00 UTC.
+    - cron: '0 20 7 6 *'
+  workflow_dispatch:
+    inputs:
+      milestone:
+        description: 'Which milestone to tag.'
+        required: true
+        type: choice
+        options:
+          - m2-progress-report
+          - m3-final
+          - proposal
+          - other
+      classroom_repo:
+        description: 'Classroom repo (owner/name) to tag. Default is the M2 classroom; update for M3 when its repo is provisioned.'
+        required: false
+        type: string
+        default: 'CS-552/open-project-m2-citeright'
+      suffix:
+        description: 'Optional suffix appended to the tag (e.g. "corrected", "v2"). Leave blank for the dated default.'
+        required: false
+        type: string
+        default: ''
+      notes:
+        description: 'Short summary shown at the top of the release notes.'
+        required: false
+        type: string
+        default: ''
+
+# A scheduled M2 run and a manual M2 run shouldn't race for the same tag.
+concurrency:
+  group: tag-milestone-${{ inputs.milestone || github.event.schedule }}
+  cancel-in-progress: false
+
+jobs:
+  meta:
+    name: Resolve milestone and gate by course year
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    outputs:
+      skip: ${{ steps.resolve.outputs.skip }}
+      milestone: ${{ steps.resolve.outputs.milestone }}
+      classroom_repo: ${{ steps.resolve.outputs.classroom_repo }}
+      notes: ${{ steps.resolve.outputs.notes }}
+      suffix: ${{ steps.resolve.outputs.suffix }}
+    steps:
+      - name: Resolve
+        id: resolve
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          SCHEDULE: ${{ github.event.schedule }}
+          INPUT_MILESTONE: ${{ inputs.milestone }}
+          INPUT_CLASSROOM: ${{ inputs.classroom_repo }}
+          INPUT_SUFFIX: ${{ inputs.suffix }}
+          INPUT_NOTES: ${{ inputs.notes }}
+        run: |
+          set -euo pipefail
+
+          CURRENT_YEAR=$(date -u +%Y)
+
+          if [[ "${EVENT_NAME}" == "schedule" ]]; then
+            # Year gate: only the 2026 offering of the course actually tags.
+            if [[ "${CURRENT_YEAR}" != "2026" ]]; then
+              echo "Scheduled trigger fired in ${CURRENT_YEAR}, but this workflow only auto-tags in 2026. Skipping."
+              echo "skip=true" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+
+            case "${SCHEDULE}" in
+              "0 20 24 5 *")
+                MILESTONE="m2-progress-report"
+                NOTES="Automated submission tag for CS-552 Milestone 2 (Progress Report) on the official deadline."
+                ;;
+              "0 20 7 6 *")
+                MILESTONE="m3-final"
+                NOTES="Automated submission tag for CS-552 Milestone 3 (Final Submission) on the official deadline."
+                ;;
+              *)
+                echo "Unknown schedule cron '${SCHEDULE}'. Skipping."
+                echo "skip=true" >> "$GITHUB_OUTPUT"
+                exit 0
+                ;;
+            esac
+
+            CLASSROOM='CS-552/open-project-m2-citeright'
+            SUFFIX=''
+          else
+            MILESTONE="${INPUT_MILESTONE}"
+            CLASSROOM="${INPUT_CLASSROOM:-CS-552/open-project-m2-citeright}"
+            SUFFIX="${INPUT_SUFFIX}"
+            NOTES="${INPUT_NOTES:-Manual submission tag for ${MILESTONE}.}"
+          fi
+
+          echo "skip=false" >> "$GITHUB_OUTPUT"
+          echo "milestone=${MILESTONE}" >> "$GITHUB_OUTPUT"
+          echo "classroom_repo=${CLASSROOM}" >> "$GITHUB_OUTPUT"
+          echo "notes=${NOTES}" >> "$GITHUB_OUTPUT"
+          echo "suffix=${SUFFIX}" >> "$GITHUB_OUTPUT"
+
+  sync:
+    name: Sync latest source to classroom
+    needs: meta
+    if: needs.meta.outputs.skip != 'true'
+    uses: ./.github/workflows/_sync-classroom.yml
+    with:
+      classroom_repo: ${{ needs.meta.outputs.classroom_repo }}
+    secrets:
+      CLASSROOM_PAT: ${{ secrets.CLASSROOM_PAT }}
+
+  tag:
+    name: Tag classroom HEAD and create release
+    needs: [meta, sync]
+    if: needs.meta.outputs.skip != 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout classroom repo (post-sync)
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+        with:
+          repository: ${{ needs.meta.outputs.classroom_repo }}
+          token: ${{ secrets.CLASSROOM_PAT }}
+          fetch-depth: 0
+          ref: main
+
+      - name: Resolve tag name
+        id: tag
+        env:
+          MILESTONE: ${{ needs.meta.outputs.milestone }}
+          SUFFIX: ${{ needs.meta.outputs.suffix }}
+        run: |
+          set -euo pipefail
+          DATE=$(date -u +%Y-%m-%d)
+          if [[ -n "${SUFFIX}" ]]; then
+            TAG="submission/${MILESTONE}-${DATE}-${SUFFIX}"
+          else
+            TAG="submission/${MILESTONE}-${DATE}"
+          fi
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "date=${DATE}" >> "$GITHUB_OUTPUT"
+
+      - name: Refuse to overwrite existing tag
+        env:
+          TAG: ${{ steps.tag.outputs.tag }}
+        run: |
+          set -euo pipefail
+          if git rev-parse -q --verify "refs/tags/${TAG}" >/dev/null; then
+            echo "Tag '${TAG}' already exists on classroom — refusing to overwrite." >&2
+            echo "Re-run with a 'suffix' input (e.g. 'corrected') to make a new tag." >&2
+            exit 1
+          fi
+
+      - name: Create annotated tag on classroom
+        env:
+          TAG: ${{ steps.tag.outputs.tag }}
+          MILESTONE: ${{ needs.meta.outputs.milestone }}
+          NOTES: ${{ needs.meta.outputs.notes }}
+          ACTOR: ${{ github.actor }}
+          DATE: ${{ steps.tag.outputs.date }}
+          SOURCE_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "${TAG}" -m "CS-552 ${MILESTONE} submission (${DATE})
+
+          ${NOTES}
+
+          Source commit: ${SOURCE_SHA}
+          Triggered by: @${ACTOR} via ${{ github.event_name }}"
+          git push origin "${TAG}"
+
+      - name: Create GitHub Release on classroom
+        env:
+          GH_TOKEN: ${{ secrets.CLASSROOM_PAT }}
+          TAG: ${{ steps.tag.outputs.tag }}
+          MILESTONE: ${{ needs.meta.outputs.milestone }}
+          NOTES: ${{ needs.meta.outputs.notes }}
+          DATE: ${{ steps.tag.outputs.date }}
+          CLASSROOM_REPO: ${{ needs.meta.outputs.classroom_repo }}
+        run: |
+          set -euo pipefail
+          PREV_TAG=$(git tag --list 'submission/*' --sort=-creatordate | sed -n '2p' || true)
+          NOTES_BODY="${NOTES}"
+          if [[ -n "${PREV_TAG}" ]]; then
+            NOTES_BODY="${NOTES_BODY}
+
+          ---
+          Auto-changelog is generated below by GitHub from commits since ${PREV_TAG}."
+          fi
+          gh release create "${TAG}" \
+            --repo "${CLASSROOM_REPO}" \
+            --title "${MILESTONE} — ${DATE}" \
+            --notes "${NOTES_BODY}" \
+            --generate-notes \
+            --verify-tag
+
+      - name: Summary
+        env:
+          TAG: ${{ steps.tag.outputs.tag }}
+          CLASSROOM_REPO: ${{ needs.meta.outputs.classroom_repo }}
+        run: |
+          {
+            echo "# Milestone tag created on classroom"
+            echo
+            echo "**Tag:** \`${TAG}\`"
+            echo
+            echo "**Classroom repo:** [${CLASSROOM_REPO}](https://github.com/${CLASSROOM_REPO})"
+            echo
+            echo "**Release:** https://github.com/${CLASSROOM_REPO}/releases/tag/${TAG}"
+          } >> "$GITHUB_STEP_SUMMARY"

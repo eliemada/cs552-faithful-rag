@@ -3,8 +3,22 @@ name: CI
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - 'notebooks/**'
+      - 'report/**'
+      - 'docs/**'
+      - '**/*.md'
+      - '**/*.ipynb'
+      - 'rcp_support/**'
   pull_request:
     branches: [main]
+    paths-ignore:
+      - 'notebooks/**'
+      - 'report/**'
+      - 'docs/**'
+      - '**/*.md'
+      - '**/*.ipynb'
+      - 'rcp_support/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
