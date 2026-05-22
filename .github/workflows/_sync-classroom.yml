@@ -1,0 +1,135 @@
+name: Sync source to classroom (reusable)
+
+# Reusable workflow that copies the current source tree into the CS-552
+# GitHub Classroom mirror and force-pushes a single squashed commit on top
+# of the classroom's initial commit. Called by:
+#   - sync-classroom.yml   (nightly cron, keeps classroom warm for TAs)
+#   - tag-milestone.yml    (run-then-tag, so each milestone tag captures
+#                          the absolute latest source state)
+#
+# Outputs `classroom_sha`: short SHA of the new classroom HEAD (empty
+# string when there were no changes to sync).
+
+on:
+  workflow_call:
+    inputs:
+      classroom_repo:
+        description: 'Classroom repo to sync into (owner/name).'
+        required: false
+        type: string
+        default: 'CS-552/open-project-m2-citeright'
+    secrets:
+      CLASSROOM_PAT:
+        required: true
+    outputs:
+      classroom_sha:
+        description: 'Short SHA of the new classroom commit, or empty if no changes.'
+        value: ${{ jobs.sync.outputs.classroom_sha }}
+
+# Two simultaneous syncs would step on each other's force-push.
+concurrency:
+  group: sync-classroom-${{ inputs.classroom_repo }}
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: Sync to ${{ inputs.classroom_repo }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      classroom_sha: ${{ steps.push.outputs.sha }}
+
+    steps:
+      - name: Check final-submission deadline has not passed
+        run: |
+          if [[ "$(date -u +%Y%m%d)" -gt "20260607" ]]; then
+            echo "Past final-submission deadline (2026-06-07) — refusing to sync."
+            exit 1
+          fi
+
+      - name: Checkout source repo
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+        with:
+          path: source
+          fetch-depth: 0
+
+      - name: Checkout classroom repo
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+        with:
+          repository: ${{ inputs.classroom_repo }}
+          token: ${{ secrets.CLASSROOM_PAT }}
+          path: classroom
+          fetch-depth: 0
+
+      - name: Build classroom structure
+        run: |
+          set -euo pipefail
+
+          cd classroom
+
+          # Remove everything except .git — we rebuild from source.
+          find . -maxdepth 1 \
+            ! -name '.' \
+            ! -name '.git' \
+            -exec rm -rf {} +
+
+          # ── code/ ──────────────────────────────────────────────
+          mkdir -p code
+          cp -r ../source/packages code/
+          cp -r ../source/evaluation code/
+          cp -r ../source/scripts code/
+          cp -r ../source/frontend code/
+          cp -r ../source/docs code/
+
+          for f in pyproject.toml uv.lock docker-compose.yml docker-entrypoint.sh Makefile; do
+            cp "../source/${f}" code/ 2>/dev/null || true
+          done
+          cp ../source/.env.example code/ 2>/dev/null || true
+          cp ../source/.dockerignore code/ 2>/dev/null || true
+
+          # ── notebooks/ ────────────────────────────────────────
+          cp -r ../source/notebooks .
+
+          # ── report/ ───────────────────────────────────────────
+          cp -r ../source/report .
+
+          # ── rcp_support/ ───────────────────────────────────────
+          cp -r ../source/rcp_support .
+
+          # ── README.md ─────────────────────────────────────────
+          cp ../source/CS552_README.md README.md
+
+      - name: Squash-commit and push
+        id: push
+        run: |
+          set -euo pipefail
+          cd classroom
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          SOURCE_SHA=$(cd ../source && git rev-parse --short HEAD)
+          SOURCE_MSG=$(cd ../source && git log -1 --pretty=format:"%s")
+
+          git add -A
+
+          if git diff --cached --quiet; then
+            echo "No changes to sync."
+            echo "sha=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          git commit -m "sync: ${SOURCE_MSG} (${SOURCE_SHA})"
+
+          INITIAL_COMMIT=$(git log --reverse --format="%H" | head -1)
+          git reset --soft "${INITIAL_COMMIT}"
+          git commit -m "sync: latest from cs552-faithful-rag @ ${SOURCE_SHA}
+
+          Auto-synced from source repository.
+          Source commit: ${SOURCE_SHA} — ${SOURCE_MSG}
+          Synced at: $(date -u '+%Y-%m-%d %H:%M UTC')"
+
+          git push --force-with-lease origin main
+
+          NEW_SHA=$(git rev-parse --short HEAD)
+          echo "sha=${NEW_SHA}" >> "$GITHUB_OUTPUT"
