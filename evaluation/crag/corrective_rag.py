@@ -1,31 +1,30 @@
-"""
-Corrective RAG (CRAG) Implementation — Person 3
+"""Corrective RAG (CRAG) implementation — Person 3.
 
-Based on: "Corrective Retrieval Augmented Generation" (Yan et al., 2024)
+Based on: "Corrective Retrieval Augmented Generation" (Yan et al., 2024).
 
-Pipeline:
-1. Retrieve documents with standard FAISS + optional reranker
-2. Score retrieval quality with a lightweight evaluator
-3. If CORRECT: use retrieved docs as-is
-4. If AMBIGUOUS: refine query, re-retrieve
-5. If INCORRECT: fallback (web search or broader retrieval)
-
-The evaluator can be:
-- A prompted LLM (zero-shot relevance scoring)
-- A fine-tuned small classifier
-- An NLI-based relevance checker
+Pipeline
+--------
+1. Retrieve documents with FAISS + optional reranker.
+2. Score retrieval quality with a cross-encoder.
+3. If CORRECT  → use the retrieved docs as-is.
+4. If AMBIGUOUS → refine the query with an LLM and re-retrieve.
+5. If INCORRECT → fallback (web search / broader retrieval — currently a stub).
 """
 
 from __future__ import annotations
 
+import functools
+import logging
+import math
+from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from enum import Enum
-import logging
-from typing import Iterable
-
-import math
+from typing import TYPE_CHECKING, Any
 
 from evaluation.common import available_models, generate
+
+if TYPE_CHECKING:
+    from sentence_transformers import CrossEncoder
 
 logger = logging.getLogger(__name__)
 
@@ -38,10 +37,39 @@ class RetrievalQuality(str, Enum):
 
 @dataclass(frozen=True)
 class CRAGConfig:
+    """Configuration for the CRAG pipeline.
+
+    Every previously-hardcoded knob lives here so experiments can sweep
+    thresholds, swap the cross-encoder, or override the refine LLM
+    without touching module code.
+    """
+
+    # Quality thresholds applied to the normalised cross-encoder score.
     confidence_threshold_high: float = 0.7
     confidence_threshold_low: float = 0.3
+
+    # Retry budget for AMBIGUOUS retrievals (each retry runs refine + re-retrieve).
     max_retries: int = 2
+
+    # Top-k for each retrieval call inside the pipeline.
+    retrieval_k: int = 10
+
+    # Reserved: switches on the web-search branch after INCORRECT.
     use_web_fallback: bool = False
+
+    # Cross-encoder for relevance scoring. ms-marco-MiniLM is fast (~25M
+    # params) and well-calibrated for ad-hoc (query, passage) relevance.
+    cross_encoder_model: str = "cross-encoder/ms-marco-MiniLM-L-6-v2"
+
+    # Query-refinement prompt knobs.
+    refine_max_docs: int = 3
+    refine_max_chars_per_doc: int = 800
+    refine_max_tokens: int = 64
+    refine_temperature: float = 0.2
+
+    # Optional override for the refine LLM. When None, the first local
+    # model from `available_models(include_api=False)` is used (Qwen 7B).
+    refine_model_spec: str | None = None
 
 
 @dataclass(frozen=True)
@@ -54,29 +82,29 @@ class CRAGResult:
     final_documents: list[dict]
 
 
+# Type alias for any callable taking `(query, k)` and returning hit dicts.
+Retriever = Callable[..., list[dict]]
+
+
 def evaluate_retrieval_quality(
     query: str,
     documents: list[dict],
     config: CRAGConfig = CRAGConfig(),
 ) -> tuple[RetrievalQuality, float]:
-    """
-    Score whether retrieved documents are relevant to the query.
+    """Score retrieval quality and map to {CORRECT, AMBIGUOUS, INCORRECT}.
 
-    Uses a HuggingFace cross-encoder (ms-marco-MiniLM-L-6-v2) to score
-    (query, doc) pairs, takes the best score, normalises to [0, 1], and
-    maps to CORRECT / AMBIGUOUS / INCORRECT via the config thresholds.
-
-    Returns:
-        (quality_label, confidence_score)
+    Scores every (query, doc) pair with the configured cross-encoder,
+    keeps the best score, normalises to [0, 1] (sigmoid when the model
+    returns raw logits), and thresholds against the two confidence cuts.
     """
     if not documents:
         return RetrievalQuality.INCORRECT, 0.0
 
-    scorer = _get_cross_encoder()
+    scorer = _get_cross_encoder(config.cross_encoder_model)
     pairs = [(query, _doc_text(doc)) for doc in documents]
-    scores = scorer.predict(pairs, show_progress_bar=False)
-    best = float(max(scores)) if len(scores) else 0.0
-    norm = _normalize_score(best)
+    scores = scorer.predict(pairs, show_progress_bar=False, convert_to_numpy=True)
+    best = float(max(scores))
+    norm = _sigmoid_if_logit(best)
 
     if norm >= config.confidence_threshold_high:
         return RetrievalQuality.CORRECT, norm
@@ -85,19 +113,26 @@ def evaluate_retrieval_quality(
     return RetrievalQuality.INCORRECT, norm
 
 
-def refine_query(query: str, failed_documents: list[dict]) -> str:
-    """
-    Reformulate query when retrieval quality is AMBIGUOUS.
+def refine_query(
+    query: str,
+    failed_documents: list[dict],
+    config: CRAGConfig = CRAGConfig(),
+) -> str:
+    """Rewrite the query with an LLM, conditioned on unsatisfying snippets.
 
-    Asks a local LLM to rewrite the question, conditioned on snippets of
-    the unsatisfying retrieved docs. Falls back to the original query if
-    no model is available or generation fails.
+    Falls back to the original query when no local model is reachable or
+    when generation raises. The first failure logs at WARNING; subsequent
+    failures stay at DEBUG to avoid log spam during a sweep.
     """
-    model_spec = _pick_refine_model()
+    model_spec = _pick_refine_model(config.refine_model_spec)
     if model_spec is None:
         return query
 
-    snippets = _summarize_docs(failed_documents, max_docs=3, max_chars=800)
+    snippets = _summarize_docs(
+        failed_documents,
+        max_docs=config.refine_max_docs,
+        max_chars=config.refine_max_chars_per_doc,
+    )
     prompt = (
         "Rewrite the user question to retrieve better evidence. "
         "Keep the original intent, add missing specifics, and avoid new facts.\n\n"
@@ -107,109 +142,57 @@ def refine_query(query: str, failed_documents: list[dict]) -> str:
     )
 
     try:
-        refined = generate(model_spec, prompt, max_tokens=64, temperature=0.2).strip()
-    except Exception as exc:  # pragma: no cover - defensive fallback
-        _warn_refine_once(exc)
+        refined = generate(
+            model_spec,
+            prompt,
+            max_tokens=config.refine_max_tokens,
+            temperature=config.refine_temperature,
+        ).strip()
+    except Exception as exc:
+        logger.debug("Query refinement failed: %s", exc, exc_info=True)
+        _emit_refine_failure_warning()
         return query
 
     return refined or query
 
 
-_REFINE_WARNED = False
-
-
-def _warn_refine_once(exc: Exception) -> None:
-    global _REFINE_WARNED
-    if _REFINE_WARNED:
-        return
-    logger.warning("Query refinement failed: %s", exc)
-    _REFINE_WARNED = True
-
-
-def _doc_text(doc: dict) -> str:
-    if isinstance(doc, dict):
-        return str(doc.get("text", ""))
-    return str(getattr(doc, "text", ""))
-
-
-def _summarize_docs(docs: Iterable[dict], *, max_docs: int, max_chars: int) -> str:
-    lines = []
-    for idx, doc in enumerate(docs):
-        if idx >= max_docs:
-            break
-        text = _doc_text(doc).replace("\n", " ").strip()
-        lines.append(f"[{idx + 1}] {text[:max_chars]}")
-    return "\n".join(lines)
-
-
-def _normalize_score(score: float) -> float:
-    if 0.0 <= score <= 1.0:
-        return score
-    # Cross-encoders sometimes return logits; squash to 0-1 range.
-    return 1.0 / (1.0 + math.exp(-score))
-
-
-_CROSS_ENCODER = None
-
-
-def _get_cross_encoder():
-    global _CROSS_ENCODER
-    if _CROSS_ENCODER is not None:
-        return _CROSS_ENCODER
-
-    try:
-        from sentence_transformers import CrossEncoder
-    except ImportError as exc:  # pragma: no cover
-        raise RuntimeError("sentence-transformers is required for CRAG scoring") from exc
-
-    model_id = "cross-encoder/ms-marco-MiniLM-L-6-v2"
-    _CROSS_ENCODER = CrossEncoder(model_id)
-    return _CROSS_ENCODER
-
-
-def _pick_refine_model() -> str | None:
-    specs = available_models(include_api=False)
-    if not specs:
-        return None
-    return specs[0]
-
-
 def corrective_rag(
     query: str,
-    retriever_fn,
+    retriever_fn: Retriever,
     config: CRAGConfig = CRAGConfig(),
 ) -> CRAGResult:
-    """
-    Full CRAG pipeline.
+    """Full CRAG pipeline.
 
     Args:
-        query: user question
-        retriever_fn: callable(query, k) -> list[{id, text, score}]
-        config: CRAG configuration
+        query: user question.
+        retriever_fn: callable ``(query: str, k: int) -> list[dict]``.
+        config: pipeline configuration (see :class:`CRAGConfig`).
     """
     current_query = query
     retrieval_rounds = 0
 
     for attempt in range(config.max_retries + 1):
         retrieval_rounds += 1
-        documents = retriever_fn(current_query, k=10)
+        documents = retriever_fn(current_query, k=config.retrieval_k)
         quality, confidence = evaluate_retrieval_quality(current_query, documents, config)
+
+        refined_marker = current_query if current_query != query else None
 
         if quality == RetrievalQuality.CORRECT:
             return CRAGResult(
                 original_query=query,
                 quality=quality,
                 confidence=confidence,
-                refined_query=current_query if current_query != query else None,
+                refined_query=refined_marker,
                 retrieval_rounds=retrieval_rounds,
                 final_documents=documents,
             )
 
         if quality == RetrievalQuality.AMBIGUOUS and attempt < config.max_retries:
-            current_query = refine_query(current_query, documents)
+            current_query = refine_query(current_query, documents, config)
             continue
 
-        # INCORRECT or exhausted retries
+        # INCORRECT, or retries exhausted.
         if config.use_web_fallback:
             # TODO: implement web search fallback
             pass
@@ -218,12 +201,13 @@ def corrective_rag(
             original_query=query,
             quality=quality,
             confidence=confidence,
-            refined_query=current_query if current_query != query else None,
+            refined_query=refined_marker,
             retrieval_rounds=retrieval_rounds,
             final_documents=documents,
         )
 
-    # Should not reach here
+    # Unreachable: the loop always returns. Kept as a defensive fallback
+    # so static analysers don't complain about a missing return path.
     return CRAGResult(
         original_query=query,
         quality=RetrievalQuality.INCORRECT,
@@ -234,7 +218,92 @@ def corrective_rag(
     )
 
 
+# ---------- private helpers ----------
+
+
+def _doc_text(doc: Any) -> str:
+    """Best-effort text extraction from a retrieval result.
+
+    Accepts dict-shaped hits (``{"text": "..."}``) or any object with a
+    ``.text`` attribute. Returns an empty string when neither is present
+    so the caller can still build a (query, doc) pair.
+    """
+    if isinstance(doc, dict):
+        return str(doc.get("text", ""))
+    return str(getattr(doc, "text", ""))
+
+
+def _summarize_docs(
+    docs: Iterable[dict],
+    *,
+    max_docs: int,
+    max_chars: int,
+) -> str:
+    """Build a compact, prompt-friendly summary of retrieved snippets."""
+    lines: list[str] = []
+    for idx, doc in enumerate(docs):
+        if idx >= max_docs:
+            break
+        text = _doc_text(doc).replace("\n", " ").strip()
+        lines.append(f"[{idx + 1}] {text[:max_chars]}")
+    return "\n".join(lines)
+
+
+def _sigmoid_if_logit(score: float) -> float:
+    """Return ``score`` unchanged if already a [0, 1] probability, else
+    squash through a logistic sigmoid (cross-encoders sometimes return
+    raw logits depending on the head)."""
+    if 0.0 <= score <= 1.0:
+        return score
+    return 1.0 / (1.0 + math.exp(-score))
+
+
+@functools.lru_cache(maxsize=4)
+def _get_cross_encoder(model_name: str) -> CrossEncoder:
+    """Lazily load a cross-encoder, cached per (model_name) across calls.
+
+    ``maxsize=4`` covers ablations that compare a handful of scorers in
+    the same process without thrashing GPU memory.
+    """
+    try:
+        from sentence_transformers import CrossEncoder
+    except ImportError as exc:
+        raise RuntimeError(
+            "sentence-transformers is required for CRAG retrieval scoring "
+            "(`uv add sentence-transformers`)."
+        ) from exc
+
+    logger.info("Loading cross-encoder %s", model_name)
+    return CrossEncoder(model_name)
+
+
+def _pick_refine_model(preferred: str | None) -> str | None:
+    """Select the LLM for query refinement.
+
+    Honours ``preferred`` when it's locally available; otherwise picks
+    the first local spec. Returns ``None`` when nothing is reachable so
+    the caller can short-circuit to the original query.
+    """
+    specs = available_models(include_api=False)
+    if not specs:
+        return None
+    if preferred and preferred in specs:
+        return preferred
+    return specs[0]
+
+
+@functools.cache
+def _emit_refine_failure_warning() -> None:
+    """Log the first refinement failure at WARNING; subsequent failures
+    are suppressed by the cache. Full exception detail is still emitted
+    at DEBUG level by the call site."""
+    logger.warning(
+        "Query refinement failed; falling back to the original query. "
+        "Subsequent failures are suppressed — re-run with DEBUG logging "
+        "for full tracebacks."
+    )
+
+
 if __name__ == "__main__":
     print("Corrective RAG module ready.")
-    print("Usage: implement evaluate_retrieval_quality() and refine_query(),")
-    print("then see individual notebook for full experiments.")
+    print("Use `corrective_rag(query, retriever_fn)` from the notebook.")
