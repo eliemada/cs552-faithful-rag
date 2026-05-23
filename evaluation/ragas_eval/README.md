@@ -19,6 +19,17 @@ All four are LLM-as-judge metrics; the project routes the judge LLM
 (`gpt-4o-mini` by default) through OpenRouter and the embeddings used by
 answer-relevancy directly through OpenAI.
 
+Every answer-LLM call is also instrumented for **token usage and cost**.
+We prefer `resp.usage.cost` (the actual amount OpenRouter charged for the
+call) over `litellm.completion_cost`'s static pricing table — the table
+silently returned `$0` for `openrouter/openai/gpt-4o-mini` before this
+fallback was added. Per-call usage is written into each per-sample
+record under `usage.{prompt_tokens, completion_tokens, total_tokens,
+cost_usd, model}`, and aggregated into the pipeline-level `usage` block
+of the result JSON. *Judge* calls are not included in this cost; the
+RAGAS judge runs inside the library and is not routed through
+`generate_with_usage`.
+
 ## What it compares
 
 | Pipeline | How context is selected | Why it's in the comparison |
@@ -98,26 +109,77 @@ that `to_ragas_dict()` strips before handing to the library.
 
 ## Cost notes (M2 budget realism)
 
-For one full run on the default 8-question sample × both pipelines:
+Live numbers from the canonical `01_rag_vs_long_context` run (n=8, judge
+calls *not* included — see below):
 
-- 8 × 2 = 16 answer generations (cheap, gpt-4o-mini)
-- 4 metrics × 16 samples × judge calls — RAGAS' `Faithfulness` alone is
-  ~3 calls per claim per sample. Empirically ≈ 100-150 judge calls per
-  full experiment.
+| pipeline | total cost | total tokens | per-query |
+|---|---|---|---|
+| Chunked RAG (gpt-4o-mini) | $0.003 | 18.4k | $0.00038 |
+| Long-context (gemini-2.5-flash) | $0.031 | 114k | $0.00383 |
 
-At `gpt-4o-mini` rates this is under \$0.10. Scaling to the full 39-pair
-gold set ≈ \$0.50. Scaling to 50 pairs × 3 retriever configs × 3
-generator models = \$5-10 — fine for M3 but disproportionate for M2.
+LC costs ≈ **10× more per query** for ≈ **6× more tokens** (the
+extra factor is gemini-2.5-flash's higher per-token rate vs gpt-4o-mini).
+
+Judge calls are RAGAS-internal and not in this table. Empirically the
+judge adds another ~100-150 `gpt-4o-mini` calls per full experiment,
+which is under $0.10 on the default setup. Scaling to the full
+39/50-pair gold set ≈ $0.50 all-in.
+
+## Known limitation: RAGAS judge variance (M2 caveat)
+
+Two runs with identical seed, sample, and answer tokens produced metric
+shifts of up to **+6.7 pp** on `faithfulness` (LC: 1.000 → 0.933). The
+underlying answer tokens were byte-identical across runs, so the drift
+is in the judge, not the answers.
+
+Root cause is visible in the RAGAS warning during the run:
+
+```
+WARNING:ragas.prompt.pydantic_prompt: LLM returned 1 generations
+instead of requested 3. Proceeding with 1 generations.
+```
+
+RAGAS uses self-consistency (n=3 generations per judge call) for
+faithfulness; `openrouter/openai/gpt-4o-mini` does not honor `n>1` and
+silently returns one. Self-consistency collapses, and a single noisy
+judgment moves the metric by ~0.1 per sample.
+
+Reading guidance for the M2 report:
+
+- `context_precision` and `context_recall` are **stable across reruns**
+  (they evaluate retrieval coverage, not generative faithfulness).
+- `faithfulness` and `answer_relevancy` have ±5 pp judge-noise floor at
+  n=8; deltas smaller than that are not real.
+- The RAG-vs-LC **direction** is robust across reruns even where
+  magnitudes shift; the cost-per-query ratio is robust too.
 
 ## Out of scope for M2 (queued for M3)
 
 - Full 39/50-pair sweep
-- Generator-model ablation (gpt-4o-mini vs claude-3.5-haiku vs deepseek-chat)
+- Generator-model ablation (gpt-4o-mini vs claude-haiku-4-5 vs deepseek-chat)
 - All four retriever configs (currently only one is used per run)
-- Cost / latency reporting in the comparison table
 - Wiring the existing NLI faithfulness scorer into the comparison
   alongside the LLM-judge faithfulness (would let us replicate the
   57 pp gap finding from PR #19 inside the RAGAS framing)
+
+## Model recommendations for M3
+
+The biggest lever for tightening the headline numbers is the **judge
+model**, not the answer model.
+
+| role | M2 setting | M3 recommendation | rationale |
+|---|---|---|---|
+| RAGAS judge | `openai/gpt-4o-mini` | **`anthropic/claude-haiku-4-5`** (or `claude-sonnet-4-5`) | Honors `n>1` for self-consistency, tighter judgments. Haiku-4-5 ~5× the per-call cost (~$0.50/run) — still cheap. Sonnet-4-5 ~15× ($2-3/run) — defensible if cited in the report as a stronger judge. |
+| RAG answer | `openai/gpt-4o-mini` | keep, *or* add `claude-haiku-4-5` as an ablation arm | gpt-4o-mini is fine for the role. Swapping confounds the retrieval comparison; better to *add* it as a row. |
+| LC answer | `google/gemini-2.5-flash` | **keep** | 1M-token context window at $0.075/$0.30 per 1M is irreplaceable for the LC baseline. Gemini-2.5-pro is an option only if cost stops mattering. |
+| Embeddings (answer-relevancy) | `text-embedding-3-small` | keep, optionally try `text-embedding-3-large` | ~6× cost for a marginal answer_relevancy gain; not worth it unless that metric is doing real lifting in the M3 conclusions. |
+
+Switching the judge alone is a one-flag change at the CLI:
+
+```bash
+uv run python -m scripts.run_ragas_experiment \
+  --judge-model anthropic/claude-haiku-4-5
+```
 
 ## Where this fits in the project
 
