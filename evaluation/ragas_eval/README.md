@@ -181,6 +181,47 @@ uv run python -m scripts.run_ragas_experiment \
   --judge-model anthropic/claude-haiku-4-5
 ```
 
+A second flag, `--answer-model-rag2`, adds a third pipeline arm that
+reuses the existing retriever but swaps the answer LLM, producing a
+clean generator-only ablation that the canonical `01_*.json` cannot
+isolate. The two flags compose:
+
+```bash
+uv run python -m scripts.run_ragas_experiment \
+  --sample 8 --seed 42 \
+  --answer-model-rag2 api:openrouter/anthropic/claude-haiku-4-5 \
+  --judge-model anthropic/claude-haiku-4-5 \
+  --output evaluation/ragas_eval/results/02_three_way_ablation.json
+```
+
+## M3 preview exhibit: `02_three_way_ablation`
+
+A first run of the two flags together is committed at
+`results/02_three_way_ablation.{json,md}`. It is not the M2
+deliverable — the canonical M2 numbers are still in `01_*.json` — but
+it lands now as an exhibit for the M3 backlog because it surfaces three
+findings the canonical run cannot:
+
+1. The M2 judge was lenient. `context_precision` for chunked RAG drops
+   from `1.000` (gpt-4o-mini judge) to `0.598` (claude-haiku-4-5 judge)
+   on the same data — a 40 pp gap that came from judge saturation, not
+   pipeline saturation.
+2. Generator quality dominates context strategy. Holding the retriever
+   fixed and swapping the answer LLM from gpt-4o-mini to claude-haiku-4-5
+   lifts faithfulness by 17 pp (`0.756` → `0.926`), more than switching
+   to long-context (`0.881`).
+3. RAG + Claude is Pareto-optimal over LC + Gemini at `n = 8` (lower
+   cost, higher faithfulness) — the "long-context wins faithfulness"
+   reading of the M2 canonical numbers does not survive a stronger
+   judge.
+
+The Yusif notebook (`notebooks/yusif_askari_413862.ipynb`) carries a
+"M3 preview" section that loads `02_*.json`, prints the 3-way table,
+and renders a grouped bar chart. M3 work should triangulate
+`claude-haiku-4-5` against at least one other strong judge before
+treating these numbers as ground truth (LLM-as-judge research
+recommends two-judge agreement).
+
 ## Where this fits in the project
 
 The proposal commits four evaluation components:
