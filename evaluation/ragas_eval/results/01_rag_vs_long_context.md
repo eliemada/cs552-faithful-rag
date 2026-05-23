@@ -4,8 +4,8 @@ n = 8 gold questions, stratified across categories.
 
 | metric | chunked RAG | long-context | Δ (LC − RAG) |
 |---|---|---|---|
-| `faithfulness` | 0.824 | 1.000 | +0.176 |
-| `answer_relevancy` | 0.739 | 0.796 | +0.056 |
+| `faithfulness` | 0.899 | 0.933 | +0.035 |
+| `answer_relevancy` | 0.713 | 0.789 | +0.076 |
 | `context_precision` | 1.000 | 1.000 | -0.000 |
 | `context_recall` | 0.917 | 1.000 | +0.083 |
 
@@ -13,6 +13,6 @@ n = 8 gold questions, stratified across categories.
 
 | measure | chunked RAG | long-context | ratio (LC / RAG) |
 |---|---|---|---|
-| total cost (USD) | $0.00270 | $0.03560 | 13.2× |
-| total tokens     | 18,403 | 114,466 | 6.2× |
-| avg cost / query | $0.00034 | $0.00445 | — |
+| total cost (USD) | $0.00304 | $0.03063 | 10.1× |
+| total tokens     | 18,476 | 114,466 | 6.2× |
+| avg cost / query | $0.00038 | $0.00383 | — |
