@@ -21,6 +21,7 @@ from pathlib import Path
 
 import pytest
 
+from evaluation.common.models import UsageInfo
 from evaluation.ragas_eval import pipelines
 from evaluation.ragas_eval.pipelines import (
     RagasSample,
@@ -29,6 +30,14 @@ from evaluation.ragas_eval.pipelines import (
     run_rag_pipeline,
 )
 from evaluation.ragas_eval.ragas_runner import METRIC_NAMES, evaluate_samples
+
+_STUB_USAGE = UsageInfo(
+    prompt_tokens=10,
+    completion_tokens=5,
+    total_tokens=15,
+    cost_usd=0.00012,
+    model="stub/model",
+)
 
 
 class _StubRetriever:
@@ -40,14 +49,17 @@ class _StubRetriever:
 
 
 def _patch_generate(monkeypatch: pytest.MonkeyPatch, response: str) -> list[str]:
-    """Replace pipelines.generate with a deterministic stub. Returns the call log."""
+    """Replace pipelines.generate_with_usage with a deterministic stub.
+
+    Returns the call log of prompts so tests can assert what the LLM saw.
+    """
     calls: list[str] = []
 
-    def fake_generate(model: str, prompt: str, **kw):
+    def fake_generate_with_usage(model: str, prompt: str, **kw):
         calls.append(prompt)
-        return response
+        return response, _STUB_USAGE
 
-    monkeypatch.setattr(pipelines, "generate", fake_generate)
+    monkeypatch.setattr(pipelines, "generate_with_usage", fake_generate_with_usage)
     return calls
 
 

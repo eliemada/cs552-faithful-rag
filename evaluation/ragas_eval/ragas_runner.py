@@ -142,7 +142,7 @@ def evaluate_samples(
     df = result.to_pandas()  # ty: ignore[unresolved-attribute]
     per_sample: list[dict] = []
     for sample, row in zip(samples, df.to_dict(orient="records")):
-        record: dict[str, str | float | None] = {
+        record: dict[str, Any] = {
             "query_id": sample.query_id,
             "pipeline": sample.pipeline,
             "question": sample.question,
@@ -153,6 +153,14 @@ def evaluate_samples(
                 # RAGAS returns NaN for failed/skipped samples; pass through as
                 # None so it doesn't poison aggregates downstream.
                 record[m] = float(value) if value == value else None
+        if sample.usage is not None:
+            record["usage"] = {
+                "prompt_tokens": sample.usage.prompt_tokens,
+                "completion_tokens": sample.usage.completion_tokens,
+                "total_tokens": sample.usage.total_tokens,
+                "cost_usd": sample.usage.cost_usd,
+                "model": sample.usage.model,
+            }
         per_sample.append(record)
 
     aggregate: dict[str, float] = {}

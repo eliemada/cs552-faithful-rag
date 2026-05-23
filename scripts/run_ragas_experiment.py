@@ -80,7 +80,35 @@ def _to_chunks_metadata_path(chunk_type: str) -> Path:
     return REPO_ROOT / "data" / "s3_archive" / "indexes" / f"{chunk_type}_metadata.json"
 
 
-def _markdown_summary(rag_agg: dict, lc_agg: dict, n: int) -> str:
+def _aggregate_usage(per_sample: list[dict]) -> dict:
+    """Sum token counts and cost across answer-LLM calls for one pipeline.
+
+    RAGAS judge calls are *not* included here — they're attributed to the
+    judge model and tracked separately if at all. This block only reports
+    the cost of generating answers (RAG vs long-context), which is the
+    M2 trade-off story.
+    """
+    totals = {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0, "cost_usd": 0.0}
+    n = 0
+    for row in per_sample:
+        u = row.get("usage")
+        if not u:
+            continue
+        totals["prompt_tokens"] += int(u["prompt_tokens"])
+        totals["completion_tokens"] += int(u["completion_tokens"])
+        totals["total_tokens"] += int(u["total_tokens"])
+        totals["cost_usd"] += float(u["cost_usd"])
+        n += 1
+    if n:
+        totals["per_query_avg_cost_usd"] = totals["cost_usd"] / n
+        totals["per_query_avg_total_tokens"] = totals["total_tokens"] / n
+    totals["n_calls"] = n
+    return totals
+
+
+def _markdown_summary(
+    rag_agg: dict, lc_agg: dict, n: int, rag_usage: dict | None = None, lc_usage: dict | None = None
+) -> str:
     lines = [
         "# RAGAS evaluation — preliminary",
         "",
@@ -94,6 +122,27 @@ def _markdown_summary(rag_agg: dict, lc_agg: dict, n: int) -> str:
         lc = lc_agg.get(m, 0.0)
         delta = lc - r
         lines.append(f"| `{m}` | {r:.3f} | {lc:.3f} | {delta:+.3f} |")
+    if rag_usage and lc_usage and rag_usage.get("n_calls") and lc_usage.get("n_calls"):
+        lines.extend(
+            [
+                "",
+                "## Answer-LLM cost & tokens (judge calls excluded)",
+                "",
+                "| measure | chunked RAG | long-context | ratio (LC / RAG) |",
+                "|---|---|---|---|",
+            ]
+        )
+        r_cost = rag_usage["cost_usd"]
+        lc_cost = lc_usage["cost_usd"]
+        r_tok = rag_usage["total_tokens"]
+        lc_tok = lc_usage["total_tokens"]
+        r_avg = rag_usage.get("per_query_avg_cost_usd", 0.0)
+        lc_avg = lc_usage.get("per_query_avg_cost_usd", 0.0)
+        ratio_cost = (lc_cost / r_cost) if r_cost else float("inf")
+        ratio_tok = (lc_tok / r_tok) if r_tok else float("inf")
+        lines.append(f"| total cost (USD) | ${r_cost:.5f} | ${lc_cost:.5f} | {ratio_cost:.1f}× |")
+        lines.append(f"| total tokens     | {r_tok:,} | {lc_tok:,} | {ratio_tok:.1f}× |")
+        lines.append(f"| avg cost / query | ${r_avg:.5f} | ${lc_avg:.5f} | — |")
     return "\n".join(lines) + "\n"
 
 
@@ -221,11 +270,13 @@ def main(argv: list[str] | None = None) -> int:
         "rag": {
             "n": rag_result.n,
             "aggregate": rag_result.aggregate,
+            "usage": _aggregate_usage(rag_result.per_sample),
             "per_sample": rag_result.per_sample,
         },
         "long_context": {
             "n": lc_result.n,
             "aggregate": lc_result.aggregate,
+            "usage": _aggregate_usage(lc_result.per_sample),
             "per_sample": lc_result.per_sample,
         },
     }
@@ -233,7 +284,13 @@ def main(argv: list[str] | None = None) -> int:
     args.output.write_text(json.dumps(payload, indent=2))
     md_path = args.output.with_suffix(".md")
     md_path.write_text(
-        _markdown_summary(rag_result.aggregate, lc_result.aggregate, n=len(rag_samples))
+        _markdown_summary(
+            rag_result.aggregate,
+            lc_result.aggregate,
+            n=len(rag_samples),
+            rag_usage=payload["rag"]["usage"],
+            lc_usage=payload["long_context"]["usage"],
+        )
     )
 
     print(f"\nWrote {_pretty(args.output)}")
@@ -241,6 +298,14 @@ def main(argv: list[str] | None = None) -> int:
     print("\nAggregate:")
     for m in METRIC_NAMES:
         print(f"  {m:<22}  RAG={rag_result.aggregate[m]:.3f}  LC={lc_result.aggregate[m]:.3f}")
+    rag_u = payload["rag"]["usage"]
+    lc_u = payload["long_context"]["usage"]
+    if rag_u.get("n_calls") and lc_u.get("n_calls"):
+        print(
+            f"\nAnswer-LLM cost (judge calls excluded):"
+            f"\n  RAG total ${rag_u['cost_usd']:.5f}  ({rag_u['total_tokens']:,} tokens, avg ${rag_u['per_query_avg_cost_usd']:.5f}/query)"
+            f"\n  LC  total ${lc_u['cost_usd']:.5f}  ({lc_u['total_tokens']:,} tokens, avg ${lc_u['per_query_avg_cost_usd']:.5f}/query)"
+        )
     return 0
 
 

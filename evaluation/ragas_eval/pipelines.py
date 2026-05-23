@@ -32,7 +32,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Final, Protocol
 
-from evaluation.common.models import generate
+from evaluation.common.models import UsageInfo, generate_with_usage
 from evaluation.gold_dataset._validator import REPO_ROOT
 
 DEFAULT_PROCESSED_DIR: Final[Path] = REPO_ROOT / "data" / "s3_archive" / "processed"
@@ -61,6 +61,9 @@ class RagasSample:
     # Provenance for debugging / failure analysis. Not consumed by RAGAS itself.
     pipeline: str
     query_id: str
+    # Answer-LLM token / cost usage. ``None`` when callers don't track usage
+    # (e.g. legacy paths) so existing behavior stays intact.
+    usage: UsageInfo | None = None
 
     def to_ragas_dict(self) -> dict[str, str | list[str]]:
         return {
@@ -108,7 +111,7 @@ def run_rag_pipeline(
     hits = retriever.search(question, k=top_k)
     contexts = [chunk_lookup[h["chunk_id"]] for h in hits if h["chunk_id"] in chunk_lookup]
     prompt = ANSWER_PROMPT.format(contexts=_format_contexts(contexts), question=question)
-    answer = generate(answer_model, prompt, max_tokens=400, temperature=0.0)
+    answer, usage = generate_with_usage(answer_model, prompt, max_tokens=400, temperature=0.0)
     return RagasSample(
         question=question,
         answer=answer.strip(),
@@ -116,6 +119,7 @@ def run_rag_pipeline(
         ground_truth=ground_truth,
         pipeline="rag",
         query_id=query_id,
+        usage=usage,
     )
 
 
@@ -145,7 +149,7 @@ def run_long_context_pipeline(
     # Each paper becomes one "context" so RAGAS can score them separately
     # if it wants to (context_precision treats the list as ranked retrievals).
     prompt = ANSWER_PROMPT.format(contexts=_format_contexts(docs), question=question)
-    answer = generate(answer_model, prompt, max_tokens=400, temperature=0.0)
+    answer, usage = generate_with_usage(answer_model, prompt, max_tokens=400, temperature=0.0)
     return RagasSample(
         question=question,
         answer=answer.strip(),
@@ -153,6 +157,7 @@ def run_long_context_pipeline(
         ground_truth=ground_truth,
         pipeline="long_context",
         query_id=query_id,
+        usage=usage,
     )
 
 
