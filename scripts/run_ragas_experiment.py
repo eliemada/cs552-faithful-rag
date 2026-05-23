@@ -107,21 +107,39 @@ def _aggregate_usage(per_sample: list[dict]) -> dict:
 
 
 def _markdown_summary(
-    rag_agg: dict, lc_agg: dict, n: int, rag_usage: dict | None = None, lc_usage: dict | None = None
+    rag_agg: dict,
+    lc_agg: dict,
+    n: int,
+    rag_usage: dict | None = None,
+    lc_usage: dict | None = None,
+    rag_alt_agg: dict | None = None,
+    rag_alt_usage: dict | None = None,
+    rag_label: str = "chunked RAG",
+    rag_alt_label: str | None = None,
+    lc_label: str = "long-context",
 ) -> str:
     lines = [
         "# RAGAS evaluation — preliminary",
         "",
         f"n = {n} gold questions, stratified across categories.",
         "",
-        "| metric | chunked RAG | long-context | Δ (LC − RAG) |",
-        "|---|---|---|---|",
     ]
-    for m in METRIC_NAMES:
-        r = rag_agg.get(m, 0.0)
-        lc = lc_agg.get(m, 0.0)
-        delta = lc - r
-        lines.append(f"| `{m}` | {r:.3f} | {lc:.3f} | {delta:+.3f} |")
+    if rag_alt_agg is not None:
+        lines.append(f"| metric | {rag_label} | {rag_alt_label or 'RAG-alt'} | {lc_label} |")
+        lines.append("|---|---|---|---|")
+        for m in METRIC_NAMES:
+            r = rag_agg.get(m, 0.0)
+            r2 = rag_alt_agg.get(m, 0.0)
+            lc = lc_agg.get(m, 0.0)
+            lines.append(f"| `{m}` | {r:.3f} | {r2:.3f} | {lc:.3f} |")
+    else:
+        lines.append(f"| metric | {rag_label} | {lc_label} | Δ (LC − RAG) |")
+        lines.append("|---|---|---|---|")
+        for m in METRIC_NAMES:
+            r = rag_agg.get(m, 0.0)
+            lc = lc_agg.get(m, 0.0)
+            delta = lc - r
+            lines.append(f"| `{m}` | {r:.3f} | {lc:.3f} | {delta:+.3f} |")
     if rag_usage and lc_usage and rag_usage.get("n_calls") and lc_usage.get("n_calls"):
         lines.extend(
             [
@@ -143,6 +161,18 @@ def _markdown_summary(
         lines.append(f"| total cost (USD) | ${r_cost:.5f} | ${lc_cost:.5f} | {ratio_cost:.1f}× |")
         lines.append(f"| total tokens     | {r_tok:,} | {lc_tok:,} | {ratio_tok:.1f}× |")
         lines.append(f"| avg cost / query | ${r_avg:.5f} | ${lc_avg:.5f} | — |")
+    if rag_alt_usage and rag_alt_usage.get("n_calls"):
+        r2_cost = rag_alt_usage["cost_usd"]
+        r2_tok = rag_alt_usage["total_tokens"]
+        r2_avg = rag_alt_usage.get("per_query_avg_cost_usd", 0.0)
+        lines.extend(
+            [
+                "",
+                f"### RAG-alt ({rag_alt_label or 'alt model'}) cost",
+                "",
+                f"- total ${r2_cost:.5f}, {r2_tok:,} tokens, avg ${r2_avg:.5f}/query",
+            ]
+        )
     return "\n".join(lines) + "\n"
 
 
@@ -164,6 +194,13 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--indexes-dir", type=Path, default=DEFAULT_INDEXES_DIR)
     parser.add_argument("--processed-dir", type=Path, default=DEFAULT_PROCESSED_DIR)
     parser.add_argument("--answer-model-rag", default=DEFAULT_ANSWER_MODEL_RAG)
+    parser.add_argument(
+        "--answer-model-rag2",
+        default=None,
+        help="Optional second RAG generator for a 3-way ablation. Same retriever and "
+        "same questions as --answer-model-rag; only the answer LLM differs. Result "
+        "lands in a `rag_alt` block in the JSON.",
+    )
     parser.add_argument("--answer-model-lc", default=DEFAULT_ANSWER_MODEL_LC)
     parser.add_argument(
         "--lc-chars-per-paper",
@@ -226,6 +263,26 @@ def main(argv: list[str] | None = None) -> int:
         except Exception as exc:  # pragma: no cover — defensive against transient API errors
             print(f" FAILED: {exc}")
 
+    rag_alt_samples: list[RagasSample] = []
+    if args.answer_model_rag2:
+        print(f"\nGenerating RAG-alt answers (model={args.answer_model_rag2}) ...")
+        for i, q in enumerate(sample, 1):
+            print(f"  [{i}/{len(sample)}] {q.query_id} ...", end="", flush=True)
+            try:
+                s = run_rag_pipeline(
+                    question=q.query_text,
+                    ground_truth=_load_gold_answer(args.gold, q.query_id),
+                    query_id=q.query_id,
+                    retriever=retriever,
+                    chunk_lookup=chunk_lookup,
+                    answer_model=args.answer_model_rag2,
+                    top_k=args.top_k,
+                )
+                rag_alt_samples.append(s)
+                print(f" {len(s.contexts)} ctx, ans={len(s.answer)} chars")
+            except Exception as exc:  # pragma: no cover
+                print(f" FAILED: {exc}")
+
     lc_samples: list[RagasSample] = []
     if not args.skip_long_context:
         print(f"\nGenerating long-context answers (model={args.answer_model_lc}) ...")
@@ -250,17 +307,24 @@ def main(argv: list[str] | None = None) -> int:
     rag_result = evaluate_samples(
         rag_samples, judge_model=args.judge_model, embed_model=args.embed_model
     )
+    rag_alt_result = None
+    if rag_alt_samples:
+        print(f"Scoring RAG-alt samples ({len(rag_alt_samples)}) with RAGAS ...")
+        rag_alt_result = evaluate_samples(
+            rag_alt_samples, judge_model=args.judge_model, embed_model=args.embed_model
+        )
     print("Scoring long-context samples ...")
     lc_result = evaluate_samples(
         lc_samples, judge_model=args.judge_model, embed_model=args.embed_model
     )
 
-    payload = {
+    payload: dict = {
         "config": {
             "sample_size": args.sample,
             "seed": args.seed,
             "retriever_config": args.retriever_config,
             "answer_model_rag": args.answer_model_rag,
+            "answer_model_rag2": args.answer_model_rag2,
             "answer_model_lc": args.answer_model_lc,
             "judge_model": args.judge_model,
             "embed_model": args.embed_model,
@@ -280,6 +344,13 @@ def main(argv: list[str] | None = None) -> int:
             "per_sample": lc_result.per_sample,
         },
     }
+    if rag_alt_result is not None:
+        payload["rag_alt"] = {
+            "n": rag_alt_result.n,
+            "aggregate": rag_alt_result.aggregate,
+            "usage": _aggregate_usage(rag_alt_result.per_sample),
+            "per_sample": rag_alt_result.per_sample,
+        }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(payload, indent=2))
     md_path = args.output.with_suffix(".md")
@@ -290,6 +361,13 @@ def main(argv: list[str] | None = None) -> int:
             n=len(rag_samples),
             rag_usage=payload["rag"]["usage"],
             lc_usage=payload["long_context"]["usage"],
+            rag_alt_agg=(rag_alt_result.aggregate if rag_alt_result is not None else None),
+            rag_alt_usage=(payload.get("rag_alt") or {}).get("usage"),
+            rag_label=f"RAG · {args.answer_model_rag.split('/')[-1]}",
+            rag_alt_label=(
+                f"RAG · {args.answer_model_rag2.split('/')[-1]}" if args.answer_model_rag2 else None
+            ),
+            lc_label=f"LC · {args.answer_model_lc.split('/')[-1]}",
         )
     )
 
@@ -297,15 +375,24 @@ def main(argv: list[str] | None = None) -> int:
     print(f"Wrote {_pretty(md_path)}")
     print("\nAggregate:")
     for m in METRIC_NAMES:
-        print(f"  {m:<22}  RAG={rag_result.aggregate[m]:.3f}  LC={lc_result.aggregate[m]:.3f}")
+        line = f"  {m:<22}  RAG={rag_result.aggregate[m]:.3f}"
+        if rag_alt_result is not None:
+            line += f"  RAG-alt={rag_alt_result.aggregate[m]:.3f}"
+        line += f"  LC={lc_result.aggregate[m]:.3f}"
+        print(line)
     rag_u = payload["rag"]["usage"]
     lc_u = payload["long_context"]["usage"]
     if rag_u.get("n_calls") and lc_u.get("n_calls"):
         print(
             f"\nAnswer-LLM cost (judge calls excluded):"
-            f"\n  RAG total ${rag_u['cost_usd']:.5f}  ({rag_u['total_tokens']:,} tokens, avg ${rag_u['per_query_avg_cost_usd']:.5f}/query)"
-            f"\n  LC  total ${lc_u['cost_usd']:.5f}  ({lc_u['total_tokens']:,} tokens, avg ${lc_u['per_query_avg_cost_usd']:.5f}/query)"
+            f"\n  RAG     total ${rag_u['cost_usd']:.5f}  ({rag_u['total_tokens']:,} tokens, avg ${rag_u['per_query_avg_cost_usd']:.5f}/query)"
+            f"\n  LC      total ${lc_u['cost_usd']:.5f}  ({lc_u['total_tokens']:,} tokens, avg ${lc_u['per_query_avg_cost_usd']:.5f}/query)"
         )
+        if rag_alt_result is not None:
+            r2_u = payload["rag_alt"]["usage"]
+            print(
+                f"  RAG-alt total ${r2_u['cost_usd']:.5f}  ({r2_u['total_tokens']:,} tokens, avg ${r2_u['per_query_avg_cost_usd']:.5f}/query)"
+            )
     return 0
 
 
