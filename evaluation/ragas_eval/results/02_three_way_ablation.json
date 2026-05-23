@@ -1,0 +1,458 @@
+{
+  "config": {
+    "sample_size": 8,
+    "seed": 42,
+    "retriever_config": "coarse_rerank",
+    "answer_model_rag": "api:openrouter/openai/gpt-4o-mini",
+    "answer_model_rag2": "api:openrouter/anthropic/claude-haiku-4-5",
+    "answer_model_lc": "api:openrouter/google/gemini-2.5-flash",
+    "judge_model": "anthropic/claude-haiku-4-5",
+    "embed_model": "text-embedding-3-small",
+    "top_k": 5,
+    "lc_chars_per_paper": 60000
+  },
+  "rag": {
+    "n": 8,
+    "aggregate": {
+      "faithfulness": 0.7556051587301588,
+      "answer_relevancy": 0.7475872701221918,
+      "context_precision": 0.5979166666342708,
+      "context_recall": 0.75
+    },
+    "usage": {
+      "prompt_tokens": 17911,
+      "completion_tokens": 603,
+      "total_tokens": 18514,
+      "cost_usd": 0.00289485,
+      "per_query_avg_cost_usd": 0.00036185625,
+      "per_query_avg_total_tokens": 2314.25,
+      "n_calls": 8
+    },
+    "per_sample": [
+      {
+        "query_id": "q310",
+        "pipeline": "rag",
+        "question": "Contrast the typical complaints about university IP management made by companies in the UK versus those in the US.",
+        "faithfulness": 0.875,
+        "answer_relevancy": 0.8528409884640097,
+        "context_precision": 0.3333333333,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 2074,
+          "completion_tokens": 80,
+          "total_tokens": 2154,
+          "cost_usd": 0.0002055,
+          "model": "openrouter/openai/gpt-4o-mini"
+        }
+      },
+      {
+        "query_id": "q002",
+        "pipeline": "rag",
+        "question": "What does the literature say about patents holding back follow-on innovation in technology-heavy industries?",
+        "faithfulness": 0.8888888888888888,
+        "answer_relevancy": 0.7953858975933037,
+        "context_precision": 0.9999999999666667,
+        "context_recall": 0.5,
+        "usage": {
+          "prompt_tokens": 2357,
+          "completion_tokens": 103,
+          "total_tokens": 2460,
+          "cost_usd": 0.00041535,
+          "model": "openrouter/openai/gpt-4o-mini"
+        }
+      },
+      {
+        "query_id": "q007",
+        "pipeline": "rag",
+        "question": "According to Mendon\u00e7a et al. (2004), what advantage do trademarks have over patents and R&D as innovation indicators in terms of firm coverage?",
+        "faithfulness": 0.7,
+        "answer_relevancy": 0.8892129529947113,
+        "context_precision": 0.4499999999775,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1805,
+          "completion_tokens": 70,
+          "total_tokens": 1875,
+          "cost_usd": 0.00031275,
+          "model": "openrouter/openai/gpt-4o-mini"
+        }
+      },
+      {
+        "query_id": "q307",
+        "pipeline": "rag",
+        "question": "Explain the 'Full Economic Cost' (FEC) requirement in the UK's Lambert Model Agreements.",
+        "faithfulness": 0.7,
+        "answer_relevancy": 0.9699451826186843,
+        "context_precision": 0.99999999995,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 2558,
+          "completion_tokens": 84,
+          "total_tokens": 2642,
+          "cost_usd": 0.0004341,
+          "model": "openrouter/openai/gpt-4o-mini"
+        }
+      },
+      {
+        "query_id": "q020",
+        "pipeline": "rag",
+        "question": "What two-way trade-off does Fosfuri (2006) use to model the licensor's decision to license a technology?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8670594787176845,
+        "context_precision": 0.99999999998,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 2269,
+          "completion_tokens": 63,
+          "total_tokens": 2332,
+          "cost_usd": 0.00037815,
+          "model": "openrouter/openai/gpt-4o-mini"
+        }
+      },
+      {
+        "query_id": "q026",
+        "pipeline": "rag",
+        "question": "According to Moser (2013), how do patent 'thickets' built by incumbents affect litigation risk for later innovators?",
+        "faithfulness": 0.3333333333333333,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0,
+        "usage": {
+          "prompt_tokens": 2296,
+          "completion_tokens": 48,
+          "total_tokens": 2344,
+          "cost_usd": 0.0003732,
+          "model": "openrouter/openai/gpt-4o-mini"
+        }
+      },
+      {
+        "query_id": "q010",
+        "pipeline": "rag",
+        "question": "How do Lemley and Shapiro (2005) reframe what a patent grants its owner, and what two dimensions of uncertainty do they identify?",
+        "faithfulness": 0.7142857142857143,
+        "answer_relevancy": 0.7326851725995986,
+        "context_precision": 0.0,
+        "context_recall": 0.5,
+        "usage": {
+          "prompt_tokens": 2293,
+          "completion_tokens": 90,
+          "total_tokens": 2383,
+          "cost_usd": 0.00039795,
+          "model": "openrouter/openai/gpt-4o-mini"
+        }
+      },
+      {
+        "query_id": "q008",
+        "pipeline": "rag",
+        "question": "According to the surveys reviewed by Mendon\u00e7a et al. (2004), how do firms generally rank patents as a means of appropriating returns from innovation, compared to marketing activities?",
+        "faithfulness": 0.8333333333333334,
+        "answer_relevancy": 0.8735684879895429,
+        "context_precision": 0.9999999999,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 2259,
+          "completion_tokens": 65,
+          "total_tokens": 2324,
+          "cost_usd": 0.00037785,
+          "model": "openrouter/openai/gpt-4o-mini"
+        }
+      }
+    ]
+  },
+  "long_context": {
+    "n": 8,
+    "aggregate": {
+      "faithfulness": 0.88125,
+      "answer_relevancy": 0.7432178870030804,
+      "context_precision": 0.93749999990625,
+      "context_recall": 0.875
+    },
+    "usage": {
+      "prompt_tokens": 113893,
+      "completion_tokens": 573,
+      "total_tokens": 114466,
+      "cost_usd": 0.03200859,
+      "per_query_avg_cost_usd": 0.00400107375,
+      "per_query_avg_total_tokens": 14308.25,
+      "n_calls": 8
+    },
+    "per_sample": [
+      {
+        "query_id": "q310",
+        "pipeline": "long_context",
+        "question": "Contrast the typical complaints about university IP management made by companies in the UK versus those in the US.",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8593354527970105,
+        "context_precision": 0.9999999999,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 11459,
+          "completion_tokens": 81,
+          "total_tokens": 11540,
+          "cost_usd": 0.0036402,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q002",
+        "pipeline": "long_context",
+        "question": "What does the literature say about patents holding back follow-on innovation in technology-heavy industries?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8091597561521897,
+        "context_precision": 0.49999999995,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 24716,
+          "completion_tokens": 88,
+          "total_tokens": 24804,
+          "cost_usd": 0.0076348,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q007",
+        "pipeline": "long_context",
+        "question": "According to Mendon\u00e7a et al. (2004), what advantage do trademarks have over patents and R&D as innovation indicators in terms of firm coverage?",
+        "faithfulness": 0.6666666666666666,
+        "answer_relevancy": 0.8470736667105353,
+        "context_precision": 0.9999999999,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 13633,
+          "completion_tokens": 60,
+          "total_tokens": 13693,
+          "cost_usd": 0.0042399,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q307",
+        "pipeline": "long_context",
+        "question": "Explain the 'Full Economic Cost' (FEC) requirement in the UK's Lambert Model Agreements.",
+        "faithfulness": 0.75,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.9999999999,
+        "context_recall": 0.0,
+        "usage": {
+          "prompt_tokens": 11459,
+          "completion_tokens": 53,
+          "total_tokens": 11512,
+          "cost_usd": 0.0035702,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q020",
+        "pipeline": "long_context",
+        "question": "What two-way trade-off does Fosfuri (2006) use to model the licensor's decision to license a technology?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8289186759617452,
+        "context_precision": 0.9999999999,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 13064,
+          "completion_tokens": 92,
+          "total_tokens": 13156,
+          "cost_usd": 0.0041492,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q026",
+        "pipeline": "long_context",
+        "question": "According to Moser (2013), how do patent 'thickets' built by incumbents affect litigation risk for later innovators?",
+        "faithfulness": 0.8333333333333334,
+        "answer_relevancy": 0.853635214172054,
+        "context_precision": 0.9999999999,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 13495,
+          "completion_tokens": 62,
+          "total_tokens": 13557,
+          "cost_usd": 0.0042035,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q010",
+        "pipeline": "long_context",
+        "question": "How do Lemley and Shapiro (2005) reframe what a patent grants its owner, and what two dimensions of uncertainty do they identify?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8980175524223157,
+        "context_precision": 0.9999999999,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 12429,
+          "completion_tokens": 73,
+          "total_tokens": 12502,
+          "cost_usd": 0.0039112,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q008",
+        "pipeline": "long_context",
+        "question": "According to the surveys reviewed by Mendon\u00e7a et al. (2004), how do firms generally rank patents as a means of appropriating returns from innovation, compared to marketing activities?",
+        "faithfulness": 0.8,
+        "answer_relevancy": 0.8496027778087929,
+        "context_precision": 0.9999999999,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 13638,
+          "completion_tokens": 64,
+          "total_tokens": 13702,
+          "cost_usd": 0.00065959,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      }
+    ]
+  },
+  "rag_alt": {
+    "n": 8,
+    "aggregate": {
+      "faithfulness": 0.9258928571428572,
+      "answer_relevancy": 0.7384174233592374,
+      "context_precision": 0.5979166666342708,
+      "context_recall": 0.75
+    },
+    "usage": {
+      "prompt_tokens": 19553,
+      "completion_tokens": 892,
+      "total_tokens": 20445,
+      "cost_usd": 0.024013,
+      "per_query_avg_cost_usd": 0.003001625,
+      "per_query_avg_total_tokens": 2555.625,
+      "n_calls": 8
+    },
+    "per_sample": [
+      {
+        "query_id": "q310",
+        "pipeline": "rag",
+        "question": "Contrast the typical complaints about university IP management made by companies in the UK versus those in the US.",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.85816924116419,
+        "context_precision": 0.3333333333,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 2233,
+          "completion_tokens": 109,
+          "total_tokens": 2342,
+          "cost_usd": 0.002778,
+          "model": "openrouter/anthropic/claude-haiku-4-5"
+        }
+      },
+      {
+        "query_id": "q002",
+        "pipeline": "rag",
+        "question": "What does the literature say about patents holding back follow-on innovation in technology-heavy industries?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8543870814674649,
+        "context_precision": 0.9999999999666667,
+        "context_recall": 0.5,
+        "usage": {
+          "prompt_tokens": 2538,
+          "completion_tokens": 132,
+          "total_tokens": 2670,
+          "cost_usd": 0.003198,
+          "model": "openrouter/anthropic/claude-haiku-4-5"
+        }
+      },
+      {
+        "query_id": "q007",
+        "pipeline": "rag",
+        "question": "According to Mendon\u00e7a et al. (2004), what advantage do trademarks have over patents and R&D as innovation indicators in terms of firm coverage?",
+        "faithfulness": 0.75,
+        "answer_relevancy": 0.8037333870690122,
+        "context_precision": 0.4499999999775,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1973,
+          "completion_tokens": 103,
+          "total_tokens": 2076,
+          "cost_usd": 0.002488,
+          "model": "openrouter/anthropic/claude-haiku-4-5"
+        }
+      },
+      {
+        "query_id": "q307",
+        "pipeline": "rag",
+        "question": "Explain the 'Full Economic Cost' (FEC) requirement in the UK's Lambert Model Agreements.",
+        "faithfulness": 0.8,
+        "answer_relevancy": 0.7850601050190202,
+        "context_precision": 0.99999999995,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 2846,
+          "completion_tokens": 116,
+          "total_tokens": 2962,
+          "cost_usd": 0.003426,
+          "model": "openrouter/anthropic/claude-haiku-4-5"
+        }
+      },
+      {
+        "query_id": "q020",
+        "pipeline": "rag",
+        "question": "What two-way trade-off does Fosfuri (2006) use to model the licensor's decision to license a technology?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8307750461856827,
+        "context_precision": 0.99999999998,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 2468,
+          "completion_tokens": 103,
+          "total_tokens": 2571,
+          "cost_usd": 0.002983,
+          "model": "openrouter/anthropic/claude-haiku-4-5"
+        }
+      },
+      {
+        "query_id": "q026",
+        "pipeline": "rag",
+        "question": "According to Moser (2013), how do patent 'thickets' built by incumbents affect litigation risk for later innovators?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0,
+        "usage": {
+          "prompt_tokens": 2325,
+          "completion_tokens": 74,
+          "total_tokens": 2399,
+          "cost_usd": 0.002695,
+          "model": "openrouter/anthropic/claude-haiku-4-5"
+        }
+      },
+      {
+        "query_id": "q010",
+        "pipeline": "rag",
+        "question": "How do Lemley and Shapiro (2005) reframe what a patent grants its owner, and what two dimensions of uncertainty do they identify?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8825637813953742,
+        "context_precision": 0.0,
+        "context_recall": 0.5,
+        "usage": {
+          "prompt_tokens": 2710,
+          "completion_tokens": 102,
+          "total_tokens": 2812,
+          "cost_usd": 0.00322,
+          "model": "openrouter/anthropic/claude-haiku-4-5"
+        }
+      },
+      {
+        "query_id": "q008",
+        "pipeline": "rag",
+        "question": "According to the surveys reviewed by Mendon\u00e7a et al. (2004), how do firms generally rank patents as a means of appropriating returns from innovation, compared to marketing activities?",
+        "faithfulness": 0.8571428571428571,
+        "answer_relevancy": 0.8926507445731554,
+        "context_precision": 0.9999999999,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 2460,
+          "completion_tokens": 153,
+          "total_tokens": 2613,
+          "cost_usd": 0.003225,
+          "model": "openrouter/anthropic/claude-haiku-4-5"
+        }
+      }
+    ]
+  }
+}

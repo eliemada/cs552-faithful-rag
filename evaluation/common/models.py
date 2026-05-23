@@ -15,9 +15,27 @@ from __future__ import annotations
 
 import logging
 import os
+from dataclasses import dataclass
 from typing import Any, Final
 
 logger = logging.getLogger(__name__)
+
+
+@dataclass(frozen=True)
+class UsageInfo:
+    """Token + cost data for one LLM call.
+
+    ``cost_usd`` is ``0.0`` for ``local:`` backends (compute on-cluster, no
+    per-call API charge) and computed via ``litellm.completion_cost`` for
+    ``api:`` backends. ``model`` is the underlying model id without the
+    ``local:`` / ``api:`` prefix.
+    """
+
+    prompt_tokens: int
+    completion_tokens: int
+    total_tokens: int
+    cost_usd: float
+    model: str
 
 
 # Models that fit in a single 40 GB A100 in bf16/fp16 (≤ 14 B params).
@@ -59,6 +77,30 @@ def generate(
     system: str | None = None,
 ) -> str:
     """Generate a completion using the backend implied by ``model_spec``."""
+    text, _ = generate_with_usage(
+        model_spec,
+        prompt,
+        max_tokens=max_tokens,
+        temperature=temperature,
+        system=system,
+    )
+    return text
+
+
+def generate_with_usage(
+    model_spec: str,
+    prompt: str,
+    *,
+    max_tokens: int = 1024,
+    temperature: float = 0.0,
+    system: str | None = None,
+) -> tuple[str, UsageInfo]:
+    """Like :func:`generate` but also returns token / cost data.
+
+    Used by evaluation pipelines that need to track per-call cost (e.g. the
+    RAGAS RAG-vs-long-context comparison). Existing callers that only need
+    the text should keep using :func:`generate`.
+    """
     if model_spec.startswith(_LOCAL_PREFIX):
         return _generate_vllm(
             model_spec.removeprefix(_LOCAL_PREFIX),
@@ -147,14 +189,24 @@ def _generate_vllm(
     max_tokens: int,
     temperature: float,
     system: str | None,
-) -> str:
+) -> tuple[str, UsageInfo]:
     from vllm import SamplingParams
 
     llm = _VLLMRegistry.get(hf_id)
     params = SamplingParams(max_tokens=max_tokens, temperature=temperature)
     full_prompt = f"{system.strip()}\n\n{prompt}" if system else prompt
     [out] = llm.generate([full_prompt], params, use_tqdm=False)
-    return out.outputs[0].text
+    text = out.outputs[0].text
+    prompt_tokens = len(getattr(out, "prompt_token_ids", []) or [])
+    completion_tokens = len(getattr(out.outputs[0], "token_ids", []) or [])
+    usage = UsageInfo(
+        prompt_tokens=prompt_tokens,
+        completion_tokens=completion_tokens,
+        total_tokens=prompt_tokens + completion_tokens,
+        cost_usd=0.0,  # local inference; compute cost not counted here
+        model=hf_id,
+    )
+    return text, usage
 
 
 def _generate_litellm(
@@ -164,7 +216,7 @@ def _generate_litellm(
     max_tokens: int,
     temperature: float,
     system: str | None,
-) -> str:
+) -> tuple[str, UsageInfo]:
     if "OPENROUTER_API_KEY" not in os.environ:
         raise RuntimeError(
             "OPENROUTER_API_KEY is not set. Either provide it inside the notebook "
@@ -185,7 +237,33 @@ def _generate_litellm(
         temperature=temperature,
         api_key=os.environ["OPENROUTER_API_KEY"],
     )
-    return resp.choices[0].message.content  # type: ignore[no-any-return]
+    text = resp.choices[0].message.content
+    usage_obj = getattr(resp, "usage", None)
+    prompt_tokens = int(getattr(usage_obj, "prompt_tokens", 0) or 0)
+    completion_tokens = int(getattr(usage_obj, "completion_tokens", 0) or 0)
+    total_tokens = int(getattr(usage_obj, "total_tokens", prompt_tokens + completion_tokens) or 0)
+    # OpenRouter populates ``usage.cost`` with the actual amount it charged the
+    # account (USD), which is the most accurate figure available. Prefer it
+    # when present; fall back to litellm's static pricing table for providers
+    # that don't return cost in the response.
+    cost_usd = 0.0
+    or_cost = getattr(usage_obj, "cost", None)
+    if or_cost is not None:
+        cost_usd = float(or_cost)
+    else:
+        try:
+            cost_usd = float(litellm.completion_cost(completion_response=resp) or 0.0)
+        except Exception as exc:  # noqa: BLE001 — litellm raises a grab-bag of errors for missing pricing
+            logger.warning("litellm.completion_cost failed for %s: %s", model_id, exc)
+            cost_usd = 0.0
+    usage = UsageInfo(
+        prompt_tokens=prompt_tokens,
+        completion_tokens=completion_tokens,
+        total_tokens=total_tokens,
+        cost_usd=cost_usd,
+        model=model_id,
+    )
+    return text, usage
 
 
 def _empty_cuda_cache() -> None:
