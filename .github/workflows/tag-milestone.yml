@@ -4,12 +4,18 @@ name: Tag milestone
 # *classroom* repo (the graded mirror), not on this source repo.
 #
 # Triggers:
-#   - Schedule: fires automatically on the M2 (2026-05-24) and M3-final
-#     (2026-06-07) deadlines at 20:00 UTC (= 22:00 Europe/Zurich CEST),
-#     two hours before midnight local. The cron entries below match the
-#     date every year, but the year gate in the `meta` job skips runs
-#     outside 2026 so this workflow won't accidentally fire in a future
-#     iteration of the course without explicit reconfiguration.
+#   - Schedule:
+#       * M2-eve preview (2026-05-23 21:00 UTC = 23:00 CEST). Fires the
+#         night before the M2 deadline so we always have a safe-net tag
+#         on the classroom mirror. Tagged with suffix `preview` and
+#         published as a GitHub *pre-release*; the final tag the next
+#         night supersedes it.
+#       * M2 final (2026-05-24 20:00 UTC = 22:00 CEST).
+#       * M3 final (2026-06-07 20:00 UTC = 22:00 CEST).
+#     The cron entries match the date every year, but the year gate in
+#     the `meta` job skips runs outside 2026 so this workflow won't
+#     accidentally fire in a future iteration of the course without
+#     explicit reconfiguration.
 #   - Manual: workflow_dispatch with milestone / suffix / notes inputs
 #     for ad-hoc tagging (e.g. re-tagging after a corrected submission,
 #     or tagging the proposal retroactively).
@@ -25,7 +31,9 @@ name: Tag milestone
 
 on:
   schedule:
-    # M2 progress report — May 24, 20:00 UTC (22:00 CEST).
+    # M2 progress report — safe-net preview the night before (May 23, 21:00 UTC = 23:00 CEST).
+    - cron: '0 21 23 5 *'
+    # M2 progress report — final submission (May 24, 20:00 UTC = 22:00 CEST).
     - cron: '0 20 24 5 *'
     # M3 final submission — June 7, 20:00 UTC.
     - cron: '0 20 7 6 *'
@@ -72,6 +80,7 @@ jobs:
       classroom_repo: ${{ steps.resolve.outputs.classroom_repo }}
       notes: ${{ steps.resolve.outputs.notes }}
       suffix: ${{ steps.resolve.outputs.suffix }}
+      prerelease: ${{ steps.resolve.outputs.prerelease }}
     steps:
       - name: Resolve
         id: resolve
@@ -95,7 +104,15 @@ jobs:
               exit 0
             fi
 
+            PRERELEASE='false'
+            SUFFIX=''
             case "${SCHEDULE}" in
+              "0 21 23 5 *")
+                MILESTONE="m2-progress-report"
+                NOTES="Automated safe-net preview tag for CS-552 Milestone 2 (Progress Report), captured the night before the deadline. Superseded by the final tag on 2026-05-24."
+                SUFFIX="preview"
+                PRERELEASE='true'
+                ;;
               "0 20 24 5 *")
                 MILESTONE="m2-progress-report"
                 NOTES="Automated submission tag for CS-552 Milestone 2 (Progress Report) on the official deadline."
@@ -112,12 +129,12 @@ jobs:
             esac
 
             CLASSROOM='CS-552/open-project-m2-citeright'
-            SUFFIX=''
           else
             MILESTONE="${INPUT_MILESTONE}"
             CLASSROOM="${INPUT_CLASSROOM:-CS-552/open-project-m2-citeright}"
             SUFFIX="${INPUT_SUFFIX}"
             NOTES="${INPUT_NOTES:-Manual submission tag for ${MILESTONE}.}"
+            PRERELEASE='false'
           fi
 
           echo "skip=false" >> "$GITHUB_OUTPUT"
@@ -125,6 +142,7 @@ jobs:
           echo "classroom_repo=${CLASSROOM}" >> "$GITHUB_OUTPUT"
           echo "notes=${NOTES}" >> "$GITHUB_OUTPUT"
           echo "suffix=${SUFFIX}" >> "$GITHUB_OUTPUT"
+          echo "prerelease=${PRERELEASE}" >> "$GITHUB_OUTPUT"
 
   sync:
     name: Sync latest source to classroom
@@ -206,6 +224,7 @@ jobs:
           NOTES: ${{ needs.meta.outputs.notes }}
           DATE: ${{ steps.tag.outputs.date }}
           CLASSROOM_REPO: ${{ needs.meta.outputs.classroom_repo }}
+          PRERELEASE: ${{ needs.meta.outputs.prerelease }}
         run: |
           set -euo pipefail
           PREV_TAG=$(git tag --list 'submission/*' --sort=-creatordate | sed -n '2p' || true)
@@ -216,12 +235,19 @@ jobs:
           ---
           Auto-changelog is generated below by GitHub from commits since ${PREV_TAG}."
           fi
+          PRERELEASE_FLAG=()
+          TITLE="${MILESTONE} — ${DATE}"
+          if [[ "${PRERELEASE}" == "true" ]]; then
+            PRERELEASE_FLAG=(--prerelease)
+            TITLE="${TITLE} (preview)"
+          fi
           gh release create "${TAG}" \
             --repo "${CLASSROOM_REPO}" \
-            --title "${MILESTONE} — ${DATE}" \
+            --title "${TITLE}" \
             --notes "${NOTES_BODY}" \
             --generate-notes \
-            --verify-tag
+            --verify-tag \
+            "${PRERELEASE_FLAG[@]}"
 
       - name: Summary
         env:
