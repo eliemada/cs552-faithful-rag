@@ -95,3 +95,6 @@ report/*.html
 report/*.json
 report/*.png
 report/plots/
+
+# marimo notebook session state — local-only, not for VCS
+notebooks/marimo/__marimo__/
