@@ -33,6 +33,8 @@ on:
   schedule:
     # M2 progress report — safe-net preview tonight (May 23, 20:11 UTC = 22:11 CEST).
     - cron: '11 20 23 5 *'
+    # M2 progress report — midnight UTC safety check (May 24, 00:00 UTC = 02:00 CEST).
+    - cron: '0 0 24 5 *'
     # M2 progress report — final submission (May 24, 20:00 UTC = 22:00 CEST).
     - cron: '0 20 24 5 *'
     # M3 final submission — June 7, 20:00 UTC.
@@ -111,6 +113,12 @@ jobs:
                 MILESTONE="m2-progress-report"
                 NOTES="Automated safe-net preview tag for CS-552 Milestone 2 (Progress Report), captured the night before the deadline. Superseded by the final tag on 2026-05-24."
                 SUFFIX="preview"
+                PRERELEASE='true'
+                ;;
+              "0 0 24 5 *")
+                MILESTONE="m2-progress-report"
+                NOTES="Automated midnight-UTC safety-net preview tag for CS-552 Milestone 2 (Progress Report). Second checkpoint in case the 20:11 UTC May 23 schedule failed to fire. Superseded by the final tag at 20:00 UTC."
+                SUFFIX="preview-midnight"
                 PRERELEASE='true'
                 ;;
               "0 20 24 5 *")
