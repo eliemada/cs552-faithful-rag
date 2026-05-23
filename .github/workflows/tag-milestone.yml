@@ -31,8 +31,8 @@ name: Tag milestone
 
 on:
   schedule:
-    # M2 progress report — safe-net preview the night before (May 23, 21:00 UTC = 23:00 CEST).
-    - cron: '0 21 23 5 *'
+    # M2 progress report — safe-net preview tonight (May 23, 20:11 UTC = 22:11 CEST).
+    - cron: '11 20 23 5 *'
     # M2 progress report — final submission (May 24, 20:00 UTC = 22:00 CEST).
     - cron: '0 20 24 5 *'
     # M3 final submission — June 7, 20:00 UTC.
@@ -107,7 +107,7 @@ jobs:
             PRERELEASE='false'
             SUFFIX=''
             case "${SCHEDULE}" in
-              "0 21 23 5 *")
+              "11 20 23 5 *")
                 MILESTONE="m2-progress-report"
                 NOTES="Automated safe-net preview tag for CS-552 Milestone 2 (Progress Report), captured the night before the deadline. Superseded by the final tag on 2026-05-24."
                 SUFFIX="preview"
