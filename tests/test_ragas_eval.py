@@ -21,15 +21,22 @@ from pathlib import Path
 
 import pytest
 
-from evaluation.common.models import UsageInfo
-from evaluation.ragas_eval import pipelines
-from evaluation.ragas_eval.pipelines import (
+# Optional dependency gate. The RAGAS evaluation glue lives behind the
+# ``rag_pipeline[eval]`` extras (ragas + langchain-openai). CI jobs that
+# install only the default extras (e.g. gold-validation) must skip this
+# module cleanly at collection time rather than fail with ImportError.
+pytest.importorskip("ragas")
+pytest.importorskip("langchain_openai")
+
+from evaluation.common.models import UsageInfo  # noqa: E402
+from evaluation.ragas_eval import pipelines  # noqa: E402
+from evaluation.ragas_eval.pipelines import (  # noqa: E402
     RagasSample,
     build_chunk_lookup,
     run_long_context_pipeline,
     run_rag_pipeline,
 )
-from evaluation.ragas_eval.ragas_runner import METRIC_NAMES, evaluate_samples
+from evaluation.ragas_eval.ragas_runner import METRIC_NAMES, evaluate_samples  # noqa: E402
 
 _STUB_USAGE = UsageInfo(
     prompt_tokens=10,
