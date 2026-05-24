@@ -50,7 +50,7 @@ Team CiteRight \\
 
 \section{Progress Summary}
 
-All four proposal components run end-to-end on a 37-question gold benchmark of intellectual-property and innovation-policy papers. The retrieval ablation grew from four to sixteen configurations with a new corpus-level SOTA (\S\ref{sec:retrieval}); the faithfulness verifier exposes a 55--61\,pp gap between NLI and LLM-judge labels (\S\ref{sec:faith}); RAGAS pits chunked RAG against a 1M-token long-context baseline and adds an answer-LLM cost dimension (\S\ref{sec:ragas}); the Corrective RAG router lifts retrieval correctness from 80\% to 90\% under a $(\tau_h, \tau_l)$ sweep (\S\ref{sec:crag}).
+All four proposal components run end-to-end on a 37-question gold benchmark of intellectual-property and innovation-policy papers. The retrieval ablation grew from four to sixteen configurations with a new corpus-level SOTA (\S\ref{sec:retrieval}); the faithfulness verifier exposes a 55--61\,pp gap between NLI and LLM-judge labels (\S\ref{sec:faith}); RAGAS pits chunked RAG against a 1M-token long-context baseline and adds an answer-LLM cost dimension (\S\ref{sec:ragas}); the Corrective RAG router lifts retrieval correctness from 60\% to 80\% on a mixed-quality 10-question slice by rescuing both ambiguous retrievals (\S\ref{sec:crag}).
 
 \section{Retrieval Ablation}
 \label{sec:retrieval}
@@ -89,8 +89,8 @@ Two pipelines run through the four RAGAS metrics \citep{es2024ragas} on an $n{=}
 \section{Corrective RAG and M3 Plan}
 \label{sec:crag}
 
-The CRAG router \citep{yan2024corrective} scores top-$k$ retrievals as CORRECT/AMBIGUOUS/INCORRECT and re-queries on AMBIGUOUS. A 9-cell $(\tau_h, \tau_l)$ sweep on a 10-question subset lifts the 80\% baseline correct-retrieval rate to 90\% at $(\tau_h{=}0.7, \tau_l{=}0.4)$ for $0.96$\,s mean latency; $\tau_h{=}0.8$ drops to $70$\,\% as refinement on already-correct retrievals causes semantic drift.
-\label{sec:m3}M3 closes the multi-hop, coverage, and LC-recall gaps via a sliding-window chunker, ColBERTv2 domain-adaptation, and a 37-question RAGAS sweep over 16 retrievers $+$ CRAG.
+The CRAG router \citep{yan2024corrective} scores top-$k$ retrievals as CORRECT/AMBIGUOUS/INCORRECT and re-queries on AMBIGUOUS. On a mixed 10-question slice ($\tau_h{=}0.813$), CRAG lifts correct-retrieval from 60\% to 80\% (${+}20$~pp), rescuing both ambiguous queries in one refinement round. A 9-cell $(\tau_h, \tau_l)$ sweep hits the same 0.80 rate but spans
+0.04--0.40~s/query, with $(\tau_h{=}0.7, \tau_l{=}0.4)$ latency-optimal. M3 scales to 37 questions with RAGAS faithfulness scoring and an \textsc{Incorrect}-branch fallback.
 
 \newpage
 \bibliography{custom}
