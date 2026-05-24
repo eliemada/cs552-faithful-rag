@@ -5,12 +5,9 @@ name: Tag milestone
 #
 # Triggers:
 #   - Schedule:
-#       * M2-eve preview (2026-05-23 21:00 UTC = 23:00 CEST). Fires the
-#         night before the M2 deadline so we always have a safe-net tag
-#         on the classroom mirror. Tagged with suffix `preview` and
-#         published as a GitHub *pre-release*; the final tag the next
-#         night supersedes it.
-#       * M2 final (2026-05-24 20:00 UTC = 22:00 CEST).
+#       * M2 final (2026-05-24 19:00 UTC = 21:00 CEST). Scheduled 1 h
+#         before the official 22:00 CEST deadline to absorb the typical
+#         5-60 min GitHub Actions scheduler latency.
 #       * M3 final (2026-06-07 20:00 UTC = 22:00 CEST).
 #     The cron entries match the date every year, but the year gate in
 #     the `meta` job skips runs outside 2026 so this workflow won't
@@ -18,7 +15,8 @@ name: Tag milestone
 #     explicit reconfiguration.
 #   - Manual: workflow_dispatch with milestone / suffix / notes inputs
 #     for ad-hoc tagging (e.g. re-tagging after a corrected submission,
-#     or tagging the proposal retroactively).
+#     tagging the proposal retroactively, or firing an early safety-net
+#     tag with suffix=preview).
 #
 # Flow:
 #   1. Sync source -> classroom (reusable _sync-classroom.yml). This
@@ -31,12 +29,9 @@ name: Tag milestone
 
 on:
   schedule:
-    # M2 progress report — safe-net preview tonight (May 23, 20:11 UTC = 22:11 CEST).
-    - cron: '11 20 23 5 *'
-    # M2 progress report — midnight UTC safety check (May 24, 00:00 UTC = 02:00 CEST).
-    - cron: '0 0 24 5 *'
-    # M2 progress report — final submission (May 24, 20:00 UTC = 22:00 CEST).
-    - cron: '0 20 24 5 *'
+    # M2 progress report — final submission (May 24, 19:00 UTC = 21:00 CEST).
+    # 1 h pre-deadline buffer absorbs GitHub Actions scheduler latency.
+    - cron: '0 19 24 5 *'
     # M3 final submission — June 7, 20:00 UTC.
     - cron: '0 20 7 6 *'
   workflow_dispatch:
@@ -109,21 +104,9 @@ jobs:
             PRERELEASE='false'
             SUFFIX=''
             case "${SCHEDULE}" in
-              "11 20 23 5 *")
+              "0 19 24 5 *")
                 MILESTONE="m2-progress-report"
-                NOTES="Automated safe-net preview tag for CS-552 Milestone 2 (Progress Report), captured the night before the deadline. Superseded by the final tag on 2026-05-24."
-                SUFFIX="preview"
-                PRERELEASE='true'
-                ;;
-              "0 0 24 5 *")
-                MILESTONE="m2-progress-report"
-                NOTES="Automated midnight-UTC safety-net preview tag for CS-552 Milestone 2 (Progress Report). Second checkpoint in case the 20:11 UTC May 23 schedule failed to fire. Superseded by the final tag at 20:00 UTC."
-                SUFFIX="preview-midnight"
-                PRERELEASE='true'
-                ;;
-              "0 20 24 5 *")
-                MILESTONE="m2-progress-report"
-                NOTES="Automated submission tag for CS-552 Milestone 2 (Progress Report) on the official deadline."
+                NOTES="Automated submission tag for CS-552 Milestone 2 (Progress Report). Fired 1 h before the 22:00 CEST deadline to absorb scheduler latency."
                 ;;
               "0 20 7 6 *")
                 MILESTONE="m3-final"
