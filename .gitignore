@@ -96,5 +96,9 @@ report/*.json
 report/*.png
 report/plots/
 
+# ACL Anthology bib (~42 MB) — lives in Overleaf only, not in VCS.
+# Re-fetch with: curl -L -o anthology.bib https://aclanthology.org/anthology.bib
+report/**/anthology.bib
+
 # marimo notebook session state — local-only, not for VCS
 notebooks/marimo/__marimo__/
