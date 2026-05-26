@@ -17,7 +17,7 @@ on:
         description: 'Classroom repo to sync into (owner/name).'
         required: false
         type: string
-        default: 'CS-552/open-project-m2-citeright'
+        default: 'CS-552/open-project-m3-citeright'
     secrets:
       CLASSROOM_PAT:
         required: true
