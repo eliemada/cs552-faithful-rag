@@ -5,11 +5,10 @@ name: Tag milestone
 #
 # Triggers:
 #   - Schedule:
-#       * M2 final (2026-05-24 19:00 UTC = 21:00 CEST). Scheduled 1 h
-#         before the official 22:00 CEST deadline to absorb the typical
-#         5-60 min GitHub Actions scheduler latency.
-#       * M3 final (2026-06-07 20:00 UTC = 22:00 CEST).
-#     The cron entries match the date every year, but the year gate in
+#       * M3 final (2026-06-07 20:00 UTC = 22:00 CEST). Scheduled
+#         ~2 h before the official 23:59 CEST = 21:59 UTC deadline to
+#         absorb the typical 5-60 min GitHub Actions scheduler latency.
+#     The cron entry matches the date every year, but the year gate in
 #     the `meta` job skips runs outside 2026 so this workflow won't
 #     accidentally fire in a future iteration of the course without
 #     explicit reconfiguration.
@@ -29,10 +28,9 @@ name: Tag milestone
 
 on:
   schedule:
-    # M2 progress report — final submission (May 24, 19:00 UTC = 21:00 CEST).
-    # 1 h pre-deadline buffer absorbs GitHub Actions scheduler latency.
-    - cron: '0 19 24 5 *'
-    # M3 final submission — June 7, 20:00 UTC.
+    # M3 final submission — June 7, 20:00 UTC = 22:00 CEST.
+    # Deadline is 23:59 CEST = 21:59 UTC; ~2 h pre-deadline buffer
+    # absorbs GitHub Actions scheduler latency.
     - cron: '0 20 7 6 *'
   workflow_dispatch:
     inputs:
@@ -41,15 +39,14 @@ on:
         required: true
         type: choice
         options:
-          - m2-progress-report
           - m3-final
           - proposal
           - other
       classroom_repo:
-        description: 'Classroom repo (owner/name) to tag. Default is the M2 classroom; update for M3 when its repo is provisioned.'
+        description: 'Classroom repo (owner/name) to tag. Default is the M3 classroom.'
         required: false
         type: string
-        default: 'CS-552/open-project-m2-citeright'
+        default: 'CS-552/open-project-m3-citeright'
       suffix:
         description: 'Optional suffix appended to the tag (e.g. "corrected", "v2"). Leave blank for the dated default.'
         required: false
@@ -61,7 +58,7 @@ on:
         type: string
         default: ''
 
-# A scheduled M2 run and a manual M2 run shouldn't race for the same tag.
+# A scheduled M3 run and a manual M3 run shouldn't race for the same tag.
 concurrency:
   group: tag-milestone-${{ inputs.milestone || github.event.schedule }}
   cancel-in-progress: false
@@ -104,13 +101,9 @@ jobs:
             PRERELEASE='false'
             SUFFIX=''
             case "${SCHEDULE}" in
-              "0 19 24 5 *")
-                MILESTONE="m2-progress-report"
-                NOTES="Automated submission tag for CS-552 Milestone 2 (Progress Report). Fired 1 h before the 22:00 CEST deadline to absorb scheduler latency."
-                ;;
               "0 20 7 6 *")
                 MILESTONE="m3-final"
-                NOTES="Automated submission tag for CS-552 Milestone 3 (Final Submission) on the official deadline."
+                NOTES="Automated submission tag for CS-552 Milestone 3 (Final Submission). Fired ~2 h before the 23:59 CEST deadline to absorb scheduler latency."
                 ;;
               *)
                 echo "Unknown schedule cron '${SCHEDULE}'. Skipping."
@@ -119,10 +112,10 @@ jobs:
                 ;;
             esac
 
-            CLASSROOM='CS-552/open-project-m2-citeright'
+            CLASSROOM='CS-552/open-project-m3-citeright'
           else
             MILESTONE="${INPUT_MILESTONE}"
-            CLASSROOM="${INPUT_CLASSROOM:-CS-552/open-project-m2-citeright}"
+            CLASSROOM="${INPUT_CLASSROOM:-CS-552/open-project-m3-citeright}"
             SUFFIX="${INPUT_SUFFIX}"
             NOTES="${INPUT_NOTES:-Manual submission tag for ${MILESTONE}.}"
             PRERELEASE='false'
