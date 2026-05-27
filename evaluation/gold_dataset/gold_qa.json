@@ -756,6 +756,437 @@
     ]
   },
   {
+    "id": "q027",
+    "question": "Why does Harris (2011) use compulsory licensing as a yardstick for evaluating TRIPS' first fifteen years?",
+    "gold_answer": "Harris argues that, though it is only one provision in a complex treaty, compulsory licensing can be used as a window through which to view TRIPS' success.",
+    "difficulty": "single-hop",
+    "category": "methodology",
+    "annotator": "elie",
+    "reviewer": "andrea",
+    "review_status": "approved",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Compulsory licensing \u2014 although only one provision within TRIPS \u2014 can be used as a window to view TRIPS' overall success.",
+        "supporting_spans": [
+          {
+            "paper_id": "00150_W2341082492",
+            "char_start": 154451,
+            "char_end": 154684,
+            "quote": "Following that, Part IV argues that the compulsory licensing provision \u2014 though only one provision in a complex treaty covering multiple intellectual property areas and related issues \u2014 can be used as a window to view TRIPS' success."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": "supports"
+      }
+    ]
+  },
+  {
+    "id": "q028",
+    "question": "What measurement approach does Kong et al. (2020) propose for the disclosure quality of patent applications?",
+    "gold_answer": "They propose using algorithms from computational linguistics to measure disclosure in patent applications.",
+    "difficulty": "single-hop",
+    "category": "methodology",
+    "annotator": "elie",
+    "reviewer": "andrea",
+    "review_status": "approved",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "The paper proposes using algorithms from computational linguistics to measure disclosure in patent applications.",
+        "supporting_spans": [
+          {
+            "paper_id": "03971_W3084591110",
+            "char_start": 1774,
+            "char_end": 1904,
+            "quote": "This paper proposes a novel approach to measure disclosure in patent applications using algorithms from computational linguistics."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q029",
+    "question": "What does Kong et al. (2020) quantitatively find about the disclosure gap between university and corporate patents?",
+    "gold_answer": "Combining their linguistic measures via principal component analysis, they find a 0.4 standard-deviation gap in disclosure, with the gap widening among top applicants.",
+    "difficulty": "single-hop",
+    "category": "comparison",
+    "annotator": "elie",
+    "reviewer": "andrea",
+    "review_status": "approved",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Combining the linguistic measures via PCA, the authors find the disclosure gap between university and corporate patents is 0.4 SD, with a wider gap between top applicants.",
+        "supporting_spans": [
+          {
+            "paper_id": "03971_W3084591110",
+            "char_start": 2471,
+            "char_end": 2625,
+            "quote": "Combining the multiple measures using principal component analysis, we find that the gap in disclosure is 0.4 SD, with a wider gap between top applicants."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q030",
+    "question": "What does the Harmonization Myth article argue has driven the post-TRIPS treaties and agreements?",
+    "gold_answer": "It argues that maximization of IP \u2014 not harmonization \u2014 has driven the post-TRIPS treaties and agreements.",
+    "difficulty": "single-hop",
+    "category": "policy_impact",
+    "annotator": "elie",
+    "reviewer": "andrea",
+    "review_status": "approved",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Maximization of IP has driven many of the post-TRIPS treaties and agreements at the expense of harmonization.",
+        "supporting_spans": [
+          {
+            "paper_id": "01200_W3102615807",
+            "char_start": 3767,
+            "char_end": 3904,
+            "quote": "Next, the Article shows how maximization of IP has driven many of the post-TRIPS treaties and agreements at the expense of harmonization."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": "supports"
+      }
+    ]
+  },
+  {
+    "id": "q031",
+    "question": "What overarching thesis does Rai (2003) advance about reforming the U.S. patent system?",
+    "gold_answer": "Because the institutions within the patent system are interdependent, reform must be both multi-institutional and closely attentive to the institutional competence of the system's actors.",
+    "difficulty": "single-hop",
+    "category": "policy_impact",
+    "annotator": "elie",
+    "reviewer": "andrea",
+    "review_status": "approved",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Patent-system reform must be both multi-institutional and closely attentive to the institutional competence of the system's actors, because the institutions within the system are interdependent.",
+        "supporting_spans": [
+          {
+            "paper_id": "00516_W1537872186",
+            "char_start": 674,
+            "char_end": 915,
+            "quote": "This Article argues that because of the interdependence of the various institutions within the patent system, reform of the system must be both multi-institutional and closely attentive to the institutional competence of the system's actors."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": "supports"
+      }
+    ]
+  },
+  {
+    "id": "q032",
+    "question": "What gap in the existing literature motivates the patent-for-design systematic review by Jiang et al.?",
+    "gold_answer": "The authors note that, despite the rapid growth of patent-for-design research, no systematic review of that literature existed, so they conducted one to map the state of the art and identify trends.",
+    "difficulty": "single-hop",
+    "category": "methodology",
+    "annotator": "elie",
+    "reviewer": "andrea",
+    "review_status": "approved",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Before this paper, no systematic review of the patent-for-design research literature had been conducted, despite the field's rapid growth.",
+        "supporting_spans": [
+          {
+            "paper_id": "00427_W4282926950",
+            "char_start": 3998,
+            "char_end": 4130,
+            "quote": "To the best of our knowledge, there has been no systematic review of patent-for-design research literature despite its rapid growth."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c002",
+        "text": "The authors conducted the review to elucidate the state of the art and reveal trends in the field.",
+        "supporting_spans": [
+          {
+            "paper_id": "00427_W4282926950",
+            "char_start": 4131,
+            "char_end": 4223,
+            "quote": "Therefore, we conducted this review to elucidate the state of the art and reveal the trends."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q033",
+    "question": "On what grounds did the European Union impose its moratorium on marketing approvals for GM crops, according to Curtis (2004)?",
+    "gold_answer": "The EU imposed the moratorium on the basis of the precautionary principle, even though it had not found any evidence that GM corn is unsafe.",
+    "difficulty": "single-hop",
+    "category": "policy_impact",
+    "annotator": "elie",
+    "reviewer": "andrea",
+    "review_status": "approved",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "The EU imposed its moratorium on marketing approvals for GM crops on the basis of the precautionary principle, despite not having found evidence that GM corn is unsafe.",
+        "supporting_spans": [
+          {
+            "paper_id": "04223_W1538847617",
+            "char_start": 7371,
+            "char_end": 7552,
+            "quote": "Although the EU\n\n3\n\n---\n\nhas not found any evidence that GM corn is unsafe, it has imposed a moratorium on the marketing approvals for GM crops based on the precautionary principle."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": "supports"
+      }
+    ]
+  },
+  {
+    "id": "q034",
+    "question": "When did the US Patent Trial and Appeal Board begin accepting petitions for inter partes review?",
+    "gold_answer": "On September 16, 2012.",
+    "difficulty": "single-hop",
+    "category": "factual",
+    "annotator": "elie",
+    "reviewer": "andrea",
+    "review_status": "approved",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "The PTAB began accepting petitions for inter partes review on September 16, 2012.",
+        "supporting_spans": [
+          {
+            "paper_id": "00775_W1929840429",
+            "char_start": 1948,
+            "char_end": 2054,
+            "quote": "The Patent Trial and Appeal Board began accepting petitions for inter partes review on September 16, 2012."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q035",
+    "question": "Which production-side challenges does the Silvello et al. AgTech roadmapping case study identify as driving Brazilian cacha\u00e7a producers to demand new technical solutions?",
+    "gold_answer": "Chemical-composition requirements for exporting, meeting quality standards as production volumes grow, workforce qualification, and sourcing advanced machinery and equipment to increase productivity.",
+    "difficulty": "single-hop",
+    "category": "factual",
+    "annotator": "elie",
+    "reviewer": "andrea",
+    "review_status": "approved",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Cacha\u00e7a producers are demanding solutions for chemical-composition requirements for entry in foreign countries, meeting quality standards as production volumes grow, qualification of the workforce, and sourcing advanced machinery and equipment to increase productivity.",
+        "supporting_spans": [
+          {
+            "paper_id": "01477_W3082119631",
+            "char_start": 5273,
+            "char_end": 5582,
+            "quote": "producers are demanding solutions that can assist them in tackling challenges such as chemical composition requirements for entry in foreign countries, meeting quality standards as production volumes grow, qualification of the workforce, and sourcing advanced machinery and equipment to increase productivity."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q036",
+    "question": "What does the Rwanda-Canada test case under TRIPS Article 31bis reveal about that compulsory-licensing pathway, according to Harris (2011)?",
+    "gold_answer": "It demonstrated the practical difficulties of using Article 31bis: the process was viewed as too cumbersome for both eligible exporting and importing countries.",
+    "difficulty": "single-hop",
+    "category": "policy_impact",
+    "annotator": "elie",
+    "reviewer": "andrea",
+    "review_status": "approved",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "The Rwanda-Canada test case demonstrated the difficulties of using TRIPS Article 31bis, with the process viewed as too cumbersome for both exporting and importing countries.",
+        "supporting_spans": [
+          {
+            "paper_id": "00150_W2341082492",
+            "char_start": 194558,
+            "char_end": 194752,
+            "quote": "First, the test case of Rwanda and Canada demonstrated the difficulties in using Article 31 bis. 122 The process was viewed as too cumbersome for both eligible exporting and importing countries."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q037",
+    "question": "How do two recent scholarly accounts of TRIPS characterise (a) the trajectory of post-TRIPS rule-making and (b) the analytical lens that best lets us judge whether TRIPS has worked?",
+    "gold_answer": "On (a), the Harmonization Myth article argues that successive post-TRIPS treaties have been driven by maximization of IP rather than harmonization. On (b), Harris (2011) treats compulsory licensing \u2014 though only one provision in a complex treaty \u2014 as the right window through which to view TRIPS' success.",
+    "difficulty": "multi-hop",
+    "category": "multi_hop",
+    "annotator": "elie",
+    "reviewer": "andrea",
+    "review_status": "approved",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Post-TRIPS treaties and agreements have been driven by maximization of IP rather than harmonization.",
+        "supporting_spans": [
+          {
+            "paper_id": "01200_W3102615807",
+            "char_start": 3767,
+            "char_end": 3904,
+            "quote": "Next, the Article shows how maximization of IP has driven many of the post-TRIPS treaties and agreements at the expense of harmonization."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": "supports"
+      },
+      {
+        "id": "c002",
+        "text": "Compulsory licensing \u2014 although only one TRIPS provision \u2014 can be used as a window to view TRIPS' overall success.",
+        "supporting_spans": [
+          {
+            "paper_id": "00150_W2341082492",
+            "char_start": 154451,
+            "char_end": 154684,
+            "quote": "Following that, Part IV argues that the compulsory licensing provision \u2014 though only one provision in a complex treaty covering multiple intellectual property areas and related issues \u2014 can be used as a window to view TRIPS' success."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": "supports"
+      }
+    ]
+  },
+  {
+    "id": "q038",
+    "question": "What two distinct research streams illustrate the use of natural-language and computational methods on patent corpora?",
+    "gold_answer": "One stream is patent-for-engineering-design research, where Jiang et al. observe that no systematic review of the literature existed despite its rapid growth. The other is patent-disclosure research, where Kong et al. (2020) propose computational-linguistic algorithms as a novel way to measure disclosure in patent applications.",
+    "difficulty": "multi-hop",
+    "category": "multi_hop",
+    "annotator": "elie",
+    "reviewer": "andrea",
+    "review_status": "approved",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Before Jiang et al., no systematic review of the patent-for-design research literature had been conducted, despite its rapid growth.",
+        "supporting_spans": [
+          {
+            "paper_id": "00427_W4282926950",
+            "char_start": 3998,
+            "char_end": 4130,
+            "quote": "To the best of our knowledge, there has been no systematic review of patent-for-design research literature despite its rapid growth."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": "supports"
+      },
+      {
+        "id": "c002",
+        "text": "Kong et al. (2020) propose algorithms from computational linguistics as a novel approach to measure disclosure in patent applications.",
+        "supporting_spans": [
+          {
+            "paper_id": "03971_W3084591110",
+            "char_start": 1774,
+            "char_end": 1904,
+            "quote": "This paper proposes a novel approach to measure disclosure in patent applications using algorithms from computational linguistics."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": "supports"
+      }
+    ]
+  },
+  {
+    "id": "q039",
+    "question": "What core institutional argument do scholars make about reform of the U.S. patent system, and what parallel critique applies to the trajectory of international IP rules?",
+    "gold_answer": "Rai (2003) argues that reform of the U.S. patent system must be multi-institutional and closely attentive to the institutional competence of the system's actors, because the institutions within it are interdependent. At the international level, the Harmonization Myth article argues that post-TRIPS treaties have been driven by maximization of IP rather than harmonization.",
+    "difficulty": "multi-hop",
+    "category": "multi_hop",
+    "annotator": "elie",
+    "reviewer": "andrea",
+    "review_status": "approved",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Reform of the U.S. patent system must be both multi-institutional and closely attentive to institutional competence, because the system's institutions are interdependent.",
+        "supporting_spans": [
+          {
+            "paper_id": "00516_W1537872186",
+            "char_start": 674,
+            "char_end": 915,
+            "quote": "This Article argues that because of the interdependence of the various institutions within the patent system, reform of the system must be both multi-institutional and closely attentive to the institutional competence of the system's actors."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c002",
+        "text": "Successive post-TRIPS treaties have been driven by maximization of IP rather than harmonization.",
+        "supporting_spans": [
+          {
+            "paper_id": "01200_W3102615807",
+            "char_start": 3767,
+            "char_end": 3904,
+            "quote": "Next, the Article shows how maximization of IP has driven many of the post-TRIPS treaties and agreements at the expense of harmonization."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q040",
+    "question": "What share of European Patent Office filings in 2024 listed a generative-AI tool among their stated inventive contributions?",
+    "gold_answer": "Not covered by the corpus.",
+    "difficulty": "unanswerable",
+    "category": "factual",
+    "annotator": "elie",
+    "reviewer": "andrea",
+    "review_status": "approved",
+    "iaa_subset": false,
+    "claims": []
+  },
+  {
+    "id": "q041",
+    "question": "How many compulsory licenses did the Brazilian government issue for COVID-19 vaccines during 2023?",
+    "gold_answer": "Not covered by the corpus.",
+    "difficulty": "unanswerable",
+    "category": "factual",
+    "annotator": "elie",
+    "reviewer": "andrea",
+    "review_status": "approved",
+    "iaa_subset": false,
+    "claims": []
+  },
+  {
     "id": "q200",
     "question": "Contrast the foundational justification for IPR as an innovation driver with the core argument of the dissenting tradition.",
     "gold_answer": "The property rights view, supported by Kenneth J. Arrow (1962), holds that IPR rewards are necessary for socially optimal innovation. The dissenting tradition, starting with Arnold Plant (1934), argues that neither IPR nor government support is required for optimal innovation rates.",
