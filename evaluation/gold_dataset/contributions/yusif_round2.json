@@ -246,7 +246,7 @@
   {
     "id": "q321",
     "question": "How does Lei et al. (2019) build their IoT patent experimental dataset from USPTO data?",
-    "gold_answer": "They take 2016\u20132018 USPTO patents in IPC class H04 (covering most IoT-related technologies) and filter by IoT keywords, yielding 8,942 patents.",
+    "gold_answer": "They take 2016–2018 USPTO patents in IPC class H04 (covering most IoT-related technologies) and filter by IoT keywords, yielding 8,942 patents.",
     "difficulty": "multi-hop",
     "category": "methodology",
     "annotator": "yusif",

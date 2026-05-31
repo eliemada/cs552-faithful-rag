@@ -45,7 +45,7 @@
             "paper_id": "00002_W2122361802",
             "char_start": 16509,
             "char_end": 16847,
-            "quote": "without cross-licenses or patent pools, there is a tendency for products to bear \u201c multiple patent burdens. \u201d The buildup of licensing fees can have several unattractive consequences. First, the well-known costs of static monopoly power are magnified: prices are well above marginal costs, causing inefficiently low use of these products."
+            "quote": "without cross-licenses or patent pools, there is a tendency for products to bear “ multiple patent burdens. ” The buildup of licensing fees can have several unattractive consequences. First, the well-known costs of static monopoly power are magnified: prices are well above marginal costs, causing inefficiently low use of these products."
           }
         ],
         "annotator_label": "supports",
@@ -98,7 +98,7 @@
             "paper_id": "00002_W2122361802",
             "char_start": 22713,
             "char_end": 22944,
-            "quote": "we have a volatile mix of two powerful types of \u201ctransaction costs\u201d that can burden innovation: (1) the complements problem, the solution of which requires coordination, perhaps large-scale coordination; and (2) the hold-up problem"
+            "quote": "we have a volatile mix of two powerful types of “transaction costs” that can burden innovation: (1) the complements problem, the solution of which requires coordination, perhaps large-scale coordination; and (2) the hold-up problem"
           }
         ],
         "annotator_label": "supports",
@@ -139,7 +139,7 @@
             "paper_id": "00002_W2122361802",
             "char_start": 16509,
             "char_end": 16797,
-            "quote": "without cross-licenses or patent pools, there is a tendency for products to bear \u201c multiple patent burdens. \u201d The buildup of licensing fees can have several unattractive consequences. First, the well-known costs of static monopoly power are magnified: prices are well above marginal costs"
+            "quote": "without cross-licenses or patent pools, there is a tendency for products to bear “ multiple patent burdens. ” The buildup of licensing fees can have several unattractive consequences. First, the well-known costs of static monopoly power are magnified: prices are well above marginal costs"
           }
         ],
         "annotator_label": "supports",
@@ -161,7 +161,7 @@
   },
   {
     "id": "q007",
-    "question": "According to Mendon\u00e7a et al. (2004), what advantage do trademarks have over patents and R&D as innovation indicators in terms of firm coverage?",
+    "question": "According to Mendonça et al. (2004), what advantage do trademarks have over patents and R&D as innovation indicators in terms of firm coverage?",
     "gold_answer": "Trademarks are used by a wider range of firms than patents or R&D, capturing innovation activity in services and in small and medium-sized enterprises (SMEs).",
     "difficulty": "single-hop",
     "category": "comparison",
@@ -188,7 +188,7 @@
   },
   {
     "id": "q008",
-    "question": "According to the surveys reviewed by Mendon\u00e7a et al. (2004), how do firms generally rank patents as a means of appropriating returns from innovation, compared to marketing activities?",
+    "question": "According to the surveys reviewed by Mendonça et al. (2004), how do firms generally rank patents as a means of appropriating returns from innovation, compared to marketing activities?",
     "gold_answer": "A common finding across large-scale innovation surveys is that patents tend to rank relatively low as a means of appropriating innovation returns, except in a few industries where they play a strategic role. Marketing activities and assets play a wider and more significant role.",
     "difficulty": "single-hop",
     "category": "comparison",
@@ -284,7 +284,7 @@
   {
     "id": "q011",
     "question": "According to Lemley and Shapiro (2005), how does patent quality affect the efficiency of the patent system at stimulating innovation?",
-    "gold_answer": "When patents are granted on already-known or obvious technologies, they impose social costs without offsetting benefits. The lower the quality of patents \u2014 i.e., the greater the fraction improperly issued \u2014 the less efficient the patent system is at stimulating innovation.",
+    "gold_answer": "When patents are granted on already-known or obvious technologies, they impose social costs without offsetting benefits. The lower the quality of patents — i.e., the greater the fraction improperly issued — the less efficient the patent system is at stimulating innovation.",
     "difficulty": "single-hop",
     "category": "policy_impact",
     "annotator": "andrea",
@@ -300,7 +300,7 @@
             "paper_id": "00005_W4233445588",
             "char_start": 6316,
             "char_end": 6650,
-            "quote": "When patents are granted covering technologies that were already known or were obvious, the resulting patents cause social costs without offsetting benefits. Therefore, the lower the quality of patents\u2014that is, the greater is the fraction of patents improperly issued\u2014the less efficient the patent system is at stimulating innovation."
+            "quote": "When patents are granted covering technologies that were already known or were obvious, the resulting patents cause social costs without offsetting benefits. Therefore, the lower the quality of patents—that is, the greater is the fraction of patents improperly issued—the less efficient the patent system is at stimulating innovation."
           }
         ],
         "annotator_label": "supports",
@@ -311,7 +311,7 @@
   {
     "id": "q012",
     "question": "How do Jorde and Teece (1990) characterize the standard view of cooperation among competitors in antitrust thinking?",
-    "gold_answer": "They describe cooperation among competitors as highly suspect in mainstream antitrust thinking \u2014 perhaps the last surviving element of what was once called the 'inhospitality tradition' in antitrust.",
+    "gold_answer": "They describe cooperation among competitors as highly suspect in mainstream antitrust thinking — perhaps the last surviving element of what was once called the 'inhospitality tradition' in antitrust.",
     "difficulty": "single-hop",
     "category": "policy_impact",
     "annotator": "andrea",
@@ -321,13 +321,13 @@
     "claims": [
       {
         "id": "c001",
-        "text": "In standard antitrust thinking, cooperation among competitors is treated as highly suspect \u2014 a remnant of the 'inhospitality tradition' in antitrust.",
+        "text": "In standard antitrust thinking, cooperation among competitors is treated as highly suspect — a remnant of the 'inhospitality tradition' in antitrust.",
         "supporting_spans": [
           {
             "paper_id": "00006_W2138453742",
             "char_start": 1168,
             "char_end": 1323,
-            "quote": "cooperation among competitors is highly suspect, being perhaps the last bastion of what was once referred to as the \u201cinhospitality tradition\u201d in antitrust."
+            "quote": "cooperation among competitors is highly suspect, being perhaps the last bastion of what was once referred to as the “inhospitality tradition” in antitrust."
           }
         ],
         "annotator_label": "supports",
@@ -365,7 +365,7 @@
   {
     "id": "q014",
     "question": "How does the simultaneous model of innovation described by Jorde and Teece (1990) characterize the nature of innovation activity?",
-    "gold_answer": "The simultaneous model visualizes innovation as an incremental and cumulative activity that builds on prior knowledge \u2014 whether inside or outside the organization, and whether proprietary or in the public domain.",
+    "gold_answer": "The simultaneous model visualizes innovation as an incremental and cumulative activity that builds on prior knowledge — whether inside or outside the organization, and whether proprietary or in the public domain.",
     "difficulty": "single-hop",
     "category": "methodology",
     "annotator": "andrea",
@@ -446,7 +446,7 @@
   {
     "id": "q017",
     "question": "How much did annual US patent issuance grow between 1983 and 2010, according to Boldrin and Levine (2013)?",
-    "gold_answer": "Boldrin and Levine report that US patent issuance grew from 59,715 in 1983 to 189,597 in 2003 and 244,341 in 2010 \u2014 more than quadrupling in less than 30 years.",
+    "gold_answer": "Boldrin and Levine report that US patent issuance grew from 59,715 in 1983 to 189,597 in 2003 and 244,341 in 2010 — more than quadrupling in less than 30 years.",
     "difficulty": "single-hop",
     "category": "factual",
     "annotator": "elie",
@@ -541,7 +541,7 @@
   {
     "id": "q020",
     "question": "What two-way trade-off does Fosfuri (2006) use to model the licensor's decision to license a technology?",
-    "gold_answer": "Fosfuri frames technology licensing as a trade-off between a revenue effect \u2014 licensing payments net of transaction costs \u2014 and a profit dissipation effect \u2014 the lower price-cost margin and/or reduced market share that result from added competition with the licensee.",
+    "gold_answer": "Fosfuri frames technology licensing as a trade-off between a revenue effect — licensing payments net of transaction costs — and a profit dissipation effect — the lower price-cost margin and/or reduced market share that result from added competition with the licensee.",
     "difficulty": "single-hop",
     "category": "methodology",
     "annotator": "elie",
@@ -557,7 +557,7 @@
             "paper_id": "00011_W3122382941",
             "char_start": 472,
             "char_end": 742,
-            "quote": "The licensing of technology entails a trade-off: licensing payments net of transaction costs (revenue effect) must be balanced against the lower price\u2014cost margin and/or reduced market share implied by increased competition (profit dissipation effect) from the licensee."
+            "quote": "The licensing of technology entails a trade-off: licensing payments net of transaction costs (revenue effect) must be balanced against the lower price—cost margin and/or reduced market share implied by increased competition (profit dissipation effect) from the licensee."
           }
         ],
         "annotator_label": "supports",
@@ -568,7 +568,7 @@
   {
     "id": "q021",
     "question": "What does the cross-country panel evidence in Kanwar and Evenson (2003) say about the effect of intellectual property rights on innovation?",
-    "gold_answer": "Using cross-country panel data on R&D investment, patent protection and other country-specific characteristics over 1981\u20131995, Kanwar and Evenson conclude that the evidence unambiguously indicates the significance of intellectual property rights as incentives for spurring innovation.",
+    "gold_answer": "Using cross-country panel data on R&D investment, patent protection and other country-specific characteristics over 1981–1995, Kanwar and Evenson conclude that the evidence unambiguously indicates the significance of intellectual property rights as incentives for spurring innovation.",
     "difficulty": "single-hop",
     "category": "policy_impact",
     "annotator": "elie",
@@ -578,13 +578,13 @@
     "claims": [
       {
         "id": "c001",
-        "text": "Kanwar and Evenson's 1981\u20131995 cross-country panel evidence unambiguously indicates that intellectual property rights are a significant incentive for spurring innovation.",
+        "text": "Kanwar and Evenson's 1981–1995 cross-country panel evidence unambiguously indicates that intellectual property rights are a significant incentive for spurring innovation.",
         "supporting_spans": [
           {
             "paper_id": "00015_W3121800927",
             "char_start": 964,
             "char_end": 1232,
-            "quote": "utilising cross-country panel data on R&D investment, patent protection and other country-specific characteristics spanning the period 1981\u201395. The evidence unambiguously indicates the significance of intellectual property rights as incentives for spurring innovation."
+            "quote": "utilising cross-country panel data on R&D investment, patent protection and other country-specific characteristics spanning the period 1981–95. The evidence unambiguously indicates the significance of intellectual property rights as incentives for spurring innovation."
           }
         ],
         "annotator_label": "supports",
@@ -690,7 +690,7 @@
   {
     "id": "q025",
     "question": "Do Kanwar and Evenson (2003) and Boldrin and Levine (2013) agree on whether stronger intellectual property rights spur innovation?",
-    "gold_answer": "No. Kanwar and Evenson's cross-country panel evidence over 1981\u20131995 unambiguously points to intellectual property rights as significant incentives for spurring innovation. Boldrin and Levine, by contrast, argue that while weak patent systems may mildly increase innovation with limited side effects, strong patent systems retard innovation with many negative side effects.",
+    "gold_answer": "No. Kanwar and Evenson's cross-country panel evidence over 1981–1995 unambiguously points to intellectual property rights as significant incentives for spurring innovation. Boldrin and Levine, by contrast, argue that while weak patent systems may mildly increase innovation with limited side effects, strong patent systems retard innovation with many negative side effects.",
     "difficulty": "multi-hop",
     "category": "multi_hop",
     "annotator": "elie",
@@ -700,13 +700,13 @@
     "claims": [
       {
         "id": "c001",
-        "text": "Cross-country panel evidence over 1981\u20131995 unambiguously indicates that intellectual property rights are significant incentives for spurring innovation.",
+        "text": "Cross-country panel evidence over 1981–1995 unambiguously indicates that intellectual property rights are significant incentives for spurring innovation.",
         "supporting_spans": [
           {
             "paper_id": "00015_W3121800927",
             "char_start": 964,
             "char_end": 1232,
-            "quote": "utilising cross-country panel data on R&D investment, patent protection and other country-specific characteristics spanning the period 1981\u201395. The evidence unambiguously indicates the significance of intellectual property rights as incentives for spurring innovation."
+            "quote": "utilising cross-country panel data on R&D investment, patent protection and other country-specific characteristics spanning the period 1981–95. The evidence unambiguously indicates the significance of intellectual property rights as incentives for spurring innovation."
           }
         ],
         "annotator_label": "supports",
@@ -747,7 +747,7 @@
             "paper_id": "00008_W3125878831",
             "char_start": 933,
             "char_end": 1117,
-            "quote": "Litigation risks are exacerbated when incumbents build \u201c thickets \u201d of strategic patents that cover little innovative progress and instead serve as a legal weapon to protect incumbents"
+            "quote": "Litigation risks are exacerbated when incumbents build “ thickets ” of strategic patents that cover little innovative progress and instead serve as a legal weapon to protect incumbents"
           }
         ],
         "annotator_label": "supports",
@@ -768,13 +768,13 @@
     "claims": [
       {
         "id": "c001",
-        "text": "Compulsory licensing \u2014 although only one provision within TRIPS \u2014 can be used as a window to view TRIPS' overall success.",
+        "text": "Compulsory licensing — although only one provision within TRIPS — can be used as a window to view TRIPS' overall success.",
         "supporting_spans": [
           {
             "paper_id": "00150_W2341082492",
             "char_start": 154451,
             "char_end": 154684,
-            "quote": "Following that, Part IV argues that the compulsory licensing provision \u2014 though only one provision in a complex treaty covering multiple intellectual property areas and related issues \u2014 can be used as a window to view TRIPS' success."
+            "quote": "Following that, Part IV argues that the compulsory licensing provision — though only one provision in a complex treaty covering multiple intellectual property areas and related issues — can be used as a window to view TRIPS' success."
           }
         ],
         "annotator_label": "supports",
@@ -839,7 +839,7 @@
   {
     "id": "q030",
     "question": "What does the Harmonization Myth article argue has driven the post-TRIPS treaties and agreements?",
-    "gold_answer": "It argues that maximization of IP \u2014 not harmonization \u2014 has driven the post-TRIPS treaties and agreements.",
+    "gold_answer": "It argues that maximization of IP — not harmonization — has driven the post-TRIPS treaties and agreements.",
     "difficulty": "single-hop",
     "category": "policy_impact",
     "annotator": "elie",
@@ -987,7 +987,7 @@
   },
   {
     "id": "q035",
-    "question": "Which production-side challenges does the Silvello et al. AgTech roadmapping case study identify as driving Brazilian cacha\u00e7a producers to demand new technical solutions?",
+    "question": "Which production-side challenges does the Silvello et al. AgTech roadmapping case study identify as driving Brazilian cachaça producers to demand new technical solutions?",
     "gold_answer": "Chemical-composition requirements for exporting, meeting quality standards as production volumes grow, workforce qualification, and sourcing advanced machinery and equipment to increase productivity.",
     "difficulty": "single-hop",
     "category": "factual",
@@ -998,7 +998,7 @@
     "claims": [
       {
         "id": "c001",
-        "text": "Cacha\u00e7a producers are demanding solutions for chemical-composition requirements for entry in foreign countries, meeting quality standards as production volumes grow, qualification of the workforce, and sourcing advanced machinery and equipment to increase productivity.",
+        "text": "Cachaça producers are demanding solutions for chemical-composition requirements for entry in foreign countries, meeting quality standards as production volumes grow, qualification of the workforce, and sourcing advanced machinery and equipment to increase productivity.",
         "supporting_spans": [
           {
             "paper_id": "01477_W3082119631",
@@ -1042,7 +1042,7 @@
   {
     "id": "q037",
     "question": "How do two recent scholarly accounts of TRIPS characterise (a) the trajectory of post-TRIPS rule-making and (b) the analytical lens that best lets us judge whether TRIPS has worked?",
-    "gold_answer": "On (a), the Harmonization Myth article argues that successive post-TRIPS treaties have been driven by maximization of IP rather than harmonization. On (b), Harris (2011) treats compulsory licensing \u2014 though only one provision in a complex treaty \u2014 as the right window through which to view TRIPS' success.",
+    "gold_answer": "On (a), the Harmonization Myth article argues that successive post-TRIPS treaties have been driven by maximization of IP rather than harmonization. On (b), Harris (2011) treats compulsory licensing — though only one provision in a complex treaty — as the right window through which to view TRIPS' success.",
     "difficulty": "multi-hop",
     "category": "multi_hop",
     "annotator": "elie",
@@ -1066,13 +1066,13 @@
       },
       {
         "id": "c002",
-        "text": "Compulsory licensing \u2014 although only one TRIPS provision \u2014 can be used as a window to view TRIPS' overall success.",
+        "text": "Compulsory licensing — although only one TRIPS provision — can be used as a window to view TRIPS' overall success.",
         "supporting_spans": [
           {
             "paper_id": "00150_W2341082492",
             "char_start": 154451,
             "char_end": 154684,
-            "quote": "Following that, Part IV argues that the compulsory licensing provision \u2014 though only one provision in a complex treaty covering multiple intellectual property areas and related issues \u2014 can be used as a window to view TRIPS' success."
+            "quote": "Following that, Part IV argues that the compulsory licensing provision — though only one provision in a complex treaty covering multiple intellectual property areas and related issues — can be used as a window to view TRIPS' success."
           }
         ],
         "annotator_label": "supports",
@@ -1753,7 +1753,7 @@
   },
   {
     "id": "q213",
-    "question": "What central claim do G\u00f6ktepe-Hulten and Mahagaonkar (2010) make about why academic scientists patent?",
+    "question": "What central claim do Göktepe-Hulten and Mahagaonkar (2010) make about why academic scientists patent?",
     "gold_answer": "Scientists use patents and invention disclosures as signals to gain reputation rather than primarily for immediate financial benefits.",
     "difficulty": "single-hop",
     "category": "policy_impact",
@@ -1780,7 +1780,7 @@
   },
   {
     "id": "q214",
-    "question": "For Max Planck scientists without industrial cooperation, how does G\u00f6ktepe-Hulten and Mahagaonkar (2010) relate expected financial benefits to patenting?",
+    "question": "For Max Planck scientists without industrial cooperation, how does Göktepe-Hulten and Mahagaonkar (2010) relate expected financial benefits to patenting?",
     "gold_answer": "Expectations of financial benefits are not related to patenting activity among scientists without industrial cooperation.",
     "difficulty": "single-hop",
     "category": "factual",
@@ -1807,7 +1807,7 @@
   },
   {
     "id": "q215",
-    "question": "What do G\u00f6ktepe-Hulten and Mahagaonkar (2010) find drives patenting and disclosure among non-industry-collaborating Max Planck scientists\u2014reputation expectations or monetary expectations?",
+    "question": "What do Göktepe-Hulten and Mahagaonkar (2010) find drives patenting and disclosure among non-industry-collaborating Max Planck scientists—reputation expectations or monetary expectations?",
     "gold_answer": "Reputation expectations are correlated with patenting and disclosure, while monetary expectations do not affect those activities in the non-cooperator sample.",
     "difficulty": "multi-hop",
     "category": "multi_hop",
@@ -1848,7 +1848,7 @@
   },
   {
     "id": "q216",
-    "question": "How large was G\u00f6ktepe-Hulten and Mahagaonkar's (2010) survey sample of Max Planck scientists, and how many usable responses did they analyze?",
+    "question": "How large was Göktepe-Hulten and Mahagaonkar's (2010) survey sample of Max Planck scientists, and how many usable responses did they analyze?",
     "gold_answer": "The survey covered more than 2,500 scientists at 67 Max Planck institutes; after filtering, they analyzed almost 1,100 usable responses.",
     "difficulty": "multi-hop",
     "category": "methodology",
@@ -1902,7 +1902,7 @@
   {
     "id": "q218",
     "question": "How do Shadlen, Schrank, and Kurtz (2005) distinguish intellectual property protection (IPP) from intellectual property rights (IPRs)?",
-    "gold_answer": "They measure IPP as outputs\u2014the actual protection delivered\u2014rather than inputs such as laws and institutions alone.",
+    "gold_answer": "They measure IPP as outputs—the actual protection delivered—rather than inputs such as laws and institutions alone.",
     "difficulty": "single-hop",
     "category": "methodology",
     "annotator": "faruk",
@@ -1918,7 +1918,7 @@
             "paper_id": "00224_W2148044093",
             "char_start": 28703,
             "char_end": 28804,
-            "quote": "Rather than focusing on inputs, we assess IPR \u201c outputs \u201d\u2014 the actual amount of protection delivered."
+            "quote": "Rather than focusing on inputs, we assess IPR “ outputs ”— the actual amount of protection delivered."
           }
         ],
         "annotator_label": "supports",
@@ -1997,7 +1997,7 @@
   {
     "id": "q221",
     "question": "Do Shadlen, Schrank, and Kurtz (2005) find that U.S. Special 301 listing reduces software piracy in their panel models?",
-    "gold_answer": "No\u2014the effect of Special 301 itself is statistically insignificant in their regressions.",
+    "gold_answer": "No—the effect of Special 301 itself is statistically insignificant in their regressions.",
     "difficulty": "single-hop",
     "category": "factual",
     "annotator": "faruk",
@@ -2077,7 +2077,7 @@
   {
     "id": "q301",
     "question": "Under what specific condition does 'Arrow's traditional result' regarding follower innovation reverse?",
-    "gold_answer": "Arrow's result reverses when forward protection is sufficiently strong. In these protective systems, followers internalize the leader\u2019s replacement effect through expected license fees, leading them to invest less in R&D than the leaders throughout the entire life of the patent.",
+    "gold_answer": "Arrow's result reverses when forward protection is sufficiently strong. In these protective systems, followers internalize the leader’s replacement effect through expected license fees, leading them to invest less in R&D than the leaders throughout the entire life of the patent.",
     "difficulty": "single-hop",
     "category": "policy_impact",
     "annotator": "yusif",
@@ -2208,7 +2208,7 @@
             "paper_id": "00303_W2954190558",
             "char_start": 4884,
             "char_end": 4999,
-            "quote": "policy determining how long a leader will be able to exclude others from using its current technology\u2014patent length"
+            "quote": "policy determining how long a leader will be able to exclude others from using its current technology—patent length"
           }
         ],
         "annotator_label": "supports",
@@ -2222,7 +2222,7 @@
             "paper_id": "00303_W2954190558",
             "char_start": 5004,
             "char_end": 5086,
-            "quote": "how enforceable its patent will be against future innovations\u2014forward protection ."
+            "quote": "how enforceable its patent will be against future innovations—forward protection ."
           },
           {
             "paper_id": "00303_W2954190558",
@@ -2462,7 +2462,7 @@
             "paper_id": "00306_W2111678950",
             "char_start": 121168,
             "char_end": 121346,
-            "quote": "Three UK companies engaged in \u201c typical \u201d collaborations describe overvaluation of IP and \u201c incompetent \u201d practices by technology management offices in prominent UK universities."
+            "quote": "Three UK companies engaged in “ typical ” collaborations describe overvaluation of IP and “ incompetent ” practices by technology management offices in prominent UK universities."
           }
         ],
         "annotator_label": "supports",
@@ -2523,7 +2523,7 @@
             "paper_id": "00306_W2111678950",
             "char_start": 114249,
             "char_end": 114648,
-            "quote": "The gist of the article was not to criticize this practice, but rather to advocate an expansion of \u201c prior user rights \u201d under Japan's patent law [61] . Prior user rights permit companies that have made inventions (perhaps in collaboration with universities) to keep such discoveries secret while preserving their right to use the inventions in the event some other entity patents them in the future"
+            "quote": "The gist of the article was not to criticize this practice, but rather to advocate an expansion of “ prior user rights ” under Japan's patent law [61] . Prior user rights permit companies that have made inventions (perhaps in collaboration with universities) to keep such discoveries secret while preserving their right to use the inventions in the event some other entity patents them in the future"
           }
         ],
         "reviewer_label": "supports"
@@ -2818,7 +2818,7 @@
   {
     "id": "q321",
     "question": "How does Lei et al. (2019) build their IoT patent experimental dataset from USPTO data?",
-    "gold_answer": "They take 2016\u20132018 USPTO patents in IPC class H04 (covering most IoT-related technologies) and filter by IoT keywords, yielding 8,942 patents.",
+    "gold_answer": "They take 2016–2018 USPTO patents in IPC class H04 (covering most IoT-related technologies) and filter by IoT keywords, yielding 8,942 patents.",
     "difficulty": "multi-hop",
     "category": "methodology",
     "annotator": "yusif",
@@ -2871,7 +2871,7 @@
   {
     "id": "q900",
     "question": "What did Bessen and Maskin find about the effect of strengthened software patent protection in the 1980s on R&D?",
-    "gold_answer": "ADVERSARIAL CONTROL \u2014 the cited span states the opposite: stronger software patents ushered in a period of stagnant, if not declining, R&D among the firms that patented most. The claim asserts a marked increase, which the span explicitly negates.",
+    "gold_answer": "ADVERSARIAL CONTROL — the cited span states the opposite: stronger software patents ushered in a period of stagnant, if not declining, R&D among the firms that patented most. The claim asserts a marked increase, which the span explicitly negates.",
     "difficulty": "single-hop",
     "category": "factual",
     "annotator": "adversarial",
@@ -2898,7 +2898,7 @@
   {
     "id": "q901",
     "question": "By how much did patents raise imitation costs in electronics, according to the studies cited by Bessen and Maskin?",
-    "gold_answer": "ADVERSARIAL CONTROL \u2014 Mansfield et al. estimate 7%, Levin et al. 7-15%. The claim's '30-40%' is fabricated; the span pins the numbers explicitly.",
+    "gold_answer": "ADVERSARIAL CONTROL — Mansfield et al. estimate 7%, Levin et al. 7-15%. The claim's '30-40%' is fabricated; the span pins the numbers explicitly.",
     "difficulty": "single-hop",
     "category": "factual",
     "annotator": "adversarial",
@@ -2925,7 +2925,7 @@
   {
     "id": "q902",
     "question": "How does Lemley characterise the relationship between intellectual property and zero-sum competition?",
-    "gold_answer": "ADVERSARIAL CONTROL \u2014 the span describes REAL property as zero-sum specifically to contrast it with IP. Lemley's actual claim, established later in the paper, is that 'invention and creation are not zero-sum'. The adversarial claim mis-attributes the zero-sum framing from real property to IP.",
+    "gold_answer": "ADVERSARIAL CONTROL — the span describes REAL property as zero-sum specifically to contrast it with IP. Lemley's actual claim, established later in the paper, is that 'invention and creation are not zero-sum'. The adversarial claim mis-attributes the zero-sum framing from real property to IP.",
     "difficulty": "single-hop",
     "category": "policy_impact",
     "annotator": "adversarial",
@@ -2941,7 +2941,7 @@
             "paper_id": "00021_W79756392",
             "char_start": 5022,
             "char_end": 5216,
-            "quote": "real property tends to be a zero-sum environment \u2013 if I use a piece of land, you can't use it.. If I overgraze a commons, that overgrazing imposes costs on anyone else who might use the commons."
+            "quote": "real property tends to be a zero-sum environment – if I use a piece of land, you can't use it.. If I overgraze a commons, that overgrazing imposes costs on anyone else who might use the commons."
           }
         ],
         "annotator_label": "contradicts",
@@ -2952,7 +2952,7 @@
   {
     "id": "q903",
     "question": "What do Sandner and Block find about how investors value patent portfolios?",
-    "gold_answer": "ADVERSARIAL CONTROL \u2014 entity swap. The span finds investors value firms with larger TRADEMARK portfolios; the claim re-attributes this finding to PATENT portfolios. The paper does discuss patents elsewhere, but this span does not address the patent-portfolio claim.",
+    "gold_answer": "ADVERSARIAL CONTROL — entity swap. The span finds investors value firms with larger TRADEMARK portfolios; the claim re-attributes this finding to PATENT portfolios. The paper does discuss patents elsewhere, but this span does not address the patent-portfolio claim.",
     "difficulty": "single-hop",
     "category": "factual",
     "annotator": "adversarial",
@@ -2979,7 +2979,7 @@
   {
     "id": "q904",
     "question": "What does Sell argue about U.S. externalization strategy across all of its trade-policy targets?",
-    "gold_answer": "ADVERSARIAL CONTROL \u2014 scope overreach. The span states a CONDITIONAL: strategy depends on leverage (high \u2192 coercive/bilateral, low \u2192 cooperative/multilateral). The claim drops the conditional and asserts a universal 'always coercive bilateral' position, which the span explicitly negates with its low-leverage branch.",
+    "gold_answer": "ADVERSARIAL CONTROL — scope overreach. The span states a CONDITIONAL: strategy depends on leverage (high → coercive/bilateral, low → cooperative/multilateral). The claim drops the conditional and asserts a universal 'always coercive bilateral' position, which the span explicitly negates with its low-leverage branch.",
     "difficulty": "single-hop",
     "category": "policy_impact",
     "annotator": "adversarial",
@@ -3006,7 +3006,7 @@
   {
     "id": "q905",
     "question": "What time period does Sandner and Block's market-value dataset cover?",
-    "gold_answer": "ADVERSARIAL CONTROL \u2014 date drift. The span specifies 1996-2002 (6757 obs / 1216 companies); the claim states 1980-1995. The two periods do not overlap.",
+    "gold_answer": "ADVERSARIAL CONTROL — date drift. The span specifies 1996-2002 (6757 obs / 1216 companies); the claim states 1980-1995. The two periods do not overlap.",
     "difficulty": "single-hop",
     "category": "factual",
     "annotator": "adversarial",
