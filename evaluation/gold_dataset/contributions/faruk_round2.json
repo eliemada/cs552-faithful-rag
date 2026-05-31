@@ -1,150 +1,284 @@
 [
-    {
-      "id": "q213",
-      "question": "What central claim do Göktepe-Hulten and Mahagaonkar (2010) make about why academic scientists patent?",
-      "gold_answer": "Scientists use patents and invention disclosures as signals to gain reputation rather than primarily for immediate financial benefits.",
-      "difficulty": "single-hop",
-      "category": "policy_impact",
-      "annotator": "faruk",
-      "reviewer": null,
-      "review_status": "pending",
-      "iaa_subset": false,
-      "claims": [
-        {
-          "id": "c001",
-          "text": "Scientists use patents and invention disclosures as reputation signals rather than mainly for financial benefits.",
-          "supporting_spans": [
-            {
-              "paper_id": "00221_W2122457513",
-              "char_start": 335,
-              "char_end": 450,
-              "quote": "We propose that scientists use patents/invention disclosures as signals to gain reputation than financial benefits."
-            }
-          ],
-          "annotator_label": "supports",
-          "reviewer_label": null
-        }
-      ]
-    },
-    {
-      "id": "q214",
-      "question": "For Max Planck scientists without industrial cooperation, how does Göktepe-Hulten and Mahagaonkar (2010) relate expected financial benefits to patenting?",
-      "gold_answer": "Expectations of financial benefits are not related to patenting activity among scientists without industrial cooperation.",
-      "difficulty": "single-hop",
-      "category": "factual",
-      "annotator": "faruk",
-      "reviewer": null,
-      "review_status": "pending",
-      "iaa_subset": false,
-      "claims": [
-        {
-          "id": "c001",
-          "text": "Expected financial benefits are not related to patenting among scientists without industrial cooperation.",
-          "supporting_spans": [
-            {
-              "paper_id": "00221_W2122457513",
-              "char_start": 789,
-              "char_end": 921,
-              "quote": "expectation of gaining financial benefits are not related with the patenting activities of scientists without industrial cooperation"
-            }
-          ],
-          "annotator_label": "supports",
-          "reviewer_label": null
-        }
-      ]
-    },
-    {
-      "id": "q215",
-      "question": "What do Göktepe-Hulten and Mahagaonkar (2010) find drives patenting and disclosure among non-industry-collaborating Max Planck scientists—reputation expectations or monetary expectations?",
-      "gold_answer": "Reputation expectations are correlated with patenting and disclosure, while monetary expectations do not affect those activities in the non-cooperator sample.",
-      "difficulty": "multi-hop",
-      "category": "multi_hop",
-      "annotator": "faruk",
-      "reviewer": null,
-      "review_status": "pending",
-      "iaa_subset": true,
-      "claims": [
-        {
-          "id": "c001",
-          "text": "Among non-cooperators, scientists expecting high reputation from commercialization are more likely to both patent and disclose inventions.",
-          "supporting_spans": [
-            {
-              "paper_id": "00221_W2122457513",
-              "char_start": 51578,
-              "char_end": 51723,
-              "quote": "scientists who expect high reputation from commercialization activities are more likely to perform both patenting as well as invention disclosure"
-            }
-          ],
-          "annotator_label": "supports",
-          "reviewer_label": null
-        },
-        {
-          "id": "c002",
-          "text": "Among non-cooperators, monetary expectations do not affect patenting and invention disclosure.",
-          "supporting_spans": [
-            {
-              "paper_id": "00221_W2122457513",
-              "char_start": 52355,
-              "char_end": 52454,
-              "quote": "monetary expectations do not affect the patenting and invention disclosure activities of scientists"
-            }
-          ],
-          "annotator_label": "supports",
-          "reviewer_label": null
-        }
-      ]
-    },
-    {
-      "id": "q216",
-      "question": "How large was Göktepe-Hulten and Mahagaonkar's (2010) survey sample of Max Planck scientists, and how many usable responses did they analyze?",
-      "gold_answer": "The survey covered more than 2,500 scientists at 67 Max Planck institutes; after filtering, they analyzed almost 1,100 usable responses.",
-      "difficulty": "multi-hop",
-      "category": "methodology",
-      "annotator": "faruk",
-      "reviewer": null,
-      "review_status": "pending",
-      "iaa_subset": true,
-      "claims": [
-        {
-          "id": "c001",
-          "text": "The study uses a newly created dataset on commercial activities among 2,500 scientists at 67 Max Planck institutes.",
-          "supporting_spans": [
-            {
-              "paper_id": "00221_W2122457513",
-              "char_start": 460,
-              "char_end": 598,
-              "quote": "a newly created dataset on the commercial activities among 2,500 scientists affiliated with 67 institutes of the German Max Planck Society"
-            }
-          ],
-          "annotator_label": "supports",
-          "reviewer_label": null
-        },
-        {
-          "id": "c002",
-          "text": "After data requirements for cooperators/non-cooperators, the analysis used almost 1,100 usable survey responses.",
-          "supporting_spans": [
-            {
-              "paper_id": "00221_W2122457513",
-              "char_start": 49759,
-              "char_end": 49795,
-              "quote": "we had almost 1,100 usable responses"
-            }
-          ],
-          "annotator_label": "supports",
-          "reviewer_label": null
-        }
-      ]
-    },
-    {
-      "id": "q217",
-      "question": "What total licensing revenue did Max Planck Innovation report from US licensees in 2007?",
-      "gold_answer": "Not covered by the corpus.",
-      "difficulty": "unanswerable",
-      "category": "factual",
-      "annotator": "faruk",
-      "reviewer": null,
-      "review_status": "pending",
-      "iaa_subset": false,
-      "claims": []
-    }
-  ]
+  {
+    "id": "q213",
+    "question": "What central claim do Göktepe-Hulten and Mahagaonkar (2010) make about why academic scientists patent?",
+    "gold_answer": "Scientists use patents and invention disclosures as signals to gain reputation rather than primarily for immediate financial benefits.",
+    "difficulty": "single-hop",
+    "category": "policy_impact",
+    "annotator": "faruk",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Scientists use patents and invention disclosures as reputation signals rather than mainly for financial benefits.",
+        "supporting_spans": [
+          {
+            "paper_id": "00221_W2122457513",
+            "char_start": 335,
+            "char_end": 450,
+            "quote": "We propose that scientists use patents/invention disclosures as signals to gain reputation than financial benefits."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q214",
+    "question": "For Max Planck scientists without industrial cooperation, how does Göktepe-Hulten and Mahagaonkar (2010) relate expected financial benefits to patenting?",
+    "gold_answer": "Expectations of financial benefits are not related to patenting activity among scientists without industrial cooperation.",
+    "difficulty": "single-hop",
+    "category": "factual",
+    "annotator": "faruk",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Expected financial benefits are not related to patenting among scientists without industrial cooperation.",
+        "supporting_spans": [
+          {
+            "paper_id": "00221_W2122457513",
+            "char_start": 789,
+            "char_end": 921,
+            "quote": "expectation of gaining financial benefits are not related with the patenting activities of scientists without industrial cooperation"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q215",
+    "question": "What do Göktepe-Hulten and Mahagaonkar (2010) find drives patenting and disclosure among non-industry-collaborating Max Planck scientists—reputation expectations or monetary expectations?",
+    "gold_answer": "Reputation expectations are correlated with patenting and disclosure, while monetary expectations do not affect those activities in the non-cooperator sample.",
+    "difficulty": "multi-hop",
+    "category": "multi_hop",
+    "annotator": "faruk",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Among non-cooperators, scientists expecting high reputation from commercialization are more likely to both patent and disclose inventions.",
+        "supporting_spans": [
+          {
+            "paper_id": "00221_W2122457513",
+            "char_start": 51578,
+            "char_end": 51723,
+            "quote": "scientists who expect high reputation from commercialization activities are more likely to perform both patenting as well as invention disclosure"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c002",
+        "text": "Among non-cooperators, monetary expectations do not affect patenting and invention disclosure.",
+        "supporting_spans": [
+          {
+            "paper_id": "00221_W2122457513",
+            "char_start": 52355,
+            "char_end": 52454,
+            "quote": "monetary expectations do not affect the patenting and invention disclosure activities of scientists"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q216",
+    "question": "How large was Göktepe-Hulten and Mahagaonkar's (2010) survey sample of Max Planck scientists, and how many usable responses did they analyze?",
+    "gold_answer": "The survey covered more than 2,500 scientists at 67 Max Planck institutes; after filtering, they analyzed almost 1,100 usable responses.",
+    "difficulty": "multi-hop",
+    "category": "methodology",
+    "annotator": "faruk",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "The study uses a newly created dataset on commercial activities among 2,500 scientists at 67 Max Planck institutes.",
+        "supporting_spans": [
+          {
+            "paper_id": "00221_W2122457513",
+            "char_start": 460,
+            "char_end": 598,
+            "quote": "a newly created dataset on the commercial activities among 2,500 scientists affiliated with 67 institutes of the German Max Planck Society"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c002",
+        "text": "After data requirements for cooperators/non-cooperators, the analysis used almost 1,100 usable survey responses.",
+        "supporting_spans": [
+          {
+            "paper_id": "00221_W2122457513",
+            "char_start": 49759,
+            "char_end": 49795,
+            "quote": "we had almost 1,100 usable responses"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q217",
+    "question": "What total licensing revenue did Max Planck Innovation report from US licensees in 2007?",
+    "gold_answer": "Not covered by the corpus.",
+    "difficulty": "unanswerable",
+    "category": "factual",
+    "annotator": "faruk",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": []
+  },
+  {
+    "id": "q218",
+    "question": "How do Shadlen, Schrank, and Kurtz (2005) distinguish intellectual property protection (IPP) from intellectual property rights (IPRs)?",
+    "gold_answer": "They measure IPP as outputs—the actual protection delivered—rather than inputs such as laws and institutions alone.",
+    "difficulty": "single-hop",
+    "category": "methodology",
+    "annotator": "faruk",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "The authors assess IPR outputs (actual protection delivered) rather than inputs like laws alone.",
+        "supporting_spans": [
+          {
+            "paper_id": "00224_W2148044093",
+            "char_start": 28703,
+            "char_end": 28804,
+            "quote": "Rather than focusing on inputs, we assess IPR “ outputs ”— the actual amount of protection delivered."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q219",
+    "question": "Why do Shadlen, Schrank, and Kurtz (2005) focus their study on computer software rather than other IP-intensive sectors?",
+    "gold_answer": "Because about 75% of the world's packaged software is produced in the United States, so enforcement abroad mainly benefits foreign (chiefly U.S.) rights holders.",
+    "difficulty": "single-hop",
+    "category": "policy_impact",
+    "annotator": "faruk",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Roughly 75% of the world's packaged software is produced in the United States.",
+        "supporting_spans": [
+          {
+            "paper_id": "00224_W2148044093",
+            "char_start": 5406,
+            "char_end": 5496,
+            "quote": "approximately 75 percent of the world's packaged software is produced in the United States"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q220",
+    "question": "According to Shadlen, Schrank, and Kurtz (2005), how much do U.S. bilateral investment treaties (BITs) and full TRIPS compliance each reduce estimated software piracy rates?",
+    "gold_answer": "A U.S. BIT is associated with about a five percentage-point drop in piracy; full TRIPS compliance is associated with about a three percentage-point drop.",
+    "difficulty": "multi-hop",
+    "category": "policy_impact",
+    "annotator": "faruk",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Having a U.S. BIT in place is associated with a five percentage-point reduction in software piracy.",
+        "supporting_spans": [
+          {
+            "paper_id": "00224_W2148044093",
+            "char_start": 82191,
+            "char_end": 82276,
+            "quote": "the presence of a BIT is associated with a five percent reduction in software piracy."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c002",
+        "text": "Being obligated to fully comply with TRIPS is associated with about a three percentage-point reduction in software piracy.",
+        "supporting_spans": [
+          {
+            "paper_id": "00224_W2148044093",
+            "char_start": 87626,
+            "char_end": 87753,
+            "quote": "Being obligated to be fully compliant with TRIPS diminishes the rate of software piracy by an estimated three percentage points"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q221",
+    "question": "Do Shadlen, Schrank, and Kurtz (2005) find that U.S. Special 301 listing reduces software piracy in their panel models?",
+    "gold_answer": "No—the effect of Special 301 itself is statistically insignificant in their regressions.",
+    "difficulty": "single-hop",
+    "category": "factual",
+    "annotator": "faruk",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "In their models, the effect of Special 301 pressure on software piracy is statistically insignificant.",
+        "supporting_spans": [
+          {
+            "paper_id": "00224_W2148044093",
+            "char_start": 93615,
+            "char_end": 93747,
+            "quote": "the effect of Special 301 itself is statistically insignificant, but the interpretation is muddled by a potential of selection bias."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q222",
+    "question": "What was India's country-specific software piracy rate in 2002 according to Shadlen, Schrank, and Kurtz (2005)?",
+    "gold_answer": "Not covered by the corpus.",
+    "difficulty": "unanswerable",
+    "category": "factual",
+    "annotator": "faruk",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": []
+  }
+]
