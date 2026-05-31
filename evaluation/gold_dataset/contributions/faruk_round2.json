@@ -1,0 +1,150 @@
+[
+    {
+      "id": "q213",
+      "question": "What central claim do Göktepe-Hulten and Mahagaonkar (2010) make about why academic scientists patent?",
+      "gold_answer": "Scientists use patents and invention disclosures as signals to gain reputation rather than primarily for immediate financial benefits.",
+      "difficulty": "single-hop",
+      "category": "policy_impact",
+      "annotator": "faruk",
+      "reviewer": null,
+      "review_status": "pending",
+      "iaa_subset": false,
+      "claims": [
+        {
+          "id": "c001",
+          "text": "Scientists use patents and invention disclosures as reputation signals rather than mainly for financial benefits.",
+          "supporting_spans": [
+            {
+              "paper_id": "00221_W2122457513",
+              "char_start": 335,
+              "char_end": 450,
+              "quote": "We propose that scientists use patents/invention disclosures as signals to gain reputation than financial benefits."
+            }
+          ],
+          "annotator_label": "supports",
+          "reviewer_label": null
+        }
+      ]
+    },
+    {
+      "id": "q214",
+      "question": "For Max Planck scientists without industrial cooperation, how does Göktepe-Hulten and Mahagaonkar (2010) relate expected financial benefits to patenting?",
+      "gold_answer": "Expectations of financial benefits are not related to patenting activity among scientists without industrial cooperation.",
+      "difficulty": "single-hop",
+      "category": "factual",
+      "annotator": "faruk",
+      "reviewer": null,
+      "review_status": "pending",
+      "iaa_subset": false,
+      "claims": [
+        {
+          "id": "c001",
+          "text": "Expected financial benefits are not related to patenting among scientists without industrial cooperation.",
+          "supporting_spans": [
+            {
+              "paper_id": "00221_W2122457513",
+              "char_start": 789,
+              "char_end": 921,
+              "quote": "expectation of gaining financial benefits are not related with the patenting activities of scientists without industrial cooperation"
+            }
+          ],
+          "annotator_label": "supports",
+          "reviewer_label": null
+        }
+      ]
+    },
+    {
+      "id": "q215",
+      "question": "What do Göktepe-Hulten and Mahagaonkar (2010) find drives patenting and disclosure among non-industry-collaborating Max Planck scientists—reputation expectations or monetary expectations?",
+      "gold_answer": "Reputation expectations are correlated with patenting and disclosure, while monetary expectations do not affect those activities in the non-cooperator sample.",
+      "difficulty": "multi-hop",
+      "category": "multi_hop",
+      "annotator": "faruk",
+      "reviewer": null,
+      "review_status": "pending",
+      "iaa_subset": true,
+      "claims": [
+        {
+          "id": "c001",
+          "text": "Among non-cooperators, scientists expecting high reputation from commercialization are more likely to both patent and disclose inventions.",
+          "supporting_spans": [
+            {
+              "paper_id": "00221_W2122457513",
+              "char_start": 51578,
+              "char_end": 51723,
+              "quote": "scientists who expect high reputation from commercialization activities are more likely to perform both patenting as well as invention disclosure"
+            }
+          ],
+          "annotator_label": "supports",
+          "reviewer_label": null
+        },
+        {
+          "id": "c002",
+          "text": "Among non-cooperators, monetary expectations do not affect patenting and invention disclosure.",
+          "supporting_spans": [
+            {
+              "paper_id": "00221_W2122457513",
+              "char_start": 52355,
+              "char_end": 52454,
+              "quote": "monetary expectations do not affect the patenting and invention disclosure activities of scientists"
+            }
+          ],
+          "annotator_label": "supports",
+          "reviewer_label": null
+        }
+      ]
+    },
+    {
+      "id": "q216",
+      "question": "How large was Göktepe-Hulten and Mahagaonkar's (2010) survey sample of Max Planck scientists, and how many usable responses did they analyze?",
+      "gold_answer": "The survey covered more than 2,500 scientists at 67 Max Planck institutes; after filtering, they analyzed almost 1,100 usable responses.",
+      "difficulty": "multi-hop",
+      "category": "methodology",
+      "annotator": "faruk",
+      "reviewer": null,
+      "review_status": "pending",
+      "iaa_subset": true,
+      "claims": [
+        {
+          "id": "c001",
+          "text": "The study uses a newly created dataset on commercial activities among 2,500 scientists at 67 Max Planck institutes.",
+          "supporting_spans": [
+            {
+              "paper_id": "00221_W2122457513",
+              "char_start": 460,
+              "char_end": 598,
+              "quote": "a newly created dataset on the commercial activities among 2,500 scientists affiliated with 67 institutes of the German Max Planck Society"
+            }
+          ],
+          "annotator_label": "supports",
+          "reviewer_label": null
+        },
+        {
+          "id": "c002",
+          "text": "After data requirements for cooperators/non-cooperators, the analysis used almost 1,100 usable survey responses.",
+          "supporting_spans": [
+            {
+              "paper_id": "00221_W2122457513",
+              "char_start": 49759,
+              "char_end": 49795,
+              "quote": "we had almost 1,100 usable responses"
+            }
+          ],
+          "annotator_label": "supports",
+          "reviewer_label": null
+        }
+      ]
+    },
+    {
+      "id": "q217",
+      "question": "What total licensing revenue did Max Planck Innovation report from US licensees in 2007?",
+      "gold_answer": "Not covered by the corpus.",
+      "difficulty": "unanswerable",
+      "category": "factual",
+      "annotator": "faruk",
+      "reviewer": null,
+      "review_status": "pending",
+      "iaa_subset": false,
+      "claims": []
+    }
+  ]
