@@ -1,0 +1,254 @@
+\pdfoutput=1
+\documentclass[11pt]{article}
+
+\usepackage{ACL2023}
+\usepackage{times}
+\usepackage{latexsym}
+\usepackage[T1]{fontenc}
+
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{inconsolata}
+\usepackage{fancyhdr}
+\usepackage{natbib}
+\usepackage{booktabs}
+\usepackage{array}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,RO]{EPFL -- Spring Semester 2026}
+\fancyhead[RE,LO]{Modern NLP -- Open Project Final Report}
+\rfoot{Page \thepage \hspace{1pt}}
+\renewcommand{\headrulewidth}{1pt}
+
+%%%%%%%%%%%%%%%%%%% TITLE AND AUTHORS %%%%%%%%%%%%%%%%%%%
+
+\title{Faithful RAG: Evaluating Citation Accuracy and Retrieval Robustness in Domain-Specific Scientific Literature}
+
+\author{\normalfont
+Andrea Trugenberger | 357615 | \texttt{andrea.trugenberger@epfl.ch} \\
+Elie Bruno | 355932 | \texttt{elie.bruno@epfl.ch} \\
+Faruk Zahiragi\'c | 415360 | \texttt{faruk.zahiragic@epfl.ch} \\
+Yusif Askari | 413862 | \texttt{yusif.askari@epfl.ch} \\
+Team CiteRight \\
+}
+
+%%%%%%%%%%%%%%%%%%% FINAL REPORT %%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+
+\begin{abstract}
+% TODO (group): <300 words. Motivate the faithfulness gap in RAG, summarize
+% the four-component pipeline (retrieval ablation, NLI/judge faithfulness,
+% chunked-RAG vs long-context, CRAG router), and headline two numbers:
+% (i) E5-large coarse+rerank as new SOTA (0.878 MRR, +8.6pp over OpenAI baseline),
+% (ii) 55--61pp NLI-vs-judge faithfulness disagreement showing NLI alone fails
+% as a faithfulness gate.
+Faithfulness in retrieval-augmented generation (RAG) is typically measured by
+end-to-end answer-level metrics that conflate retrieval quality with grounded
+generation. We disentangle the two on a 93-claim, character-span--validated
+gold benchmark over intellectual-property and innovation-policy papers, and
+report on four interventions: a sixteen-configuration retrieval ablation, a
+faithfulness verifier combining DeBERTa-v3 NLI with an LLM judge, a chunked-RAG
+vs.\ 1M-token long-context comparison with cost normalisation, and a Corrective
+RAG router \citep{yan2024corrective}. E5-large coarse+rerank is the new
+corpus-level SOTA at 0.878 MRR (+8.6\,pp over a closed-source OpenAI baseline),
+the NLI and LLM-judge heads disagree by 55--61\,pp exposing NLI as an
+insufficient gate, and CRAG lifts retrieval correctness from 60\% to 80\% on
+a mixed-quality slice. % TODO: finalize once human-eval and chunker-ablation numbers land.
+\end{abstract}
+
+
+\section{Introduction}
+\label{sec:intro}
+% TODO (group): per TA feedback, this section must MOTIVATE the work before
+% diving into approach. Recommended structure:
+%   1. The problem: RAG systems are deployed under the assumption that
+%      retrieved context grounds the answer, but recent work shows substantial
+%      fabrication even when retrieval succeeds.
+%   2. Why current methods fall short: end-to-end metrics (EM, BLEU, judge
+%      scores) conflate retrieval recall with generative grounding; NLI-based
+%      faithfulness checks suffer known failure modes on long-form
+%      multi-claim outputs.
+%   3. Our approach: we build a character-span-grounded gold benchmark
+%      (93 QA pairs, 5 difficulty buckets, 6 adversarial controls) over
+%      domain-specific scientific literature, and run four orthogonal
+%      interventions that each isolate one failure axis: retrieval, judging,
+%      long-context tradeoff, and corrective routing.
+%   4. Contributions (bullet form): (i) gold benchmark, (ii) retrieval-config
+%      SOTA, (iii) NLI-vs-judge gap quantification, (iv) CRAG ablation,
+%      (v) human eval validating the judge.
+%   5. Key results preview (one sentence each, mirroring the abstract).
+
+
+\section{Approach}
+\label{sec:approach}
+% TODO (group): describe the four-component pipeline. Per intermediate
+% feedback ("a brief note on how the experiments are planned across the team,
+% and what the INCORRECT-branch fallback will actually do"), this section
+% must:
+%   - name per-member ownership of each component (retrieval=Elie, NLI/judge
+%     =Andrea, CRAG=Faruk, RAGAS/long-context=Yusif)
+%   - spell out the CRAG INCORRECT-branch fallback action (web search?
+%     abstain? rewrite?) — currently underspecified.
+
+\subsection{Gold benchmark}
+\label{sec:approach:gold}
+% TODO: describe gold_qa.json schema: 93 claim-level QA pairs across 5
+% difficulty buckets (single-hop, multi-hop, unanswerable, IAA subset,
+% adversarial controls q900-q905), with byte-validated supporting_spans
+% (char_start/char_end into LF-normalised document.md). Note IAA subset
+% targets Cohen-kappa across reviewers.
+
+\subsection{Retrieval pipeline}
+\label{sec:approach:retrieval}
+% TODO: brief description of HybridRetriever code path; embedder families;
+% optional ZeroEntropy cross-encoder reranker. Defer numbers to Results.
+
+\subsection{Faithfulness verification}
+\label{sec:approach:faith}
+% TODO: NLI head (DeBERTa-v3-large-mnli) + LLM-judge head; how the two are
+% combined; thresholds.
+
+\subsection{Corrective RAG router}
+\label{sec:approach:crag}
+% TODO: CORRECT / AMBIGUOUS / INCORRECT branch logic; thresholds (tau_h, tau_l);
+% the INCORRECT-branch fallback (specify per intermediate feedback).
+
+
+\section{Experiments}
+\label{sec:exp}
+
+\subsection{Data}
+\label{sec:exp:data}
+% TODO: dataset sources (intellectual-property + innovation-policy papers
+% sourced from arXiv / OpenAlex), preprocessing (LF normalisation, document.md
+% extraction), annotation protocol (annotator + reviewer + IAA subset),
+% adversarial controls rationale, licensing / ethical considerations on
+% the source corpus.
+
+\subsection{Evaluation}
+\label{sec:exp:eval}
+% TODO: per-component metrics:
+%   - Retrieval: hit@k, MRR, nDCG (paper-level), open-recall.
+%   - Faithfulness: NLI label vs LLM-judge label vs human label (kappa).
+%   - RAGAS: faithfulness, answer_relevancy, context_precision, context_recall.
+%   - CRAG: pre/post correct-retrieval rate; latency.
+%   - Cost: USD per query, normalized accuracy-per-dollar.
+% Baselines: OpenAI text-embedding-3-small (closed-source), BGE-M3, ColBERTv2;
+% long-context Gemini 2.5 Flash; closed-book GPT-4o-mini / Claude-3.5-haiku /
+% DeepSeek-chat.
+
+\subsection{Experimental details}
+\label{sec:exp:details}
+% TODO: hardware (RCP cluster, GPU types), training/inference time per
+% experiment, prompt versions, library versions (pin uv.lock), random seeds.
+
+
+\section{Results and Analysis}
+\label{sec:results}
+
+\subsection{Retrieval ablation}
+\label{sec:retrieval}
+
+The 93-claim gold set (5 categories incl.\ multi-hop, byte-validated character spans, 6 adversarial controls q900--q905 that break the single-class Cohen-$\kappa$ paradox \citep{cohen1960kappa} from the first IAA round) drives a sixteen-configuration ablation. Configurations cross four embedder families (OpenAI \texttt{text-embedding-3-small}; BGE-M3 \citep{chen2024bgem3}; E5-large \citep{wang2024e5}; ColBERTv2 \citep{santhanam2022colbertv2}), two chunk granularities (coarse $\sim$2000\,chars, fine $\sim$300\,chars), and an optional ZeroEntropy cross-encoder reranker, sharing one \texttt{HybridRetriever} code path that reports hit@$k$, MRR, and nDCG.
+
+\begin{table}[h]
+\centering
+\footnotesize
+\begin{tabular}{lccc}
+\toprule
+config (\texttt{coarse\_rerank}) & hit@5 & hit@10 & MRR \\
+\midrule
+OpenAI \texttt{text-emb-3-small}     & 0.946          & 0.946          & 0.842 \\
+BGE-M3                                & 0.946          & 0.946          & 0.842 \\
+\textbf{E5-large}                     & \textbf{0.973} & \textbf{0.973} & \textbf{0.878} \\
+ColBERTv2                             & 0.892          & 0.919          & 0.786 \\
+\bottomrule
+\end{tabular}
+\caption{Best per embedder; full grid in \texttt{retrieval\_eval/}.}
+\label{tab:retrieval}
+\end{table}
+
+E5-large with the reranker wins every paper-level metric, beating the closed-source OpenAI baseline by $+8.6$\,pp MRR; ColBERTv2 trails by $17$\,pp MRR. Multi-hop hit@10 falls from $1.000$ on coarse to $0.667$--$0.833$ on fine: the chunker is the dominant bottleneck.
+
+% TODO (Elie): chunker variation experiment per TA feedback
+% ("vary chunk size or overlap, or a semantic/recursive chunker, to close
+% some of the multi-hop / open-recall gap"). Add 1 table + 1 plot.
+
+\subsection{Faithfulness verification}
+\label{sec:faith}
+
+The verifier extends the proposal's NLI pipeline (DeBERTa-v3-large-mnli, \citealp{he2021debertav3}) with an LLM-judge head. On 24 answerable gold questions answered closed-book by three generators (GPT-4o-mini, Claude-3.5-haiku, DeepSeek-chat), NLI marks $18/24$ ($0.750$) faithful at every provider while the LLM judge marks $0.138$/$0.173$/$0.198$ --- a $55$--$61$\,pp gap matching a known NLI failure mode \citep{min-etal-2023-factscore,gao2023enabling}: NLI alone fails as a faithfulness gate.
+
+% TODO (Andrea + Yusif): human-eval pass per TA feedback ("Your faithfulness
+% section flags the 55-61pp NLI-vs-judge disagreement, but doesn't provide
+% information about the faithfulness of the judge LLM. Human evaluation
+% would be a strong addition to validate your claims here.").
+% Target: 60 disagreement items + 20 agreement controls; 2 annotators each;
+% report Cohen's kappa human vs (a) NLI, (b) judge.
+
+\subsection{End-to-end RAG vs long-context}
+\label{sec:ragas}
+
+Two pipelines run through the four RAGAS metrics \citep{es2024ragas} on an $n{=}8$ stratified subset: chunked RAG (\S\ref{sec:retrieval} retriever, GPT-4o-mini) and a long-context baseline that loads every cited \texttt{document.md} into a 1M-token Gemini~2.5~Flash window, judged by GPT-4o-mini. LC wins every metric but gaps are small (RAG/LC): faithfulness $0.899/0.933$, answer\_relevancy $0.713/0.789$, context\_precision $1.000/1.000$, context\_recall $0.917/1.000$ --- the open recall gap replicates the chunker bottleneck from \S\ref{sec:retrieval}. OpenRouter cost captures show LC at $\sim$10$\times$ the answer-LLM spend (\$0.00383 vs \$0.00038/query), reframing the trade-off as accuracy-per-dollar.
+
+% TODO (Yusif): refresh table with final M3 numbers if n increased beyond 8.
+
+\subsection{Corrective RAG}
+\label{sec:crag}
+
+The CRAG router \citep{yan2024corrective} scores top-$k$ retrievals as CORRECT/AMBIGUOUS/INCORRECT and re-queries on AMBIGUOUS. On a mixed 10-question slice ($\tau_h{=}0.813$), CRAG lifts correct-retrieval from 60\% to 80\% (${+}20$~pp), rescuing both ambiguous queries in one refinement round. A 9-cell $(\tau_h, \tau_l)$ sweep hits the same 0.80 rate but spans
+0.04--0.40~s/query, with $(\tau_h{=}0.7, \tau_l{=}0.4)$ latency-optimal.
+
+% TODO (Faruk): scale to full 93-question gold set; document INCORRECT-branch
+% fallback explicitly (per intermediate feedback) and show one qualitative
+% example per branch (CORRECT / AMBIGUOUS / INCORRECT).
+
+
+\section{Ethical considerations}
+\label{sec:ethics}
+% TODO (group): per rubric, address when applicable:
+%   1. Language adaptation: corpus is English-only; outline how the pipeline
+%      could be ported to high-resource (FR, DE) and low-resource (UR, SW)
+%      languages (e.g. multilingual embedder swap, MT pivot, native NLI heads).
+%   2. Signed-language interaction (rubric prompt) — discuss briefly.
+%   3. Beneficiaries vs harms: a faithfulness-gated RAG benefits legal /
+%      policy / scientific reviewers who must cite sources; harms include
+%      false confidence if the gate fails silently, and downstream effects
+%      on IP-litigation workflows.
+%   4. Marginalized groups: bias in the source corpus (Anglo-American IP law
+%      bias) could under-serve non-Western legal traditions.
+%   5. Judge-LLM bias: discuss limitations of using proprietary judges and
+%      our planned mitigation (human eval cross-validation).
+
+
+\section{Conclusion}
+\label{sec:conclusion}
+% TODO (group): summarize:
+%   - Headline result: span-grounded gold benchmark + four-component
+%     evaluation isolates retrieval from faithfulness from judging.
+%   - Key findings: E5-large coarse+rerank SOTA; chunker is the dominant
+%     bottleneck; NLI-vs-judge 55-61pp gap; CRAG +20pp on mixed slice;
+%     long-context wins but at 10x cost.
+%   - Limitations: small human-eval sample, single English corpus, judge-LLM
+%     dependence, CRAG evaluated on 10-question slice (M2) / 93 (M3).
+%   - Future work: multi-lingual port, full IAA close-out, scaling CRAG
+%     fallback to live web search.
+
+
+% Entries for the entire Anthology, followed by custom entries
+\bibliography{anthology,custom}
+\bibliographystyle{acl_natbib}
+
+\appendix
+
+\section{Appendix (optional)}\label{sec:appendix}
+% Optional appendix: additional ablation tables, full retrieval grid,
+% qualitative CRAG traces, RAGAS per-question breakdowns. Does NOT count
+% toward the 4-page limit. Graders are not required to read it.
+
+
+\end{document}
