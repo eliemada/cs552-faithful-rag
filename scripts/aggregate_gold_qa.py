@@ -53,7 +53,7 @@ def main(argv: list[str] | None = None) -> int:
         return 1
 
     aggregated = aggregate_contributions(args.contrib_dir)
-    args.gold_qa.write_text(json.dumps(aggregated, indent=2) + "\n")
+    args.gold_qa.write_text(json.dumps(aggregated, indent=2, ensure_ascii=False) + "\n")
     sys.stdout.write(f"Wrote {len(aggregated)} pairs → {args.gold_qa}\n")
     return 0
 

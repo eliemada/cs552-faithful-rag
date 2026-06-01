@@ -1,0 +1,299 @@
+[
+  {
+    "id": "q313",
+    "question": "What antitrust action does Moschini (2010) report the U.S. government taking regarding Monsanto?",
+    "gold_answer": "The Department of Justice opened a formal antitrust investigation of Monsanto practices.",
+    "difficulty": "single-hop",
+    "category": "policy_impact",
+    "annotator": "yusif",
+    "reviewer": "faruk",
+    "review_status": "approved",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "The U.S. Department of Justice opened a formal antitrust investigation of Monsanto practices.",
+        "supporting_spans": [
+          {
+            "paper_id": "00311_W1608413735",
+            "char_start": 1720,
+            "char_end": 1822,
+            "quote": "And the Department of Justice (DOJ) has opened a formal antitrust investigation of Monsanto practices."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q314",
+    "question": "According to Moschini (2010), what percentage of U.S. soybean acres planted in 2009 contained at least one Monsanto biotech trait?",
+    "gold_answer": "In 2009, 94.5% of U.S. soybean planted acres contained Monsanto traits (along with 81.1% for corn and 78.9% for cotton).",
+    "difficulty": "single-hop",
+    "category": "factual",
+    "annotator": "yusif",
+    "reviewer": "faruk",
+    "review_status": "approved",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "In 2009, 94.5% of U.S. soybean planted acres contained Monsanto GM traits.",
+        "supporting_spans": [
+          {
+            "paper_id": "00311_W1608413735",
+            "char_start": 10710,
+            "char_end": 10799,
+            "quote": "In 2009, this share amounted to 81.1 % in corn, 94.5 % in soybeans, and 78.9 % in cotton."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": "supports"
+      }
+    ]
+  },
+  {
+    "id": "q315",
+    "question": "When did private agricultural R&D spending in the United States surpass public spending, according to Moschini (2010)?",
+    "gold_answer": "Private agricultural R&D has exceeded public R&D expenditures since the early 1980s.",
+    "difficulty": "single-hop",
+    "category": "factual",
+    "annotator": "yusif",
+    "reviewer": "faruk",
+    "review_status": "approved",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "In U.S. agriculture, private R&D has exceeded public R&D expenditures since the early 1980s.",
+        "supporting_spans": [
+          {
+            "paper_id": "00311_W1608413735",
+            "char_start": 3184,
+            "char_end": 3294,
+            "quote": "More specifically, in agriculture, private R & D has exceeded public R & D expenditures since the early 1980s."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q316",
+    "question": "Why does Moschini (2010) argue that both germplasm and GM traits are essential for modern seed varieties, and how does he characterize trait licensing in this setting?",
+    "gold_answer": "Modern varieties derive value from both germplasm and GM traits, each essential. Licensing GM traits is generally procompetitive because it integrates complementary inputs needed to deliver a marketable seed product.",
+    "difficulty": "multi-hop",
+    "category": "multi_hop",
+    "annotator": "yusif",
+    "reviewer": "faruk",
+    "review_status": "approved",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Modern seed varieties of major crops derive user value from two essential sources: germplasm and GM traits.",
+        "supporting_spans": [
+          {
+            "paper_id": "00311_W1608413735",
+            "char_start": 7023,
+            "char_end": 7213,
+            "quote": "Specifically, modern seed varieties of major crops, such as corn, soybeans, cotton, and canola, derive their value to users from two sources that are both essential: germplasm and GM traits."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": "supports"
+      },
+      {
+        "id": "c002",
+        "text": "Licensing GM traits in this industry is generally procompetitive because it integrates complementary factors needed to assemble a product with market value.",
+        "supporting_spans": [
+          {
+            "paper_id": "00311_W1608413735",
+            "char_start": 18356,
+            "char_end": 18573,
+            "quote": "Licensing in this context is generally held to have procompetititve effects because it facilitates the integration of complementary factors of production that are essential to assemble a product that has market value."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": "supports"
+      }
+    ]
+  },
+  {
+    "id": "q317",
+    "question": "What does Moschini (2010) say about the expiration timeline for the original Roundup Ready soybean trait and the prospect of generic biotech soybeans?",
+    "gold_answer": "The last controlling patent on the original Roundup Ready soybean trait is set to expire in 2014, raising the real possibility of generic RR soybean varieties.",
+    "difficulty": "multi-hop",
+    "category": "policy_impact",
+    "annotator": "yusif",
+    "reviewer": "faruk",
+    "review_status": "approved",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "The last controlling patent on the original soybean Roundup Ready trait is set to expire in 2014.",
+        "supporting_spans": [
+          {
+            "paper_id": "00311_W1608413735",
+            "char_start": 24921,
+            "char_end": 25023,
+            "quote": "the last controlling patent for the original soybean Roundup Ready (RR) trait is set to expire in 2014"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c002",
+        "text": "Patent expiration creates a real possibility of generic Roundup Ready soybean varieties.",
+        "supporting_spans": [
+          {
+            "paper_id": "00311_W1608413735",
+            "char_start": 25029,
+            "char_end": 25121,
+            "quote": "the real possibility of having generic versions of RR soybeans is exciting to many observers"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q318",
+    "question": "What limitations of the vector space model (VSM) does Lei et al. (2019) identify for patent analysis?",
+    "gold_answer": "VSM loses sentence-level semantics and suffers from curse-of-dimensionality problems when applied to patent analysis.",
+    "difficulty": "single-hop",
+    "category": "methodology",
+    "annotator": "yusif",
+    "reviewer": "faruk",
+    "review_status": "approved",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "VSM applied to patents loses sentence-level semantics and faces curse-of-dimensionality problems.",
+        "supporting_spans": [
+          {
+            "paper_id": "00316_W2963659766",
+            "char_start": 1542,
+            "char_end": 1716,
+            "quote": "However, the VSM method suffers from several limitations when applied to patent analysis tasks, such as loss of sentence-level semantics and curse-of-dimensionality problems."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q319",
+    "question": "How do Lei et al. (2019) construct the feature vector space model (FVSM) for patent documents?",
+    "gold_answer": "They map patent documents to feature vectors extracted by convolutional neural networks (CNNs), forming FVSM as an alternative to term-based VSM.",
+    "difficulty": "single-hop",
+    "category": "methodology",
+    "annotator": "yusif",
+    "reviewer": "faruk",
+    "review_status": "approved",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "FVSM maps patent documents to feature vectors extracted by convolutional neural networks.",
+        "supporting_spans": [
+          {
+            "paper_id": "00316_W2963659766",
+            "char_start": 1760,
+            "char_end": 1948,
+            "quote": "we propose patent analytics based on feature VSM (FVSM), where the FVSM is constructed by mapping patent documents to feature the vectors extracted by convolutional neural networks (CNNs)."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q320",
+    "question": "Which three patent analysis tasks does Lei et al. (2019) apply FVSM to in their IoT case study?",
+    "gold_answer": "Patent similarity comparison, patent clustering, and patent map generation.",
+    "difficulty": "single-hop",
+    "category": "factual",
+    "annotator": "yusif",
+    "reviewer": "faruk",
+    "review_status": "approved",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "FVSM is applied to patent similarity comparison, patent clustering, and patent map generation.",
+        "supporting_spans": [
+          {
+            "paper_id": "00316_W2963659766",
+            "char_start": 1949,
+            "char_end": 2112,
+            "quote": "The applications of FVSM for three typical patent analysis tasks, i.e., patents similarity comparison, patent clustering, and patent map generation, are discussed."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q321",
+    "question": "How does Lei et al. (2019) build their IoT patent experimental dataset from USPTO data?",
+    "gold_answer": "They take 2016–2018 USPTO patents in IPC class H04 (covering most IoT-related technologies) and filter by IoT keywords, yielding 8,942 patents.",
+    "difficulty": "multi-hop",
+    "category": "methodology",
+    "annotator": "yusif",
+    "reviewer": "faruk",
+    "review_status": "approved",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "The IoT study includes only USPTO patents under IPC class H04 because that class covers most IoT-related technologies.",
+        "supporting_spans": [
+          {
+            "paper_id": "00316_W2963659766",
+            "char_start": 31961,
+            "char_end": 32091,
+            "quote": "Only the patents under the IPC class of H04 are included for our study because this class covers most of IoT related technologies."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": "supports"
+      },
+      {
+        "id": "c002",
+        "text": "Keyword filtering of H04 patents produces a structured data set of 8,942 IoT-related patents.",
+        "supporting_spans": [
+          {
+            "paper_id": "00316_W2963659766",
+            "char_start": 32585,
+            "char_end": 32674,
+            "quote": "8942 patents are selected and their patent texts constitute a structured patent data set."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": "supports"
+      }
+    ]
+  },
+  {
+    "id": "q322",
+    "question": "What percentage of the IoT patents in Lei et al. (2019) were filed with the European Patent Office (EPO)?",
+    "gold_answer": "Not covered by the corpus.",
+    "difficulty": "unanswerable",
+    "category": "factual",
+    "annotator": "yusif",
+    "reviewer": "faruk",
+    "review_status": "approved",
+    "iaa_subset": false,
+    "claims": []
+  }
+]
