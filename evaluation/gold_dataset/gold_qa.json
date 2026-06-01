@@ -1187,6 +1187,302 @@
     "claims": []
   },
   {
+    "id": "q100",
+    "question": "According to Moser (2013), how can patent laws influence the direction of technical change across industries?",
+    "gold_answer": "Moser argues that because inventors' reliance on patents varies across industries, patent laws can shape the direction of technical change: in countries without patent laws, inventors must depend on secrecy and other alternatives, so R&D concentrates in industries where secrecy is effective.",
+    "difficulty": "single-hop",
+    "category": "policy_impact",
+    "annotator": "andrea",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Because inventors' dependence on patents varies across industries, patent laws may influence the direction of technical change; in countries without patent laws inventors depend on secrecy and other alternatives.",
+        "supporting_spans": [
+          {
+            "paper_id": "00008_W3125878831",
+            "char_start": 21709,
+            "char_end": 22009,
+            "quote": "But if inventors' dependence on patents varies across industries, patent laws may influence the direction of technical change (Moser 2005) : In countries without patent laws, inventors depend entirely on secrecy, lead time, and other alternatives to patents in protecting their intellectual property."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q101",
+    "question": "According to the survey evidence reviewed by Moser (2013), how does the effectiveness of secrecy compare to patents across industries, and for which industries are patents rated most effective?",
+    "gold_answer": "Survey evidence from American R&D labs (1983) and firms (1994) indicates that secrecy is rated more effective than patents in most industries; patents are consistently rated effective only for pharmaceuticals and chemical inventions.",
+    "difficulty": "single-hop",
+    "category": "comparison",
+    "annotator": "andrea",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Survey respondents from American R&D labs (1983) and firms (1994) report that secrecy is more effective than patents in most industries.",
+        "supporting_spans": [
+          {
+            "paper_id": "00008_W3125878831",
+            "char_start": 24424,
+            "char_end": 24724,
+            "quote": "respondents from 634 American research and development labs in 1983 (Levin, Klevorick, Nelson, and Winter 1987) and from 1,478 American firms in 1994 (Cohen, Nelson, and Walsh 2000) report that secrecy is more effective than patents as a mechanism to protect intellectual property in most industries."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c002",
+        "text": "Patents are consistently rated an effective protection mechanism only for pharmaceuticals and chemical inventions.",
+        "supporting_spans": [
+          {
+            "paper_id": "00008_W3125878831",
+            "char_start": 24802,
+            "char_end": 24947,
+            "quote": "Only for pharmaceuticals and chemical inventions are patents consistently rated as an effective mechanism to protect intellectual property today."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q102",
+    "question": "How do Aghion, Dewatripont, and Stein (2008) characterize the fundamental tradeoff between academic and private-sector research?",
+    "gold_answer": "Aghion, Dewatripont, and Stein argue that the fundamental tradeoff between academia and the private sector is one of creative control versus focus: academia serves as a precommitment mechanism that lets scientists freely pursue their own interests, whereas the private sector offers focus.",
+    "difficulty": "single-hop",
+    "category": "methodology",
+    "annotator": "andrea",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Aghion, Dewatripont, and Stein (2008) argue the fundamental tradeoff between academia and the private sector is one of creative control versus focus, with academia acting as a precommitment mechanism that lets scientists freely pursue their own interests.",
+        "supporting_spans": [
+          {
+            "paper_id": "00009_W2109614009",
+            "char_start": 430,
+            "char_end": 694,
+            "quote": "we emphasize control-rights considerations, and argue that the fundamental tradeoff between academia and the private sector is one of creative control versus focus. By serving as a precommitment mechanism that allows scientists to freely pursue their own interests"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q103",
+    "question": "According to Galasso and Schankerman (2014), what is the causal effect of patent invalidation on follow-on innovation, and how does this effect vary across industries and patentee types?",
+    "gold_answer": "Galasso and Schankerman find that patent invalidation causes about a 50 percent increase in citations to the focal patent on average, but the effect is heterogeneous: patent rights block downstream innovation in computers, electronics, and medical instruments (but not drugs, chemicals, or mechanical technologies), and the effect is entirely driven by invalidation of patents owned by large patentees, which triggers more follow-on innovation by small firms.",
+    "difficulty": "single-hop",
+    "category": "policy_impact",
+    "annotator": "andrea",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Patent invalidation causes roughly a 50 percent increase in citations to the focal patent on average, though the impact is heterogeneous.",
+        "supporting_spans": [
+          {
+            "paper_id": "00010_W2116398574",
+            "char_start": 664,
+            "char_end": 854,
+            "quote": "Patent invalidation leads to a 50 percent increase in citations to the focal patent, on average, but the impact is heterogeneous and depends on characteristics of the bargaining environment."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c002",
+        "text": "The blocking effect appears in computers, electronics, and medical instruments but not drugs, chemicals, or mechanical technologies, and is entirely driven by invalidation of large patentees' patents triggering more follow-on innovation by small firms.",
+        "supporting_spans": [
+          {
+            "paper_id": "00010_W2116398574",
+            "char_start": 855,
+            "char_end": 1151,
+            "quote": "Patent rights block downstream innovation in computers, electronics and medical instruments, but not in drugs, chemicals or mechanical technologies. Moreover, the effect is entirely driven by invalidation of patents owned by large patentees that triggers more follow-on innovation by small firms."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q104",
+    "question": "What concern does the theoretical literature raise about upstream patent rights impeding downstream innovation, and what causal evidence do Galasso and Schankerman (2014) provide on the effect of removing patent rights?",
+    "gold_answer": "The theoretical literature raises the 'anti-commons' concern, summarized by Aghion, Dewatripont, and Stein (2008) via Heller and Eisenberg (1998): a proliferation of upstream intellectual property rights may stifle downstream innovation. Galasso and Schankerman (2014) provide causal evidence consistent with this concern, finding that patent invalidation (removing patent rights) leads to about a 50 percent increase in follow-on citations to the focal patent on average.",
+    "difficulty": "multi-hop",
+    "category": "multi_hop",
+    "annotator": "andrea",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "The anti-commons concern holds that a proliferation of upstream intellectual property rights may stifle downstream innovation (Heller and Eisenberg 1998, as cited by Aghion et al. 2008).",
+        "supporting_spans": [
+          {
+            "paper_id": "00009_W2109614009",
+            "char_start": 3531,
+            "char_end": 3811,
+            "quote": "Heller and Eisenberg (1998) talk of an “anti-commons” effect associated with early IPR protection, arguing that “a proliferation of intellectual property rights upstream may be stifling life-saving innovations further downstream in the course of research and product development.”"
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c002",
+        "text": "Galasso and Schankerman (2014) find that patent invalidation leads to about a 50 percent increase in citations to the focal patent on average.",
+        "supporting_spans": [
+          {
+            "paper_id": "00010_W2116398574",
+            "char_start": 664,
+            "char_end": 854,
+            "quote": "Patent invalidation leads to a 50 percent increase in citations to the focal patent, on average, but the impact is heterogeneous and depends on characteristics of the bargaining environment."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q105",
+    "question": "What was the average pendency time for a US utility patent application at the USPTO in 2024?",
+    "gold_answer": "Not covered by the corpus.",
+    "difficulty": "unanswerable",
+    "category": "factual",
+    "annotator": "andrea",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": []
+  },
+  {
+    "id": "q106",
+    "question": "According to Fosfuri (2006), what fundamental trade-off does technology licensing impose on a licensor?",
+    "gold_answer": "Fosfuri argues that technology licensing forces a trade-off between the revenue effect (licensing and royalty revenues net of transaction costs) and the profit dissipation effect (lower price-cost margins and/or reduced market share from increased competition introduced by the licensee).",
+    "difficulty": "single-hop",
+    "category": "methodology",
+    "annotator": "andrea",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": true,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Fosfuri (2006) argues that technology licensing forces a trade-off between the revenue effect (royalties net of transaction costs) and the profit dissipation effect (lower margins or reduced market share from licensee competition).",
+        "supporting_spans": [
+          {
+            "paper_id": "00011_W3122382941",
+            "char_start": 3564,
+            "char_end": 3835,
+            "quote": "licensing forces a trade-off: licensing and royalty revenues net of transaction costs (the revenue effect) must be balanced against the lower price–cost margin and/or reduced market share implied by increased competition (the profit dissipation effect) from the licensee."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q107",
+    "question": "According to Besen and Raskind (1991), what is the fundamental objective of intellectual property protection?",
+    "gold_answer": "Besen and Raskind state that the objective of intellectual property protection is to create incentives that maximize the difference between the value of the intellectual property that is created and used and the social cost of its creation, including the cost of administering the system.",
+    "difficulty": "single-hop",
+    "category": "policy_impact",
+    "annotator": "andrea",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "The objective of intellectual property protection is to create incentives that maximize the difference between the value of IP created and used and the social cost of its creation.",
+        "supporting_spans": [
+          {
+            "paper_id": "00012_W1999853213",
+            "char_start": 5469,
+            "char_end": 5728,
+            "quote": "The objective of intellectual property protection is to create incentives that maximize the difference between the value of the intellectual property that is created and used and the social cost of its creation, including the cost of administering the system."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
+    "id": "q108",
+    "question": "How many AI-related patents did OpenAI file with the USPTO in 2024?",
+    "gold_answer": "Not covered by the corpus.",
+    "difficulty": "unanswerable",
+    "category": "factual",
+    "annotator": "andrea",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": []
+  },
+  {
+    "id": "q109",
+    "question": "How do Besen and Raskind (1991) and Moser (2013) together explain why patent laws affect which industries attract innovative activity?",
+    "gold_answer": "Besen and Raskind (1991) establish that producers invest in innovation only if they can appropriate sufficient returns. Moser (2013) provides historical evidence of the consequence: in countries without patent laws, innovation concentrated in industries where secrecy was an effective substitute for legal protection, confirming that the ability to appropriate returns shapes the direction of innovative activity across industries.",
+    "difficulty": "multi-hop",
+    "category": "multi_hop",
+    "annotator": "andrea",
+    "reviewer": null,
+    "review_status": "pending",
+    "iaa_subset": false,
+    "claims": [
+      {
+        "id": "c001",
+        "text": "Besen and Raskind (1991) argue that producers invest in innovation only if they can appropriate sufficient returns from it.",
+        "supporting_spans": [
+          {
+            "paper_id": "00012_W1999853213",
+            "char_start": 5806,
+            "char_end": 6060,
+            "quote": "private producers have an incentive to invest in innovation only if they receive an appropriate return. Whether producers will have the correct incentives depends on their ability to appropriate at least some of the value that users place on those works."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      },
+      {
+        "id": "c002",
+        "text": "Moser (2013) finds that in countries without patent laws, innovation historically concentrated in industries where secrecy was an effective means of protecting intellectual property.",
+        "supporting_spans": [
+          {
+            "paper_id": "00008_W3125878831",
+            "char_start": 22425,
+            "char_end": 22596,
+            "quote": "Cross-country comparisons of exhibition data confirm that innovation in countries without patent laws focused on a narrow set of industries in which secrecy was effective."
+          }
+        ],
+        "annotator_label": "supports",
+        "reviewer_label": null
+      }
+    ]
+  },
+  {
     "id": "q200",
     "question": "Contrast the foundational justification for IPR as an innovation driver with the core argument of the dissenting tradition.",
     "gold_answer": "The property rights view, supported by Kenneth J. Arrow (1962), holds that IPR rewards are necessary for socially optimal innovation. The dissenting tradition, starting with Arnold Plant (1934), argues that neither IPR nor government support is required for optimal innovation rates.",
