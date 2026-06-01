@@ -102,3 +102,11 @@ report/**/anthology.bib
 
 # marimo notebook session state — local-only, not for VCS
 notebooks/marimo/__marimo__/
+
+# Human-eval rater fill-in files — annotated locally, joined via
+# scripts/compute_human_eval_kappa.py. The sample.csv + ground_truth.json
+# are reproducible from `sample_human_eval.py --seed 2026` and are committed
+# (whitelisted below to bypass the broader *.csv rule above).
+evaluation/faithfulness/human_eval/rater_*.csv
+!evaluation/faithfulness/human_eval/sample.csv
+!evaluation/faithfulness/human_eval/ground_truth.json

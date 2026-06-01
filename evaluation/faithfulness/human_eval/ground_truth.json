@@ -1,0 +1,562 @@
+{
+  "q001_deepseek_04": {
+    "claim_idx": 4,
+    "judge_label": "not_supported",
+    "model": "deepseek/deepseek-chat",
+    "nli_label": "supported",
+    "question_id": "q001",
+    "stratum": "nli_sup_judge_not"
+  },
+  "q002_deepseek_00": {
+    "claim_idx": 0,
+    "judge_label": "not_supported",
+    "model": "deepseek/deepseek-chat",
+    "nli_label": "supported",
+    "question_id": "q002",
+    "stratum": "nli_sup_judge_not"
+  },
+  "q002_gpt4omin_05": {
+    "claim_idx": 5,
+    "judge_label": "not_supported",
+    "model": "openai/gpt-4o-mini",
+    "nli_label": "supported",
+    "question_id": "q002",
+    "stratum": "nli_sup_judge_not"
+  },
+  "q002_gpt4omin_07": {
+    "claim_idx": 7,
+    "judge_label": "not_supported",
+    "model": "openai/gpt-4o-mini",
+    "nli_label": "supported",
+    "question_id": "q002",
+    "stratum": "nli_sup_judge_not"
+  },
+  "q005_claude35_00": {
+    "claim_idx": 0,
+    "judge_label": "not_supported",
+    "model": "anthropic/claude-3.5-haiku",
+    "nli_label": "supported",
+    "question_id": "q005",
+    "stratum": "nli_sup_judge_not"
+  },
+  "q005_deepseek_01": {
+    "claim_idx": 1,
+    "judge_label": "not_supported",
+    "model": "deepseek/deepseek-chat",
+    "nli_label": "supported",
+    "question_id": "q005",
+    "stratum": "nli_sup_judge_not"
+  },
+  "q005_deepseek_05": {
+    "claim_idx": 5,
+    "judge_label": "not_supported",
+    "model": "deepseek/deepseek-chat",
+    "nli_label": "supported",
+    "question_id": "q005",
+    "stratum": "nli_sup_judge_not"
+  },
+  "q005_gpt4omin_06": {
+    "claim_idx": 6,
+    "judge_label": "not_supported",
+    "model": "openai/gpt-4o-mini",
+    "nli_label": "supported",
+    "question_id": "q005",
+    "stratum": "nli_sup_judge_not"
+  },
+  "q007_claude35_00": {
+    "claim_idx": 0,
+    "judge_label": "not_supported",
+    "model": "anthropic/claude-3.5-haiku",
+    "nli_label": "supported",
+    "question_id": "q007",
+    "stratum": "nli_sup_judge_not"
+  },
+  "q007_deepseek_01": {
+    "claim_idx": 1,
+    "judge_label": "supported",
+    "model": "deepseek/deepseek-chat",
+    "nli_label": "supported",
+    "question_id": "q007",
+    "stratum": "both_supported"
+  },
+  "q007_deepseek_03": {
+    "claim_idx": 3,
+    "judge_label": "supported",
+    "model": "deepseek/deepseek-chat",
+    "nli_label": "supported",
+    "question_id": "q007",
+    "stratum": "both_supported"
+  },
+  "q007_gpt4omin_01": {
+    "claim_idx": 1,
+    "judge_label": "supported",
+    "model": "openai/gpt-4o-mini",
+    "nli_label": "supported",
+    "question_id": "q007",
+    "stratum": "both_supported"
+  },
+  "q008_claude35_01": {
+    "claim_idx": 1,
+    "judge_label": "supported",
+    "model": "anthropic/claude-3.5-haiku",
+    "nli_label": "not_supported",
+    "question_id": "q008",
+    "stratum": "nli_not_judge_sup"
+  },
+  "q008_claude35_02": {
+    "claim_idx": 2,
+    "judge_label": "supported",
+    "model": "anthropic/claude-3.5-haiku",
+    "nli_label": "not_supported",
+    "question_id": "q008",
+    "stratum": "nli_not_judge_sup"
+  },
+  "q008_claude35_03": {
+    "claim_idx": 3,
+    "judge_label": "supported",
+    "model": "anthropic/claude-3.5-haiku",
+    "nli_label": "not_supported",
+    "question_id": "q008",
+    "stratum": "nli_not_judge_sup"
+  },
+  "q008_deepseek_01": {
+    "claim_idx": 1,
+    "judge_label": "supported",
+    "model": "deepseek/deepseek-chat",
+    "nli_label": "not_supported",
+    "question_id": "q008",
+    "stratum": "nli_not_judge_sup"
+  },
+  "q008_gpt4omin_01": {
+    "claim_idx": 1,
+    "judge_label": "supported",
+    "model": "openai/gpt-4o-mini",
+    "nli_label": "not_supported",
+    "question_id": "q008",
+    "stratum": "nli_not_judge_sup"
+  },
+  "q008_gpt4omin_03": {
+    "claim_idx": 3,
+    "judge_label": "supported",
+    "model": "openai/gpt-4o-mini",
+    "nli_label": "not_supported",
+    "question_id": "q008",
+    "stratum": "nli_not_judge_sup"
+  },
+  "q009_claude35_00": {
+    "claim_idx": 0,
+    "judge_label": "supported",
+    "model": "anthropic/claude-3.5-haiku",
+    "nli_label": "not_supported",
+    "question_id": "q009",
+    "stratum": "nli_not_judge_sup"
+  },
+  "q009_claude35_02": {
+    "claim_idx": 2,
+    "judge_label": "supported",
+    "model": "anthropic/claude-3.5-haiku",
+    "nli_label": "not_supported",
+    "question_id": "q009",
+    "stratum": "nli_not_judge_sup"
+  },
+  "q009_claude35_03": {
+    "claim_idx": 3,
+    "judge_label": "supported",
+    "model": "anthropic/claude-3.5-haiku",
+    "nli_label": "not_supported",
+    "question_id": "q009",
+    "stratum": "nli_not_judge_sup"
+  },
+  "q009_deepseek_00": {
+    "claim_idx": 0,
+    "judge_label": "supported",
+    "model": "deepseek/deepseek-chat",
+    "nli_label": "not_supported",
+    "question_id": "q009",
+    "stratum": "nli_not_judge_sup"
+  },
+  "q009_deepseek_01": {
+    "claim_idx": 1,
+    "judge_label": "supported",
+    "model": "deepseek/deepseek-chat",
+    "nli_label": "not_supported",
+    "question_id": "q009",
+    "stratum": "nli_not_judge_sup"
+  },
+  "q009_deepseek_02": {
+    "claim_idx": 2,
+    "judge_label": "supported",
+    "model": "deepseek/deepseek-chat",
+    "nli_label": "not_supported",
+    "question_id": "q009",
+    "stratum": "nli_not_judge_sup"
+  },
+  "q009_deepseek_03": {
+    "claim_idx": 3,
+    "judge_label": "supported",
+    "model": "deepseek/deepseek-chat",
+    "nli_label": "not_supported",
+    "question_id": "q009",
+    "stratum": "nli_not_judge_sup"
+  },
+  "q009_gpt4omin_02": {
+    "claim_idx": 2,
+    "judge_label": "supported",
+    "model": "openai/gpt-4o-mini",
+    "nli_label": "not_supported",
+    "question_id": "q009",
+    "stratum": "nli_not_judge_sup"
+  },
+  "q010_deepseek_01": {
+    "claim_idx": 1,
+    "judge_label": "supported",
+    "model": "deepseek/deepseek-chat",
+    "nli_label": "not_supported",
+    "question_id": "q010",
+    "stratum": "nli_not_judge_sup"
+  },
+  "q011_claude35_01": {
+    "claim_idx": 1,
+    "judge_label": "supported",
+    "model": "anthropic/claude-3.5-haiku",
+    "nli_label": "supported",
+    "question_id": "q011",
+    "stratum": "both_supported"
+  },
+  "q011_deepseek_02": {
+    "claim_idx": 2,
+    "judge_label": "supported",
+    "model": "deepseek/deepseek-chat",
+    "nli_label": "supported",
+    "question_id": "q011",
+    "stratum": "both_supported"
+  },
+  "q011_gpt4omin_03": {
+    "claim_idx": 3,
+    "judge_label": "not_supported",
+    "model": "openai/gpt-4o-mini",
+    "nli_label": "supported",
+    "question_id": "q011",
+    "stratum": "nli_sup_judge_not"
+  },
+  "q012_claude35_00": {
+    "claim_idx": 0,
+    "judge_label": "supported",
+    "model": "anthropic/claude-3.5-haiku",
+    "nli_label": "not_supported",
+    "question_id": "q012",
+    "stratum": "nli_not_judge_sup"
+  },
+  "q013_claude35_01": {
+    "claim_idx": 1,
+    "judge_label": "supported",
+    "model": "anthropic/claude-3.5-haiku",
+    "nli_label": "supported",
+    "question_id": "q013",
+    "stratum": "both_supported"
+  },
+  "q013_claude35_02": {
+    "claim_idx": 2,
+    "judge_label": "not_supported",
+    "model": "anthropic/claude-3.5-haiku",
+    "nli_label": "supported",
+    "question_id": "q013",
+    "stratum": "nli_sup_judge_not"
+  },
+  "q013_deepseek_05": {
+    "claim_idx": 5,
+    "judge_label": "not_supported",
+    "model": "deepseek/deepseek-chat",
+    "nli_label": "supported",
+    "question_id": "q013",
+    "stratum": "nli_sup_judge_not"
+  },
+  "q013_deepseek_08": {
+    "claim_idx": 8,
+    "judge_label": "supported",
+    "model": "deepseek/deepseek-chat",
+    "nli_label": "supported",
+    "question_id": "q013",
+    "stratum": "both_supported"
+  },
+  "q013_deepseek_14": {
+    "claim_idx": 14,
+    "judge_label": "not_supported",
+    "model": "deepseek/deepseek-chat",
+    "nli_label": "supported",
+    "question_id": "q013",
+    "stratum": "nli_sup_judge_not"
+  },
+  "q014_claude35_06": {
+    "claim_idx": 6,
+    "judge_label": "not_supported",
+    "model": "anthropic/claude-3.5-haiku",
+    "nli_label": "supported",
+    "question_id": "q014",
+    "stratum": "nli_sup_judge_not"
+  },
+  "q014_claude35_09": {
+    "claim_idx": 9,
+    "judge_label": "not_supported",
+    "model": "anthropic/claude-3.5-haiku",
+    "nli_label": "supported",
+    "question_id": "q014",
+    "stratum": "nli_sup_judge_not"
+  },
+  "q014_gpt4omin_08": {
+    "claim_idx": 8,
+    "judge_label": "not_supported",
+    "model": "openai/gpt-4o-mini",
+    "nli_label": "supported",
+    "question_id": "q014",
+    "stratum": "nli_sup_judge_not"
+  },
+  "q014_gpt4omin_09": {
+    "claim_idx": 9,
+    "judge_label": "not_supported",
+    "model": "openai/gpt-4o-mini",
+    "nli_label": "supported",
+    "question_id": "q014",
+    "stratum": "nli_sup_judge_not"
+  },
+  "q015_gpt4omin_04": {
+    "claim_idx": 4,
+    "judge_label": "supported",
+    "model": "openai/gpt-4o-mini",
+    "nli_label": "not_supported",
+    "question_id": "q015",
+    "stratum": "nli_not_judge_sup"
+  },
+  "q015_gpt4omin_05": {
+    "claim_idx": 5,
+    "judge_label": "supported",
+    "model": "openai/gpt-4o-mini",
+    "nli_label": "not_supported",
+    "question_id": "q015",
+    "stratum": "nli_not_judge_sup"
+  },
+  "q016_claude35_01": {
+    "claim_idx": 1,
+    "judge_label": "not_supported",
+    "model": "anthropic/claude-3.5-haiku",
+    "nli_label": "supported",
+    "question_id": "q016",
+    "stratum": "nli_sup_judge_not"
+  },
+  "q016_claude35_06": {
+    "claim_idx": 6,
+    "judge_label": "not_supported",
+    "model": "anthropic/claude-3.5-haiku",
+    "nli_label": "supported",
+    "question_id": "q016",
+    "stratum": "nli_sup_judge_not"
+  },
+  "q016_deepseek_05": {
+    "claim_idx": 5,
+    "judge_label": "not_supported",
+    "model": "deepseek/deepseek-chat",
+    "nli_label": "supported",
+    "question_id": "q016",
+    "stratum": "nli_sup_judge_not"
+  },
+  "q016_gpt4omin_02": {
+    "claim_idx": 2,
+    "judge_label": "supported",
+    "model": "openai/gpt-4o-mini",
+    "nli_label": "supported",
+    "question_id": "q016",
+    "stratum": "both_supported"
+  },
+  "q016_gpt4omin_03": {
+    "claim_idx": 3,
+    "judge_label": "supported",
+    "model": "openai/gpt-4o-mini",
+    "nli_label": "supported",
+    "question_id": "q016",
+    "stratum": "both_supported"
+  },
+  "q017_claude35_01": {
+    "claim_idx": 1,
+    "judge_label": "supported",
+    "model": "anthropic/claude-3.5-haiku",
+    "nli_label": "supported",
+    "question_id": "q017",
+    "stratum": "both_supported"
+  },
+  "q017_gpt4omin_03": {
+    "claim_idx": 3,
+    "judge_label": "not_supported",
+    "model": "openai/gpt-4o-mini",
+    "nli_label": "supported",
+    "question_id": "q017",
+    "stratum": "nli_sup_judge_not"
+  },
+  "q018_deepseek_04": {
+    "claim_idx": 4,
+    "judge_label": "not_supported",
+    "model": "deepseek/deepseek-chat",
+    "nli_label": "supported",
+    "question_id": "q018",
+    "stratum": "nli_sup_judge_not"
+  },
+  "q018_gpt4omin_06": {
+    "claim_idx": 6,
+    "judge_label": "not_supported",
+    "model": "openai/gpt-4o-mini",
+    "nli_label": "supported",
+    "question_id": "q018",
+    "stratum": "nli_sup_judge_not"
+  },
+  "q020_claude35_00": {
+    "claim_idx": 0,
+    "judge_label": "supported",
+    "model": "anthropic/claude-3.5-haiku",
+    "nli_label": "supported",
+    "question_id": "q020",
+    "stratum": "both_supported"
+  },
+  "q021_claude35_00": {
+    "claim_idx": 0,
+    "judge_label": "supported",
+    "model": "anthropic/claude-3.5-haiku",
+    "nli_label": "supported",
+    "question_id": "q021",
+    "stratum": "both_supported"
+  },
+  "q021_claude35_01": {
+    "claim_idx": 1,
+    "judge_label": "not_supported",
+    "model": "anthropic/claude-3.5-haiku",
+    "nli_label": "supported",
+    "question_id": "q021",
+    "stratum": "nli_sup_judge_not"
+  },
+  "q021_claude35_05": {
+    "claim_idx": 5,
+    "judge_label": "supported",
+    "model": "anthropic/claude-3.5-haiku",
+    "nli_label": "supported",
+    "question_id": "q021",
+    "stratum": "both_supported"
+  },
+  "q021_claude35_06": {
+    "claim_idx": 6,
+    "judge_label": "supported",
+    "model": "anthropic/claude-3.5-haiku",
+    "nli_label": "supported",
+    "question_id": "q021",
+    "stratum": "both_supported"
+  },
+  "q021_deepseek_01": {
+    "claim_idx": 1,
+    "judge_label": "not_supported",
+    "model": "deepseek/deepseek-chat",
+    "nli_label": "supported",
+    "question_id": "q021",
+    "stratum": "nli_sup_judge_not"
+  },
+  "q021_gpt4omin_01": {
+    "claim_idx": 1,
+    "judge_label": "supported",
+    "model": "openai/gpt-4o-mini",
+    "nli_label": "supported",
+    "question_id": "q021",
+    "stratum": "both_supported"
+  },
+  "q022_deepseek_01": {
+    "claim_idx": 1,
+    "judge_label": "supported",
+    "model": "deepseek/deepseek-chat",
+    "nli_label": "not_supported",
+    "question_id": "q022",
+    "stratum": "nli_not_judge_sup"
+  },
+  "q022_gpt4omin_01": {
+    "claim_idx": 1,
+    "judge_label": "supported",
+    "model": "openai/gpt-4o-mini",
+    "nli_label": "not_supported",
+    "question_id": "q022",
+    "stratum": "nli_not_judge_sup"
+  },
+  "q023_deepseek_00": {
+    "claim_idx": 0,
+    "judge_label": "not_supported",
+    "model": "deepseek/deepseek-chat",
+    "nli_label": "supported",
+    "question_id": "q023",
+    "stratum": "nli_sup_judge_not"
+  },
+  "q023_gpt4omin_04": {
+    "claim_idx": 4,
+    "judge_label": "supported",
+    "model": "openai/gpt-4o-mini",
+    "nli_label": "supported",
+    "question_id": "q023",
+    "stratum": "both_supported"
+  },
+  "q024_claude35_00": {
+    "claim_idx": 0,
+    "judge_label": "not_supported",
+    "model": "anthropic/claude-3.5-haiku",
+    "nli_label": "supported",
+    "question_id": "q024",
+    "stratum": "nli_sup_judge_not"
+  },
+  "q025_claude35_00": {
+    "claim_idx": 0,
+    "judge_label": "not_supported",
+    "model": "anthropic/claude-3.5-haiku",
+    "nli_label": "supported",
+    "question_id": "q025",
+    "stratum": "nli_sup_judge_not"
+  },
+  "q025_deepseek_01": {
+    "claim_idx": 1,
+    "judge_label": "supported",
+    "model": "deepseek/deepseek-chat",
+    "nli_label": "supported",
+    "question_id": "q025",
+    "stratum": "both_supported"
+  },
+  "q025_gpt4omin_01": {
+    "claim_idx": 1,
+    "judge_label": "supported",
+    "model": "openai/gpt-4o-mini",
+    "nli_label": "supported",
+    "question_id": "q025",
+    "stratum": "both_supported"
+  },
+  "q025_gpt4omin_02": {
+    "claim_idx": 2,
+    "judge_label": "not_supported",
+    "model": "openai/gpt-4o-mini",
+    "nli_label": "supported",
+    "question_id": "q025",
+    "stratum": "nli_sup_judge_not"
+  },
+  "q025_gpt4omin_05": {
+    "claim_idx": 5,
+    "judge_label": "not_supported",
+    "model": "openai/gpt-4o-mini",
+    "nli_label": "supported",
+    "question_id": "q025",
+    "stratum": "nli_sup_judge_not"
+  },
+  "q026_deepseek_00": {
+    "claim_idx": 0,
+    "judge_label": "supported",
+    "model": "deepseek/deepseek-chat",
+    "nli_label": "supported",
+    "question_id": "q026",
+    "stratum": "both_supported"
+  },
+  "q026_gpt4omin_01": {
+    "claim_idx": 1,
+    "judge_label": "supported",
+    "model": "openai/gpt-4o-mini",
+    "nli_label": "supported",
+    "question_id": "q026",
+    "stratum": "both_supported"
+  }
+}
