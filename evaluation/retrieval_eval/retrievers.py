@@ -110,7 +110,35 @@ def _make_configs() -> tuple[RetrieverConfig, ...]:
     return tuple(out)
 
 
-CONFIGS: Final[tuple[RetrieverConfig, ...]] = _make_configs()
+# M3 chunker-ablation variants — anchored on e5_large + reranker (M2 SOTA), only
+# the chunker is varied. See evaluation/retrieval_eval/CHUNKER_ABLATION_PLAN.md.
+_CHUNKER_VARIANT_KEYS: Final[tuple[str, ...]] = (
+    "s200_o0",
+    "s200_o100",
+    "s400_o0",
+    "s400_o200",
+    "s600_o0",
+    "s600_o300",
+    "s800_o0",
+    "s800_o400",
+    "recursive_400",
+)
+
+
+def _make_chunker_variant_configs() -> tuple[RetrieverConfig, ...]:
+    """One config per chunker variant, anchored on e5_large + reranker."""
+    return tuple(
+        RetrieverConfig(
+            name=f"e5_rerank_{variant}",
+            chunk_type=variant,
+            use_reranker=True,
+            embedder="e5_large",
+        )
+        for variant in _CHUNKER_VARIANT_KEYS
+    )
+
+
+CONFIGS: Final[tuple[RetrieverConfig, ...]] = _make_configs() + _make_chunker_variant_configs()
 CONFIGS_BY_NAME: Final[dict[str, RetrieverConfig]] = {c.name: c for c in CONFIGS}
 
 

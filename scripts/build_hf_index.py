@@ -54,6 +54,18 @@ def collect_chunk_files(chunks_dir: Path, chunk_type: str) -> list[Path]:
     return sorted(chunks_dir.glob(f"*_{chunk_type}.json"))
 
 
+def _paper_id_from_chunk_file(path: Path, chunk_type: str) -> str:
+    """Extract ``<paper_id>`` from a ``<paper_id>_<chunk_type>.json`` filename."""
+    return path.name.removesuffix(f"_{chunk_type}.json")
+
+
+def restrict_to_paper_set(
+    files: list[Path], chunk_type: str, allowed_paper_ids: set[str]
+) -> list[Path]:
+    """Filter ``files`` to only those whose paper_id is in ``allowed_paper_ids``."""
+    return [p for p in files if _paper_id_from_chunk_file(p, chunk_type) in allowed_paper_ids]
+
+
 def load_chunks(chunk_files: list[Path]) -> tuple[list[str], list[dict]]:
     """Return (texts, metadata) in stable order across paper files and chunks."""
     texts: list[str] = []
@@ -127,7 +139,25 @@ def main(argv: list[str] | None = None) -> int:
         choices=sorted(MODEL_ALIASES),
         help="Short alias resolved to a HF model id (see MODEL_ALIASES).",
     )
-    parser.add_argument("--chunk-type", required=True, choices=["coarse", "fine"])
+    parser.add_argument(
+        "--chunk-type",
+        required=True,
+        help=(
+            "Chunk-type / variant key used in the input filename "
+            "(<paper>_<chunk-type>.json) and in the output basename. "
+            "Common values: coarse, fine, s400_o200, recursive_400, etc."
+        ),
+    )
+    parser.add_argument(
+        "--restrict-to-papers-with",
+        type=str,
+        default=None,
+        help=(
+            "Only index papers that also have a <paper>_<RESTRICT>.json chunk file. "
+            "Use to keep the haystack consistent across variant ablation runs, "
+            "e.g. --restrict-to-papers-with coarse."
+        ),
+    )
     parser.add_argument("--chunks-dir", type=Path, default=DEFAULT_CHUNKS_DIR)
     parser.add_argument("--indexes-dir", type=Path, default=DEFAULT_INDEXES_DIR)
     parser.add_argument("--batch-size", type=int, default=64)
@@ -157,6 +187,18 @@ def main(argv: list[str] | None = None) -> int:
     if not chunk_files:
         logger.error("No chunk files in %s for chunk_type=%s", args.chunks_dir, args.chunk_type)
         return 1
+
+    if args.restrict_to_papers_with:
+        ref_files = collect_chunk_files(args.chunks_dir, args.restrict_to_papers_with)
+        allowed = {_paper_id_from_chunk_file(p, args.restrict_to_papers_with) for p in ref_files}
+        before = len(chunk_files)
+        chunk_files = restrict_to_paper_set(chunk_files, args.chunk_type, allowed)
+        logger.info(
+            "restricted to %d / %d papers (had %s chunk files)",
+            len(chunk_files),
+            before,
+            args.restrict_to_papers_with,
+        )
 
     texts, metadata = load_chunks(chunk_files)
     if args.limit is not None:
