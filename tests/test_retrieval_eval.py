@@ -259,12 +259,16 @@ def test_ndcg_bounded_by_one() -> None:
 
 
 def test_config_matrix_covers_four_embedders_x_two_chunks_x_pm_rerank() -> None:
-    # 4 embedders × 2 granularities × 2 ±rerank
-    assert len(CONFIGS) == 16
-    embedders = {c.embedder for c in CONFIGS}
-    assert embedders == {"openai", "bge_m3", "e5_large", "colbert"}
-    granularities = {c.chunk_type for c in CONFIGS}
-    assert granularities == {"coarse", "fine"}
+    # 4 embedders × 2 granularities × 2 ±rerank = 16, plus 9 chunker variants
+    assert len(CONFIGS) == 25
+    base = [c for c in CONFIGS if c.chunk_type in ("coarse", "fine")]
+    chunker_variants = [c for c in CONFIGS if c.chunk_type not in ("coarse", "fine")]
+    assert len(base) == 16
+    assert len(chunker_variants) == 9
+    assert {c.embedder for c in base} == {"openai", "bge_m3", "e5_large", "colbert"}
+    assert {c.chunk_type for c in base} == {"coarse", "fine"}
+    assert all(c.embedder == "e5_large" and c.use_reranker for c in chunker_variants)
+    assert all(c.name.startswith("e5_rerank_") for c in chunker_variants)
 
 
 def test_openai_configs_keep_legacy_index_basename() -> None:
