@@ -192,32 +192,32 @@ def render_report(rows: list[JoinedRow]) -> tuple[str, dict]:
 ## Sample
 
 - Joined rows (both raters labelled, ground-truth available): **{len(rows)}**
-- Inter-rater (A, B) agreement: po = {info_ab.get('po', float('nan')):.3f}
+- Inter-rater (A, B) agreement: po = {info_ab.get("po", float("nan")):.3f}
 
 ## Headline κ
 
 | Pair                       | κ     | n  |
 |---|---|---|
-| rater_a vs rater_b         | {_fmt_kappa(k_ab)} | {info_ab['n']} |
-| majority_human vs NLI      | {_fmt_kappa(k_hn)} | {info_hn['n']} |
-| majority_human vs judge    | {_fmt_kappa(k_hj)} | {info_hj['n']} |
+| rater_a vs rater_b         | {_fmt_kappa(k_ab)} | {info_ab["n"]} |
+| majority_human vs NLI      | {_fmt_kappa(k_hn)} | {info_hn["n"]} |
+| majority_human vs judge    | {_fmt_kappa(k_hj)} | {info_hj["n"]} |
 
 ## Per-stratum breakdown
 
 | stratum | n (raters agree) | human = NLI | human = judge |
 |---|---|---|---|
-{chr(10).join(stratum_lines) if stratum_lines else '| — | 0 | — | — |'}
+{chr(10).join(stratum_lines) if stratum_lines else "| — | 0 | — | — |"}
 
 ## Confusion matrices
 
 ### rater A vs rater B
-{_confusion_md('rater_a', 'rater_b', info_ab)}
+{_confusion_md("rater_a", "rater_b", info_ab)}
 
 ### majority_human vs NLI
-{_confusion_md('human', 'NLI', info_hn)}
+{_confusion_md("human", "NLI", info_hn)}
 
 ### majority_human vs judge
-{_confusion_md('human', 'judge', info_hj)}
+{_confusion_md("human", "judge", info_hj)}
 
 ## Notes for the report
 

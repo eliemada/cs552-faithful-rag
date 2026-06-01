@@ -33,8 +33,8 @@
     "difficulty": "multi-hop",
     "category": "multi_hop",
     "annotator": "elie",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "faruk",
+    "review_status": "approved",
     "iaa_subset": true,
     "claims": [
       {
@@ -49,7 +49,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       },
       {
         "id": "c002",
@@ -63,7 +63,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       }
     ]
   },
@@ -166,8 +166,8 @@
     "difficulty": "single-hop",
     "category": "comparison",
     "annotator": "andrea",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "faruk",
+    "review_status": "approved",
     "iaa_subset": true,
     "claims": [
       {
@@ -182,7 +182,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       }
     ]
   },
@@ -504,8 +504,8 @@
     "difficulty": "multi-hop",
     "category": "multi_hop",
     "annotator": "elie",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "faruk",
+    "review_status": "approved",
     "iaa_subset": true,
     "claims": [
       {
@@ -520,7 +520,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       },
       {
         "id": "c002",
@@ -534,7 +534,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       }
     ]
   },
@@ -545,8 +545,8 @@
     "difficulty": "single-hop",
     "category": "methodology",
     "annotator": "elie",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "faruk",
+    "review_status": "approved",
     "iaa_subset": true,
     "claims": [
       {
@@ -561,7 +561,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       }
     ]
   },
@@ -599,8 +599,8 @@
     "difficulty": "multi-hop",
     "category": "methodology",
     "annotator": "elie",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "faruk",
+    "review_status": "approved",
     "iaa_subset": true,
     "claims": [
       {
@@ -615,7 +615,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       },
       {
         "id": "c002",
@@ -629,7 +629,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       }
     ]
   },
@@ -694,8 +694,8 @@
     "difficulty": "multi-hop",
     "category": "multi_hop",
     "annotator": "elie",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "faruk",
+    "review_status": "approved",
     "iaa_subset": true,
     "claims": [
       {
@@ -710,7 +710,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       },
       {
         "id": "c002",
@@ -724,7 +724,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       }
     ]
   },
@@ -1193,8 +1193,8 @@
     "difficulty": "single-hop",
     "category": "policy_impact",
     "annotator": "andrea",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "faruk",
+    "review_status": "approved",
     "iaa_subset": true,
     "claims": [
       {
@@ -1209,7 +1209,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       }
     ]
   },
@@ -1261,8 +1261,8 @@
     "difficulty": "single-hop",
     "category": "methodology",
     "annotator": "andrea",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "faruk",
+    "review_status": "approved",
     "iaa_subset": true,
     "claims": [
       {
@@ -1277,7 +1277,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       }
     ]
   },
@@ -1329,8 +1329,8 @@
     "difficulty": "multi-hop",
     "category": "multi_hop",
     "annotator": "andrea",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "faruk",
+    "review_status": "approved",
     "iaa_subset": true,
     "claims": [
       {
@@ -1345,7 +1345,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       },
       {
         "id": "c002",
@@ -1359,7 +1359,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       }
     ]
   },
@@ -1382,8 +1382,8 @@
     "difficulty": "single-hop",
     "category": "methodology",
     "annotator": "andrea",
-    "reviewer": null,
-    "review_status": "pending",
+    "reviewer": "faruk",
+    "review_status": "approved",
     "iaa_subset": true,
     "claims": [
       {
@@ -1398,7 +1398,7 @@
           }
         ],
         "annotator_label": "supports",
-        "reviewer_label": null
+        "reviewer_label": "supports"
       }
     ]
   },
