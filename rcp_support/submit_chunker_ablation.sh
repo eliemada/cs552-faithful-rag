@@ -38,6 +38,24 @@ if [[ -z "${ZEROENTROPY_API_KEY:-}" ]]; then
     exit 1
 fi
 
+# HF rate-limits unauthenticated traffic from the shared EPFL cluster IP
+# (we saw 429s on the previous job). Forward a HF token so snapshot_download
+# uses the authenticated quota. We try (in order): existing env var, .env,
+# then the standard hf cache file ~/.cache/huggingface/token.
+if [[ -z "${HF_TOKEN:-}" && -f .env ]]; then
+    HF_TOKEN="$(grep -E '^HF_TOKEN=' .env | head -1 | cut -d= -f2- | tr -d '"' | tr -d "'")"
+fi
+if [[ -z "${HF_TOKEN:-}" && -f "${HOME}/.cache/huggingface/token" ]]; then
+    HF_TOKEN="$(cat "${HOME}/.cache/huggingface/token" | tr -d '\n')"
+fi
+export HF_TOKEN
+if [[ -z "${HF_TOKEN}" ]]; then
+    echo "ERROR: no HF token found. The HF download will be rate-limited (429) from the cluster IP." >&2
+    echo "Either:  export HF_TOKEN=hf_..." >&2
+    echo "Or login locally:  uv run huggingface-cli login" >&2
+    exit 1
+fi
+
 if [[ "${GASPAR}" == "gaspar" || -z "${GASPAR}" ]]; then
     echo "ERROR: edit submit_chunker_ablation.sh and set GASPAR to your EPFL GASPAR username." >&2
     exit 1
@@ -179,6 +197,7 @@ runai submit \
   --environment GIT_REF="${GIT_REF}" \
   --environment CHUNKER_COMMAND="${CHUNKER_COMMAND}" \
   --environment ZEROENTROPY_API_KEY="${ZEROENTROPY_API_KEY}" \
+  --environment HF_TOKEN="${HF_TOKEN}" \
   --existing-pvc "claimname=${SCRATCH_PVC},path=/scratch" \
   --existing-pvc "claimname=${SHARED_RO_PVC},path=/shared-ro" \
   --command -- /bin/bash -lc 'ln -sf "$(command -v python3)" /usr/local/bin/python; eval "${CHUNKER_COMMAND}"'
