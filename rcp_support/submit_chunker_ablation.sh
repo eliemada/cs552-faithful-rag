@@ -23,6 +23,21 @@ GROUP="${GROUP:-g68}"
 GIT_REF="${GIT_REF:-main}"
 # ======================================================
 
+# The eval step calls the ZeroEntropy reranker over HTTPS, so the API key
+# must travel into the pod. We read it from a local .env (preferred) or
+# from the launcher's own environment as a fallback. The key is never
+# committed.
+if [[ -z "${ZEROENTROPY_API_KEY:-}" && -f .env ]]; then
+    ZEROENTROPY_API_KEY="$(grep -E '^ZEROENTROPY_API_KEY=' .env | head -1 | cut -d= -f2- | tr -d '"' | tr -d "'")"
+    export ZEROENTROPY_API_KEY
+fi
+if [[ -z "${ZEROENTROPY_API_KEY:-}" ]]; then
+    echo "ERROR: ZEROENTROPY_API_KEY is not set and not present in .env. The reranker step needs it." >&2
+    echo "Either:  export ZEROENTROPY_API_KEY=ze_..." >&2
+    echo "Or add it to .env:  ZEROENTROPY_API_KEY=ze_..." >&2
+    exit 1
+fi
+
 if [[ "${GASPAR}" == "gaspar" || -z "${GASPAR}" ]]; then
     echo "ERROR: edit submit_chunker_ablation.sh and set GASPAR to your EPFL GASPAR username." >&2
     exit 1
@@ -141,6 +156,7 @@ runai submit \
   --environment REPO_DIR="${REPO_DIR}" \
   --environment GIT_REF="${GIT_REF}" \
   --environment CHUNKER_COMMAND="${CHUNKER_COMMAND}" \
+  --environment ZEROENTROPY_API_KEY="${ZEROENTROPY_API_KEY}" \
   --existing-pvc "claimname=${SCRATCH_PVC},path=/scratch" \
   --existing-pvc "claimname=${SHARED_RO_PVC},path=/shared-ro" \
   --command -- /bin/bash -lc 'ln -sf "$(command -v python3)" /usr/local/bin/python; eval "${CHUNKER_COMMAND}"'
