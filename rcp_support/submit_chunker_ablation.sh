@@ -43,10 +43,10 @@ fi
 # uses the authenticated quota. We try (in order): existing env var, .env,
 # then the standard hf cache file ~/.cache/huggingface/token.
 if [[ -z "${HF_TOKEN:-}" && -f .env ]]; then
-    HF_TOKEN="$(grep -E '^HF_TOKEN=' .env | head -1 | cut -d= -f2- | tr -d '"' | tr -d "'")"
+    HF_TOKEN="$(grep -E '^HF_TOKEN=' .env 2>/dev/null | head -1 | cut -d= -f2- | tr -d '"' | tr -d "'" || true)"
 fi
 if [[ -z "${HF_TOKEN:-}" && -f "${HOME}/.cache/huggingface/token" ]]; then
-    HF_TOKEN="$(cat "${HOME}/.cache/huggingface/token" | tr -d '\n')"
+    HF_TOKEN="$(tr -d '\n' < "${HOME}/.cache/huggingface/token")"
 fi
 export HF_TOKEN
 if [[ -z "${HF_TOKEN}" ]]; then
