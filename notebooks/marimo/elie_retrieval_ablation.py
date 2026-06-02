@@ -1119,51 +1119,50 @@ def __(chunker_results, mo, pd, per_config, variant_keys):
         return pd.DataFrame(chunker_rows).set_index("config")
 
     chunker_df = build_chunker_df()
-    if chunker_df is None:
+    chunker_display = (
         mo.md(
             "_Chunker ablation results not yet on disk — start the run with_ "
             "`./scripts/run_chunker_ablation_local.sh` _or watch the RCP job, "
             "and this cell will populate automatically._"
         )
-    else:
-        mo.ui.table(chunker_df, selection=None)
+        if chunker_df is None
+        else mo.ui.table(chunker_df, selection=None)
+    )
+    chunker_display
     return (chunker_df,)
 
 
 @app.cell
-def __(chunker_df, px):
-    """Hit@10 across chunk sizes, one line per overlap level + reference points."""
-    if chunker_df is None:
-        chunker_plot = None
-    else:
-        # Long-form for plotly: melt config name into (size, overlap, strategy)
-        rows = []
+def __(chunker_df, mo, pd, px):
+    """Hit@10 across chunk sizes, one symbol per chunker strategy."""
+
+    def build_chunker_plot():
+        if chunker_df is None:
+            return None
+        plot_rows = []
         for cfg, row in chunker_df.iterrows():
             if "coarse_rerank" in cfg:
-                rows.append(
+                plot_rows.append(
                     {"size": 2000, "overlap": 0, "strategy": "M2 baseline", "hit@10": row["hit@10"]}
                 )
             elif "recursive_400" in cfg:
-                rows.append(
+                plot_rows.append(
                     {"size": 400, "overlap": 80, "strategy": "recursive", "hit@10": row["hit@10"]}
                 )
             else:
-                # cfg like "e5_rerank_s400_o200"
                 tag = cfg.split("e5_rerank_", 1)[-1]
                 size_s, ov_s = tag.split("_")
-                size = int(size_s.lstrip("s"))
-                ov = int(ov_s.lstrip("o"))
-                rows.append(
+                plot_rows.append(
                     {
-                        "size": size,
-                        "overlap": ov,
+                        "size": int(size_s.lstrip("s")),
+                        "overlap": int(ov_s.lstrip("o")),
                         "strategy": "paragraph-aware",
                         "hit@10": row["hit@10"],
                     }
                 )
-        chunker_plot_df = __import__("pandas").DataFrame(rows)
-        chunker_plot = px.scatter(
-            chunker_plot_df,
+        plot_df = pd.DataFrame(plot_rows)
+        fig = px.scatter(
+            plot_df,
             x="size",
             y="hit@10",
             color="strategy",
@@ -1171,9 +1170,17 @@ def __(chunker_df, px):
             hover_data=["overlap"],
             title="Chunker ablation: paper-level hit@10 vs chunk size",
         )
-        chunker_plot.update_traces(marker=dict(size=11))
-        chunker_plot.update_layout(height=380, font=dict(size=11))
+        fig.update_traces(marker=dict(size=11))
+        fig.update_layout(height=380, font=dict(size=11))
+        return fig
+
+    chunker_plot = build_chunker_plot()
+    chunker_plot_display = (
         chunker_plot
+        if chunker_plot is not None
+        else mo.md("_Plot will render once the chunker-ablation results land._")
+    )
+    chunker_plot_display
     return (chunker_plot,)
 
 
