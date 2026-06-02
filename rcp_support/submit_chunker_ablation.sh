@@ -82,27 +82,42 @@ fi
 uv sync --all-packages
 
 # 3. ensure base corpus (processed + existing coarse/fine chunks) is on /scratch.
-#    These are gitignored. We pull from the citeright/corpus HF dataset.
-if [[ ! -d data/s3_archive/processed ]] || [[ -z "$(ls data/s3_archive/processed 2>/dev/null)" ]]; then
-    echo "Processed corpus missing. Downloading from HF..."
-    uv run python - <<'PY'
+#    Always run snapshot_download to add any newly-uploaded papers (idempotent;
+#    HF skips files we already have locally). The previous run pulled only 52
+#    papers because allow_patterns=["processed/*", ...] is a single-level glob
+#    that misses processed/<paper_id>/document.md (two levels deep). We now use
+#    "**" doublestar globs so all nested files are eligible.
+echo "Syncing corpus from HF (recursive globs)..."
+uv run python - <<'PY'
 from huggingface_hub import snapshot_download
 snapshot_download(
     "citeright/corpus",
     repo_type="dataset",
     local_dir="data/s3_archive",
-    allow_patterns=["processed/*", "chunks/*", "indexes/*"],
+    allow_patterns=["processed/**", "chunks/**", "indexes/**"],
 )
 PY
-fi
+echo "Papers in processed/: $(ls data/s3_archive/processed/ 2>/dev/null | wc -l)"
+
+# 3b. delete the previous (52-paper-haystack) variant chunks + indexes so the
+#     next steps regenerate them from the now-larger processed/ set. Without
+#     this, generate_chunk_variants --skip-existing and the build loop would
+#     keep reusing the broken artefacts.
+rm -f data/s3_archive/chunks/*_s[0-9]*_o[0-9]*.json
+rm -f data/s3_archive/chunks/*_recursive_*.json
+rm -f data/s3_archive/indexes/e5_large_s[0-9]*_o[0-9]*.faiss
+rm -f data/s3_archive/indexes/e5_large_s[0-9]*_o[0-9]*_metadata.json
+rm -f data/s3_archive/indexes/e5_large_recursive_*.faiss
+rm -f data/s3_archive/indexes/e5_large_recursive_*_metadata.json
+echo "Cleared previous variant artefacts; remaining indexes:"
+ls data/s3_archive/indexes/ | head -20
 
 # 4. generate the 9 chunker variants from processed/<paper>/document.md
-#    This is CPU-only and takes ~6 seconds. Idempotent via --skip-existing.
+#    This is CPU-only and takes ~6 seconds for the full corpus.
 uv run python -m scripts.generate_chunk_variants \
     --processed-dir data/s3_archive/processed \
     --out-dir data/s3_archive/chunks \
-    --workers 8 \
-    --skip-existing
+    --workers 8
 
 # 5. nvidia-smi sanity
 nvidia-smi || true
@@ -125,6 +140,13 @@ for v in "${VARIANTS[@]}"; do
         --batch-size 256 \
         --device cuda
 done
+
+# 6b. drop any stale per-config eval JSONs from the previous (broken) run so
+#     --run-missing actually re-evaluates them against the freshly-built
+#     indexes. The committed M2 baselines (16 configs) are left alone.
+rm -f evaluation/retrieval_eval/results/e5_rerank_*.json
+rm -f evaluation/retrieval_eval/results/comparison.json
+rm -f evaluation/retrieval_eval/results/comparison.md
 
 # 7. run the ablation evaluator on the new configs.
 #    --run-missing runs every config in CONFIGS that lacks a JSON, which is
