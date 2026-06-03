@@ -2,6 +2,15 @@
 
 **Owner:** Faruk · **Target:** branch logic + 3 qualitative examples landed by 2026-06-04 · **For §Approach/CRAG-router and §Results/CRAG in the final report.**
 
+> **Status (2026-06-03): Option A IMPLEMENTED.** `corrective_rag.py` now abstains
+> on INCORRECT / exhausted-AMBIGUOUS (`final_documents=[]`, `abstained=True`);
+> `use_web_fallback` was renamed to `use_abstain_fallback` (default `True`) and a
+> `finalize_answer()` helper emits `abstain_message` instead of calling the
+> generator. Covered by `tests/test_crag.py` (16 tests). The full-gold threshold
+> ablation runs via `scripts/run_crag_ablation.py` (probe once + analytical
+> sweep; reports branch distribution, abstain precision/recall vs. the
+> unanswerable stratum, and correct-retrieval-among-answered vs. baseline).
+
 ## Why this exists
 
 Intermediate (M2) feedback called out:
