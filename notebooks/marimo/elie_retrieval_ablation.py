@@ -45,27 +45,43 @@ def __(mo):
 **Elie Bruno** &middot; SCIPER 355932 &middot; CS-552 Spring 2026 &middot;
 Team Faithful RAG &middot; **M3 Final Submission**
 
-> *What's new for M3.* This notebook extends the M2 ablation (16 embedder
-> × chunk × reranker configs) with three M3 additions, each addressing a
-> concrete TA recommendation from the M2 progress feedback:
+> *What's new for M3 — and what the headline number is.* This notebook
+> extends the M2 ablation (16 embedder × chunk × reranker configs) with
+> three M3 additions, each addressing a concrete TA recommendation. All
+> three landed; the chunker ablation produced a new SOTA.
 >
 > 1. **Chunker ablation** (TA: *"add a quick experiment varying chunk
 >    size or overlap, or a semantic / recursive chunker"*). Nine new
->    configs all anchored on the M2 SOTA (`e5_large + reranker`) so only
->    the chunker varies — see the *M3 chunker ablation* section at the
->    bottom.
-> 2. **Per-difficulty breakdown** added to surface the multi-hop drop the
->    TA called out (hit@10 from 1.000 coarse to 0.667 fine).
+>    configs all anchored on the M2 SOTA (`e5_large + reranker`).
+>    **Result: `s800_o0` is the new SOTA at MRR = 0.902 (+3.7 pp over the
+>    re-run M2 baseline at the same n=88), nDCG@10 = 0.895 (+1.3 pp)**,
+>    and `s600_o0` / `s800_o400` push hit@10 to 0.989. See the *M3
+>    chunker ablation* section.
+> 2. **Per-difficulty breakdown** added to surface the multi-hop drop
+>    the TA called out (hit@10 from 1.000 coarse to 0.667 fine).
 > 3. **Qualitative failure mode inspection** that goes beyond listing
 >    failing query IDs — for each always-miss query I show the gold
 >    supporting span and the top-5 retrieved chunks the SOTA config
 >    surfaced instead, so the reader can see *why* retrieval missed.
 >
-> The 93-question gold benchmark (expanded from the M2 37) plus the new
-> Andrea/Faruk/Yusif round-2 pairs add ~50 % more multi-hop and
-> unanswerable cases. The M2 numbers below are the cached values on the
-> original 37-query subset; the M3 chunker ablation runs on the full 88
-> evaluable queries.
+> The 93-claim gold benchmark (88 answerable queries + 9 unanswerable;
+> expanded from the M2 37) plus the new Andrea/Faruk/Yusif round-2
+> pairs add ~50 % more multi-hop and unanswerable cases. The M2
+> embedder table below is on the original n=37 subset; the M3 chunker
+> ablation and the re-run M2 baseline both use the full n=88.
+>
+> *Cluster pivot.* The chunker ablation was originally targeted at the
+> course's EPFL RCP project (`course-cs-552`). RCP saturated at
+> **75/75 GPUs** on submission day, returning `OverLimit` and no
+> scheduling progress for ~24 h (raised on the course discussion
+> forum). I migrated the workload to the **EPFL SCITAS `izar`
+> partition** (1× Tesla V100-PCIE-32GB): the SLURM script at
+> `scitas_support/chunker_ablation_izar.sbatch` mirrors the RCP
+> submitter, pre-stages the corpus via rsync from a local mirror to
+> dodge HF Hub's 1000-requests-per-5-min limit, and pins Python 3.12
+> for `fast-plaid` wheel compatibility. All 9 indexes built in **~8 h**
+> on the V100; eval ran in another 25 min over the ZeroEntropy
+> reranker HTTPS API.
 
 > *Authoring note.* This notebook is authored in [marimo](https://marimo.io)
 > and exported to `.ipynb` via `marimo export ipynb --include-outputs` for
@@ -1044,14 +1060,19 @@ The 999-paper M2 coarse haystack is held fixed
 ~6 seconds on 8 CPU workers), `scripts/build_hf_index.py` extended to
 accept arbitrary `--chunk-type` strings and `--restrict-to-papers-with`,
 9 new `RetrieverConfig` entries in
-`evaluation/retrieval_eval/retrievers.py`, an RCP launcher
-(`rcp_support/submit_chunker_ablation.sh`) and a local-MPS-fallback
-runner (`scripts/run_chunker_ablation_local.sh`) for when the cluster
-queue is too long.
+`evaluation/retrieval_eval/retrievers.py`, the RCP launcher
+(`rcp_support/submit_chunker_ablation.sh`), the SCITAS izar SLURM
+script (`scitas_support/chunker_ablation_izar.sbatch`) that took over
+when RCP saturated, and a local-MPS-fallback runner
+(`scripts/run_chunker_ablation_local.sh`).
 
-(The headline table + plot land here once the RCP / local run completes.
-This cell auto-detects the new result JSONs and falls back to a clear
-"awaiting results" message until they exist.)
+**Run record (SCITAS izar, job 2958659).** Started 2026-06-03 07:16
+CEST on `i45` (Tesla V100-PCIE-32GB). All 9 FAISS variant indexes built
+in ~8 h 30 min; eval over the ZeroEntropy reranker HTTPS API finished
+~16:15 CEST. Both the index/metadata files and the per-config eval
+JSONs are mirrored locally — see
+`evaluation/retrieval_eval/results/e5_rerank_*.json` and the SLURM
+logs at `slurm_logs/chunker-2958659.{out,err}`.
 """
     )
     return
@@ -1087,7 +1108,7 @@ def __(json, repo_root):
 
 @app.cell
 def __(chunker_results, mo, pd, per_config, variant_keys):
-    """Headline chunker-ablation table — anchored on the M2 SOTA baseline."""
+    """Headline chunker-ablation table — anchored on the M2 SOTA baseline (re-run at n=88)."""
 
     def build_chunker_df():
         if not chunker_results:
@@ -1101,6 +1122,7 @@ def __(chunker_results, mo, pd, per_config, variant_keys):
                 "hit@5": round(base["hit_rate@5"], 3),
                 "hit@10": round(base["hit_rate@10"], 3),
                 "MRR": round(base["mrr"], 3),
+                "nDCG@10": round(base["ndcg@10"], 3),
             }
         )
         for key in variant_keys:
@@ -1114,6 +1136,7 @@ def __(chunker_results, mo, pd, per_config, variant_keys):
                     "hit@5": round(a["hit_rate@5"], 3),
                     "hit@10": round(a["hit_rate@10"], 3),
                     "MRR": round(a["mrr"], 3),
+                    "nDCG@10": round(a["ndcg@10"], 3),
                 }
             )
         return pd.DataFrame(chunker_rows).set_index("config")
@@ -1130,6 +1153,62 @@ def __(chunker_results, mo, pd, per_config, variant_keys):
     )
     chunker_display
     return (chunker_df,)
+
+
+@app.cell
+def __(chunker_df, mo):
+    """Interpretation of the chunker-ablation results — three findings + mechanism."""
+    if chunker_df is None:
+        chunker_findings = mo.md("_Findings will appear here once results land._")
+    else:
+        # Pull headline numbers programmatically so the prose stays in sync with
+        # the actual JSONs on disk — no hand-typed numbers below this line.
+        baseline_row = chunker_df.loc["e5_large_coarse_rerank (M2 baseline)"]
+        best_mrr_idx = chunker_df.drop("e5_large_coarse_rerank (M2 baseline)")["MRR"].idxmax()
+        best_hit10_idx = chunker_df.drop("e5_large_coarse_rerank (M2 baseline)")["hit@10"].idxmax()
+        best_mrr_row = chunker_df.loc[best_mrr_idx]
+        best_hit10_row = chunker_df.loc[best_hit10_idx]
+        d_mrr = best_mrr_row["MRR"] - baseline_row["MRR"]
+        d_hit10 = best_hit10_row["hit@10"] - baseline_row["hit@10"]
+        d_ndcg = best_mrr_row["nDCG@10"] - baseline_row["nDCG@10"]
+        chunker_findings = mo.md(
+            f"""
+**Findings.**
+
+1. **`{best_mrr_idx}` is the new SOTA on ranking quality.**
+   MRR={best_mrr_row['MRR']:.3f} (Δ {d_mrr:+.3f} vs the re-run baseline at
+   the same _n_=88), nDCG@10={best_mrr_row['nDCG@10']:.3f}
+   (Δ {d_ndcg:+.3f}). 800-char windows are short enough to surface the
+   gold span yet long enough to preserve the sentence-level evidence
+   the cross-encoder reranker scores.
+
+2. **`{best_hit10_idx}` is best on recall.** hit@10={best_hit10_row['hit@10']:.3f}
+   (Δ {d_hit10:+.3f}). The trade-off mirrors a classic precision–recall
+   tension: bigger or overlapped windows surface more gold papers in
+   the top 10, but the reranker has more candidates to fight through
+   so the right paper less often lands at rank 1.
+
+3. **No-overlap variants beat their 50 %-overlap siblings on MRR
+   consistently** (`s400_o0` > `s400_o200`, `s800_o0` > `s800_o400`).
+   Counter-intuitive at first — overlap should help recall — but in
+   practice the duplicated content inflates the candidate pool with
+   near-identical chunks and the reranker can't tell them apart.
+
+4. **`recursive_400` is the worst variant on every paper-level metric.**
+   The LangChain-style cascade splits on `\\n\\n` → `\\n` → `". "` → `" "`,
+   which means it fragments mid-paragraph at sentence boundaries. That
+   destroys exactly the sentence-level coherence the reranker depends
+   on. Negative finding worth reporting: the popular off-the-shelf
+   recursive splitter is the worst choice for this corpus.
+
+**Mechanism summary.** Chunker geometry matters more than fine-grained
+overlap. The lever is *paragraph-aware fixed-size windows around
+800 chars with no overlap* — a cheap, deterministic recipe that any
+RAG pipeline can adopt without retraining the embedder or reranker.
+"""
+        )
+    chunker_findings
+    return (chunker_findings,)
 
 
 @app.cell
@@ -1188,31 +1267,116 @@ def __(chunker_df, mo, pd, px):
 def __(mo):
     mo.md(
         r"""
+### Qualitative: why `recursive_400` loses
+
+The headline tables compress nine variants into rank numbers. The
+mechanism is easier to see by reading the chunks the splitters actually
+produce on the same passage. Below: the opening of Shapiro (2001)
+*Navigating the Patent Thicket* — paper `00002_W2122361802`, a multi-hop
+question target — chunked by the SOTA `s800_o0` paragraph-aware
+splitter vs the underperforming `recursive_400`.
+"""
+    )
+    return
+
+
+@app.cell
+def __(json, mo, repo_root):
+    """Side-by-side comparison: first three chunks per variant on the same paper."""
+    chunks_dir = repo_root / "data" / "s3_archive" / "chunks"
+    paper_id = "00002_W2122361802"
+
+    def first_n_chunks(variant: str, n: int = 3) -> list[dict]:
+        path = chunks_dir / f"{paper_id}_{variant}.json"
+        if not path.is_file():
+            return []
+        data = json.loads(path.read_text())
+        return data.get("chunks", [])[:n]
+
+    s800 = first_n_chunks("s800_o0", 3)
+    rec = first_n_chunks("recursive_400", 3)
+
+    def render(label: str, chunks: list[dict]) -> str:
+        if not chunks:
+            return f"**{label}** — _chunks not on disk_"
+        rows = [f"**{label}** ({len(chunks)} of N shown)"]
+        for c in chunks:
+            text = c.get("text", "").replace("\n", " ").strip()
+            if len(text) > 280:
+                text = text[:280] + "…"
+            rows.append(
+                f"- _{c.get('chunk_id', '?')}_ "
+                f"({c.get('char_end', 0) - c.get('char_start', 0)} chars): "
+                f"{text}"
+            )
+        return "\n".join(rows)
+
+    chunker_qualitative = mo.md(
+        render("`s800_o0` (paragraph-aware, no overlap)", s800)
+        + "\n\n"
+        + render("`recursive_400` (LangChain-style separator cascade)", rec)
+        + "\n\n"
+        "**Read:** `s800_o0` keeps each section/abstract paragraph as one "
+        "self-contained chunk, so the reranker scores one cohesive passage "
+        "per candidate. `recursive_400` slices the same content at sentence "
+        "boundaries, producing many short fragments whose semantic content "
+        "is fractionally retained. The reranker scores those fragments at "
+        "a discount because none of them carries the full claim."
+    )
+    chunker_qualitative
+    return (chunker_qualitative,)
+
+
+@app.cell
+def __(mo):
+    mo.md(
+        r"""
 ## Reproducibility
 
+The chunker-ablation results in this notebook came from a SCITAS izar
+SLURM job because the course's RCP project hit `OverLimit` on the
+75-GPU quota — see the *Cluster pivot* note in the preamble for the
+full story. Three equivalent paths are wired up:
+
 ```bash
-# Single config eval (M2 anchor)
+# (A) SCITAS izar — primary path for the M3 ablation
+#     1× V100-32GB, ~8h for the full 9-variant grid
+ssh enbruno@izar.hpc.epfl.ch
+cd /scratch/izar/$USER/cs552-faithful-rag
+sbatch scitas_support/chunker_ablation_izar.sbatch
+
+# (B) EPFL RCP — original path, gated by 75/75 GPU quota
+GASPAR=<username> GROUP=<group> ./rcp_support/submit_chunker_ablation.sh
+
+# (C) Local CUDA / MPS fallback — for when neither cluster is reachable.
+#     Idempotent: skips finished variants on rerun.
+BATCH_SIZE=32 DEVICE=cuda ./scripts/run_chunker_ablation_local.sh
+
+# Pull cluster results back to local
+rsync -av enbruno@izar.hpc.epfl.ch:/scratch/izar/enbruno/cs552-faithful-rag/evaluation/retrieval_eval/results/ \
+    evaluation/retrieval_eval/results/
+
+# Single-config eval (M2 anchor re-run at n=88 — runs locally,
+#                     no GPU needed — it's just retrieve + HTTPS rerank)
 uv run python -m evaluation.retrieval_eval.evaluate_retrieval \
     --config e5_large_coarse_rerank
 
-# Full M2 + M3 ablation, refresh comparison.md
+# Summarise the 9 + 1 result JSONs into a markdown table + CSV
+uv run python -m scripts.summarise_chunker_results
+
+# Full M2 + M3 ablation comparison
 uv run python -m scripts.run_retrieval_ablation --run-missing
 
-# M3 chunker variants (local MPS, ~10-18h depending on grid)
-./scripts/run_chunker_ablation_local.sh
-
-# M3 chunker variants (RCP, A100, ~30min when a slot is available)
-GASPAR=enbruno GROUP=g68 ./rcp_support/submit_chunker_ablation.sh
-
-# This notebook
+# Edit this notebook (marimo edit; ipynb is regenerated from the .py)
 uv run marimo edit notebooks/marimo/elie_retrieval_ablation.py
 ```
 
 All artifacts in the notebook come from
 `evaluation/retrieval_eval/results/*.json`, themselves produced by the
-scripts above. Each result JSON embeds the top-K retrieved papers and
+paths above. Each result JSON embeds the top-K retrieved papers and
 chunks per query, so nDCG and any future ranking-based metric can be
-recomputed without re-running the retriever.
+recomputed without re-running the retriever. The SLURM logs for the
+SCITAS run are committed to `slurm_logs/chunker-2958659.{out,err}`.
 """
     )
     return
