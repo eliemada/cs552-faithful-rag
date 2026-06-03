@@ -1176,13 +1176,13 @@ def __(chunker_df, mo):
 **Findings.**
 
 1. **`{best_mrr_idx}` is the new SOTA on ranking quality.**
-   MRR={best_mrr_row['MRR']:.3f} (Δ {d_mrr:+.3f} vs the re-run baseline at
-   the same _n_=88), nDCG@10={best_mrr_row['nDCG@10']:.3f}
+   MRR={best_mrr_row["MRR"]:.3f} (Δ {d_mrr:+.3f} vs the re-run baseline at
+   the same _n_=88), nDCG@10={best_mrr_row["nDCG@10"]:.3f}
    (Δ {d_ndcg:+.3f}). 800-char windows are short enough to surface the
    gold span yet long enough to preserve the sentence-level evidence
    the cross-encoder reranker scores.
 
-2. **`{best_hit10_idx}` is best on recall.** hit@10={best_hit10_row['hit@10']:.3f}
+2. **`{best_hit10_idx}` is best on recall.** hit@10={best_hit10_row["hit@10"]:.3f}
    (Δ {d_hit10:+.3f}). The trade-off mirrors a classic precision–recall
    tension: bigger or overlapped windows surface more gold papers in
    the top 10, but the reranker has more candidates to fight through
