@@ -1,0 +1,146 @@
+[mer 03 jun 2026 07:15:55 CEST] host=i45 gpu=Tesla V100-PCIE-32GB
+Wed Jun  3 07:15:55 2026
++---------------------------------------------------------------------------------------+
+| NVIDIA-SMI 535.154.05             Driver Version: 535.154.05   CUDA Version: 12.2     |
+|-----------------------------------------+----------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |         Memory-Usage | GPU-Util  Compute M. |
+|                                         |                      |               MIG M. |
+|=========================================+======================+======================|
+|   0  Tesla V100-PCIE-32GB           On  | 00000000:D8:00.0 Off |                  Off |
+| N/A   37C    P0              33W / 250W |      0MiB / 32768MiB |      0%      Default |
+|                                         |                      |                  N/A |
++-----------------------------------------+----------------------+----------------------+
+
++---------------------------------------------------------------------------------------+
+| Processes:                                                                            |
+|  GPU   GI   CI        PID   Type   Process name                            GPU Memory |
+|        ID   ID                                                             Usage      |
+|=======================================================================================|
+|  No running processes found                                                           |
++---------------------------------------------------------------------------------------+
+Pinned `.python-version` to `3.12`
+[mer 03 jun 2026 07:22:03 CEST] papers in processed/: 1410, coarse chunks: 999
+[mer 03 jun 2026 07:24:21 CEST] ==> building e5_large_s200_o0
+[mer 03 jun 2026 08:31:51 CEST] ==> building e5_large_s200_o100
+[mer 03 jun 2026 09:30:52 CEST] ==> building e5_large_s400_o0
+[mer 03 jun 2026 10:33:17 CEST] ==> building e5_large_s400_o200
+[mer 03 jun 2026 11:29:49 CEST] ==> building e5_large_s600_o0
+[mer 03 jun 2026 12:24:22 CEST] ==> building e5_large_s600_o300
+[mer 03 jun 2026 13:15:34 CEST] ==> building e5_large_s800_o0
+[mer 03 jun 2026 14:01:22 CEST] ==> building e5_large_s800_o400
+[mer 03 jun 2026 14:45:55 CEST] ==> building e5_large_recursive_400
+Running e5_rerank_s200_o0 ...
+Resolving gold dataset → chunks ...
+  88 evaluable queries
+Loading retriever config: e5_rerank_s200_o0
+Running evaluation ...
+
+Wrote /scratch/izar/enbruno/cs552-faithful-rag/evaluation/retrieval_eval/results/e5_rerank_s200_o0.json
+  paper-level n=88: hit@5=0.943  hit@10=0.977  mrr=0.824
+  chunk-level: no queries with chunk coverage at this granularity
+Running e5_rerank_s200_o100 ...
+Resolving gold dataset → chunks ...
+  88 evaluable queries
+Loading retriever config: e5_rerank_s200_o100
+Running evaluation ...
+
+Wrote /scratch/izar/enbruno/cs552-faithful-rag/evaluation/retrieval_eval/results/e5_rerank_s200_o100.json
+  paper-level n=88: hit@5=0.932  hit@10=0.977  mrr=0.834
+  chunk-level: no queries with chunk coverage at this granularity
+Running e5_rerank_s400_o0 ...
+Resolving gold dataset → chunks ...
+  88 evaluable queries
+Loading retriever config: e5_rerank_s400_o0
+Running evaluation ...
+
+Wrote /scratch/izar/enbruno/cs552-faithful-rag/evaluation/retrieval_eval/results/e5_rerank_s400_o0.json
+  paper-level n=88: hit@5=0.943  hit@10=0.966  mrr=0.875
+  chunk-level: no queries with chunk coverage at this granularity
+Running e5_rerank_s400_o200 ...
+Resolving gold dataset → chunks ...
+  88 evaluable queries
+Loading retriever config: e5_rerank_s400_o200
+Running evaluation ...
+
+Wrote /scratch/izar/enbruno/cs552-faithful-rag/evaluation/retrieval_eval/results/e5_rerank_s400_o200.json
+  paper-level n=88: hit@5=0.920  hit@10=0.977  mrr=0.810
+  chunk-level: no queries with chunk coverage at this granularity
+Running e5_rerank_s600_o0 ...
+Resolving gold dataset → chunks ...
+  88 evaluable queries
+Loading retriever config: e5_rerank_s600_o0
+Running evaluation ...
+
+Wrote /scratch/izar/enbruno/cs552-faithful-rag/evaluation/retrieval_eval/results/e5_rerank_s600_o0.json
+  paper-level n=88: hit@5=0.943  hit@10=0.989  mrr=0.864
+  chunk-level: no queries with chunk coverage at this granularity
+Running e5_rerank_s600_o300 ...
+Resolving gold dataset → chunks ...
+  88 evaluable queries
+Loading retriever config: e5_rerank_s600_o300
+Running evaluation ...
+
+Wrote /scratch/izar/enbruno/cs552-faithful-rag/evaluation/retrieval_eval/results/e5_rerank_s600_o300.json
+  paper-level n=88: hit@5=0.955  hit@10=0.977  mrr=0.856
+  chunk-level: no queries with chunk coverage at this granularity
+Running e5_rerank_s800_o0 ...
+Resolving gold dataset → chunks ...
+  88 evaluable queries
+Loading retriever config: e5_rerank_s800_o0
+Running evaluation ...
+
+Wrote /scratch/izar/enbruno/cs552-faithful-rag/evaluation/retrieval_eval/results/e5_rerank_s800_o0.json
+  paper-level n=88: hit@5=0.943  hit@10=0.966  mrr=0.902
+  chunk-level: no queries with chunk coverage at this granularity
+Running e5_rerank_s800_o400 ...
+Resolving gold dataset → chunks ...
+  88 evaluable queries
+Loading retriever config: e5_rerank_s800_o400
+Running evaluation ...
+
+Wrote /scratch/izar/enbruno/cs552-faithful-rag/evaluation/retrieval_eval/results/e5_rerank_s800_o400.json
+  paper-level n=88: hit@5=0.955  hit@10=0.989  mrr=0.862
+  chunk-level: no queries with chunk coverage at this granularity
+Running e5_rerank_recursive_400 ...
+Resolving gold dataset → chunks ...
+  88 evaluable queries
+Loading retriever config: e5_rerank_recursive_400
+Running evaluation ...
+
+Wrote /scratch/izar/enbruno/cs552-faithful-rag/evaluation/retrieval_eval/results/e5_rerank_recursive_400.json
+  paper-level n=88: hit@5=0.920  hit@10=0.955  mrr=0.778
+  chunk-level: no queries with chunk coverage at this granularity
+Wrote evaluation/retrieval_eval/results/comparison.json
+Wrote evaluation/retrieval_eval/results/comparison.md
+  configs included: ['coarse_faiss', 'coarse_rerank', 'fine_faiss', 'fine_rerank', 'bge_m3_coarse_faiss', 'bge_m3_coarse_rerank', 'bge_m3_fine_faiss', 'bge_m3_fine_rerank', 'e5_large_coarse_faiss', 'e5_large_coarse_rerank', 'e5_large_fine_faiss', 'e5_large_fine_rerank', 'colbert_coarse_faiss', 'colbert_coarse_rerank', 'colbert_fine_faiss', 'colbert_fine_rerank', 'e5_rerank_s200_o0', 'e5_rerank_s200_o100', 'e5_rerank_s400_o0', 'e5_rerank_s400_o200', 'e5_rerank_s600_o0', 'e5_rerank_s600_o300', 'e5_rerank_s800_o0', 'e5_rerank_s800_o400', 'e5_rerank_recursive_400']
+[mer 03 jun 2026 16:15:12 CEST] ==> indices:
+-rw-r--r--+ 1 enbruno in-ma2-unit 1.2G  3 jun 15:53 e5_large_recursive_400.faiss
+-rw-r--r--+ 1 enbruno in-ma2-unit 171M  3 jun 15:53 e5_large_recursive_400_metadata.json
+-rw-r--r--+ 1 enbruno in-ma2-unit 781M  3 jun 08:31 e5_large_s200_o0.faiss
+-rw-r--r--+ 1 enbruno in-ma2-unit 234M  3 jun 08:31 e5_large_s200_o0_metadata.json
+-rw-r--r--+ 1 enbruno in-ma2-unit 781M  3 jun 09:30 e5_large_s200_o100.faiss
+-rw-r--r--+ 1 enbruno in-ma2-unit 193M  3 jun 09:30 e5_large_s200_o100_metadata.json
+-rw-r--r--+ 1 enbruno in-ma2-unit 589M  3 jun 10:33 e5_large_s400_o0.faiss
+-rw-r--r--+ 1 enbruno in-ma2-unit 217M  3 jun 10:33 e5_large_s400_o0_metadata.json
+-rw-r--r--+ 1 enbruno in-ma2-unit 589M  3 jun 11:29 e5_large_s400_o200.faiss
+-rw-r--r--+ 1 enbruno in-ma2-unit 176M  3 jun 11:29 e5_large_s400_o200_metadata.json
+-rw-r--r--+ 1 enbruno in-ma2-unit 472M  3 jun 12:24 e5_large_s600_o0.faiss
+-rw-r--r--+ 1 enbruno in-ma2-unit 206M  3 jun 12:24 e5_large_s600_o0_metadata.json
+-rw-r--r--+ 1 enbruno in-ma2-unit 472M  3 jun 13:15 e5_large_s600_o300.faiss
+-rw-r--r--+ 1 enbruno in-ma2-unit 166M  3 jun 13:15 e5_large_s600_o300_metadata.json
+-rw-r--r--+ 1 enbruno in-ma2-unit 388M  3 jun 14:01 e5_large_s800_o0.faiss
+-rw-r--r--+ 1 enbruno in-ma2-unit 199M  3 jun 14:01 e5_large_s800_o0_metadata.json
+-rw-r--r--+ 1 enbruno in-ma2-unit 388M  3 jun 14:45 e5_large_s800_o400.faiss
+-rw-r--r--+ 1 enbruno in-ma2-unit 158M  3 jun 14:45 e5_large_s800_o400_metadata.json
+[mer 03 jun 2026 16:15:12 CEST] ==> results:
+-rw-r--r--+ 1 enbruno in-ma2-unit 224K  3 jun 16:15 e5_rerank_recursive_400.json
+-rw-r--r--+ 1 enbruno in-ma2-unit 213K  3 jun 15:55 e5_rerank_s200_o0.json
+-rw-r--r--+ 1 enbruno in-ma2-unit 217K  3 jun 15:58 e5_rerank_s200_o100.json
+-rw-r--r--+ 1 enbruno in-ma2-unit 213K  3 jun 16:00 e5_rerank_s400_o0.json
+-rw-r--r--+ 1 enbruno in-ma2-unit 217K  3 jun 16:02 e5_rerank_s400_o200.json
+-rw-r--r--+ 1 enbruno in-ma2-unit 213K  3 jun 16:05 e5_rerank_s600_o0.json
+-rw-r--r--+ 1 enbruno in-ma2-unit 217K  3 jun 16:07 e5_rerank_s600_o300.json
+-rw-r--r--+ 1 enbruno in-ma2-unit 213K  3 jun 16:10 e5_rerank_s800_o0.json
+-rw-r--r--+ 1 enbruno in-ma2-unit 217K  3 jun 16:12 e5_rerank_s800_o400.json
+[mer 03 jun 2026 16:15:12 CEST] done.

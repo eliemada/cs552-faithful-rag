@@ -132,12 +132,12 @@ build_one_index() {
         echo "  skip: ${out} already exists"
         return 0
     fi
-    echo "  building e5_large_${v} on ${DEVICE} ..."
+    echo "  building e5_large_${v} on ${DEVICE} (batch=${BATCH_SIZE:-64}) ..."
     uv run python -m scripts.build_hf_index \
         --model e5-large \
         --chunk-type "${v}" \
         --restrict-to-papers-with coarse \
-        --batch-size 64 \
+        --batch-size "${BATCH_SIZE:-64}" \
         --device "${DEVICE}"
 }
 

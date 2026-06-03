@@ -23,6 +23,15 @@ Four configurations spanning chunk granularity × ±ZeroEntropy reranker.
 | colbert_coarse_rerank | 37 | 0.892 | 0.919 | 0.946 | 0.274 | 0.946 | 0.786 |
 | colbert_fine_faiss | 37 | 0.838 | 0.919 | 0.973 | 0.254 | 0.946 | 0.659 |
 | colbert_fine_rerank | 37 | 0.919 | 0.946 | 0.946 | 0.276 | 0.932 | 0.704 |
+| e5_rerank_s200_o0 | 88 | 0.943 | 0.977 | 0.989 | 0.467 | 0.955 | 0.824 |
+| e5_rerank_s200_o100 | 88 | 0.932 | 0.977 | 0.989 | 0.439 | 0.966 | 0.834 |
+| e5_rerank_s400_o0 | 88 | 0.943 | 0.966 | 0.989 | 0.496 | 0.960 | 0.875 |
+| e5_rerank_s400_o200 | 88 | 0.920 | 0.977 | 0.989 | 0.460 | 0.966 | 0.810 |
+| e5_rerank_s600_o0 | 88 | 0.943 | 0.989 | 0.989 | 0.502 | 0.966 | 0.864 |
+| e5_rerank_s600_o300 | 88 | 0.955 | 0.977 | 0.989 | 0.474 | 0.966 | 0.856 |
+| e5_rerank_s800_o0 | 88 | 0.943 | 0.966 | 0.977 | 0.510 | 0.955 | 0.902 |
+| e5_rerank_s800_o400 | 88 | 0.955 | 0.989 | 0.989 | 0.495 | 0.960 | 0.862 |
+| e5_rerank_recursive_400 | 88 | 0.920 | 0.955 | 0.966 | 0.436 | 0.943 | 0.778 |
 
 `n` is the number of evaluable queries. At paper level every gold pair contributes; at
 chunk level only queries whose gold span overlaps at least one chunk at the relevant
@@ -49,16 +58,25 @@ see `evaluation/retrieval_eval/gold_resolver.py`).
 | colbert_coarse_rerank | 20 | 0.700 | 0.750 | 0.800 | 0.053 | 0.490 | 0.597 |
 | colbert_fine_faiss | 16 | 0.375 | 0.500 | 0.562 | 0.031 | 0.257 | 0.272 |
 | colbert_fine_rerank | 16 | 0.562 | 0.688 | 0.750 | 0.050 | 0.385 | 0.288 |
+| e5_rerank_s200_o0 | 0 | — | — | — | — | — | — |
+| e5_rerank_s200_o100 | 0 | — | — | — | — | — | — |
+| e5_rerank_s400_o0 | 0 | — | — | — | — | — | — |
+| e5_rerank_s400_o200 | 0 | — | — | — | — | — | — |
+| e5_rerank_s600_o0 | 0 | — | — | — | — | — | — |
+| e5_rerank_s600_o300 | 0 | — | — | — | — | — | — |
+| e5_rerank_s800_o0 | 0 | — | — | — | — | — | — |
+| e5_rerank_s800_o400 | 0 | — | — | — | — | — | — |
+| e5_rerank_recursive_400 | 0 | — | — | — | — | — | — |
 
 ### Paper-level hit@10 by question category
 
-| category | n | coarse_faiss | coarse_rerank | fine_faiss | fine_rerank | bge_m3_coarse_faiss | bge_m3_coarse_rerank | bge_m3_fine_faiss | bge_m3_fine_rerank | e5_large_coarse_faiss | e5_large_coarse_rerank | e5_large_fine_faiss | e5_large_fine_rerank | colbert_coarse_faiss | colbert_coarse_rerank | colbert_fine_faiss | colbert_fine_rerank |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| comparison | 4 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 |
-| factual | 9 | 0.778 | 0.889 | 0.889 | 0.889 | 1.000 | 0.889 | 1.000 | 0.889 | 0.889 | 0.889 | 0.889 | 0.889 | 0.778 | 0.778 | 1.000 | 0.889 |
-| methodology | 4 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 |
-| multi_hop | 6 | 1.000 | 1.000 | 0.833 | 1.000 | 1.000 | 1.000 | 0.667 | 0.833 | 1.000 | 1.000 | 0.667 | 0.833 | 0.833 | 1.000 | 0.667 | 0.833 |
-| policy_impact | 14 | 0.786 | 0.929 | 0.857 | 1.000 | 0.857 | 0.929 | 1.000 | 0.929 | 1.000 | 1.000 | 0.929 | 1.000 | 0.929 | 0.929 | 0.929 | 1.000 |
+| category | n | coarse_faiss | coarse_rerank | fine_faiss | fine_rerank | bge_m3_coarse_faiss | bge_m3_coarse_rerank | bge_m3_fine_faiss | bge_m3_fine_rerank | e5_large_coarse_faiss | e5_large_coarse_rerank | e5_large_fine_faiss | e5_large_fine_rerank | colbert_coarse_faiss | colbert_coarse_rerank | colbert_fine_faiss | colbert_fine_rerank | e5_rerank_s200_o0 | e5_rerank_s200_o100 | e5_rerank_s400_o0 | e5_rerank_s400_o200 | e5_rerank_s600_o0 | e5_rerank_s600_o300 | e5_rerank_s800_o0 | e5_rerank_s800_o400 | e5_rerank_recursive_400 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| comparison | 4 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 |
+| factual | 9 | 0.778 | 0.889 | 0.889 | 0.889 | 1.000 | 0.889 | 1.000 | 0.889 | 0.889 | 0.889 | 0.889 | 0.889 | 0.778 | 0.778 | 1.000 | 0.889 | 0.955 | 0.909 | 0.955 | 0.909 | 0.955 | 0.955 | 0.955 | 0.955 | 0.955 |
+| methodology | 4 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 |
+| multi_hop | 6 | 1.000 | 1.000 | 0.833 | 1.000 | 1.000 | 1.000 | 0.667 | 0.833 | 1.000 | 1.000 | 0.667 | 0.833 | 0.833 | 1.000 | 0.667 | 0.833 | 0.923 | 1.000 | 0.923 | 1.000 | 1.000 | 0.923 | 0.923 | 1.000 | 1.000 |
+| policy_impact | 14 | 0.786 | 0.929 | 0.857 | 1.000 | 0.857 | 0.929 | 1.000 | 0.929 | 1.000 | 1.000 | 0.929 | 1.000 | 0.929 | 0.929 | 0.929 | 1.000 | 1.000 | 1.000 | 0.970 | 1.000 | 1.000 | 1.000 | 0.970 | 1.000 | 0.909 |
 
 ---
 
