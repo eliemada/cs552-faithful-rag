@@ -110,3 +110,7 @@ notebooks/marimo/__marimo__/
 evaluation/faithfulness/human_eval/rater_*.csv
 !evaluation/faithfulness/human_eval/sample.csv
 !evaluation/faithfulness/human_eval/ground_truth.json
+# Finalised rater files — whitelisted once that rater is done annotating so
+# the κ computation in the report is reproducible from this repo alone.
+!evaluation/faithfulness/human_eval/rater_andrea.csv
+!evaluation/faithfulness/human_eval/rater_yusif.csv

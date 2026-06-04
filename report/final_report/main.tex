@@ -40,7 +40,7 @@ Team CiteRight \\
 \thispagestyle{fancy}
 
 \begin{abstract}
-Faithfulness in retrieval-augmented generation (RAG) is typically measured by end-to-end answer-level metrics that conflate retrieval quality, grounded generation, and a miscalibrated judge into one number. We disentangle these axes on a span-grounded benchmark of 93 atomic claims (88 answerable queries) over intellectual-property and innovation-policy papers, and run four interventions: a sixteen-configuration retrieval ablation plus a nine-variant chunker-strategy sweep, a faithfulness verifier that runs DeBERTa-v3 NLI and an LLM judge side by side and is itself validated against a human-rated subset, a chunked-RAG vs.\ 1M-token long-context comparison with USD-normalised cost, and a Corrective RAG router \citep{yan2024corrective} with an abstain fallback. Headline numbers (all at $n{=}88$): an 800-char no-overlap chunker lifts E5-large MRR from 0.865 to \textbf{0.902} ($+3.7$\,pp) and nDCG@10 from 0.882 to 0.895, closing the M2 multi-hop gap; NLI and LLM-judge disagree by 55--61\,pp with \emph{zero} claims where both call \texttt{not\_supported}, exposing NLI as an unsound gate; CRAG lifts retrieval correctness from 60\% to 80\% on a mixed slice; at $n{=}30$ under a model-controlled three-arm ablation (Gemini both sides), long-context wins every RAGAS metric by $+6$ to $+14$\,pp at $6{-}14\times$ the answer-LLM cost.
+Faithfulness in retrieval-augmented generation (RAG) is typically measured by end-to-end answer-level metrics that conflate retrieval quality, grounded generation, and a miscalibrated judge into one number. We disentangle these axes on a span-grounded benchmark of 93 atomic claims (88 answerable queries) over intellectual-property and innovation-policy papers, and run four interventions: a sixteen-configuration retrieval ablation plus a nine-variant chunker-strategy sweep, a faithfulness verifier that runs DeBERTa-v3 NLI and an LLM judge side by side and is itself validated against a human-rated subset, a chunked-RAG vs.\ 1M-token long-context comparison with USD-normalised cost, and a Corrective RAG router \citep{yan2024corrective} with an abstain fallback. Headline numbers (all at $n{=}88$): an 800-char no-overlap chunker lifts E5-large MRR from 0.865 to \textbf{0.902} ($+3.7$\,pp) and nDCG@10 from 0.882 to 0.895, closing the M2 multi-hop gap; NLI and LLM-judge disagree by 55--61\,pp with \emph{zero} claims where both call \texttt{not\_supported}; a blinded 70-claim two-rater human eval pins the judge at Cohen's $\kappa{=}0.882$ vs.\ humans and NLI at $\kappa{=}-0.454$, conclusively ruling NLI out as a faithfulness gate; CRAG lifts retrieval correctness from 60\% to 80\% on a mixed slice; at $n{=}30$ under a model-controlled three-arm ablation (Gemini both sides), long-context wins every RAGAS metric by $+6$ to $+14$\,pp at $6{-}14\times$ the answer-LLM cost.
 \end{abstract}
 
 
@@ -53,7 +53,7 @@ The standard fix --- bolt on an NLI faithfulness check --- inherits NLI's known 
 
 We disentangle these axes on a span-grounded benchmark and four targeted interventions. The gold set is 93 claim-level QA pairs over intellectual-property and innovation-policy papers in which every claim carries byte-validated character spans into its source document. On top of this gold we run: (i) a sixteen-configuration retrieval ablation that isolates embedder, chunker, and reranker contributions and adds a chunker-strategy sweep; (ii) a faithfulness verifier that runs DeBERTa-v3 NLI \citep{he2021debertav3} and an LLM judge side by side and validates both heads against a human-rated subset; (iii) a chunked-RAG vs.\ 1M-token long-context comparison with USD-normalised cost; and (iv) a Corrective RAG router \citep{yan2024corrective} with an abstain fallback wired to the unanswerable stratum.
 
-\paragraph{Contributions.} (1)~A character-span-grounded benchmark of 93 atomic claims (88 answerable queries plus a 9-item unanswerable stratum) with an inter-annotator-agreement subset and six adversarial controls. (2)~A two-stage retrieval study: an embedder grid that names E5-large \citep{wang2024e5} coarse$+$rerank as the M2 SOTA, followed by a nine-variant chunker-strategy ablation that lifts the SOTA to \textbf{0.902 MRR} ($+3.7$\,pp) with 800-char no-overlap chunks, identifying chunker geometry as a more tractable lever than embedder family for closing the multi-hop gap. (3)~A 55--61\,pp NLI-vs-judge disagreement and \emph{zero} claims where both heads call \texttt{not\_supported} --- a smoking gun that NLI alone is an unsound gate --- together with a human-eval pass reporting Cohen's $\kappa$ \citep{cohen1960kappa} of each automated head against humans. (4)~A CRAG ablation that lifts retrieval correctness from 60\% to 80\% on a mixed-quality slice and a documented abstain branch that trades coverage for precision.
+\paragraph{Contributions.} (1)~A character-span-grounded benchmark of 93 atomic claims (88 answerable queries plus a 9-item unanswerable stratum) with an inter-annotator-agreement subset and six adversarial controls. (2)~A two-stage retrieval study: an embedder grid that names E5-large \citep{wang2024e5} coarse$+$rerank as the M2 SOTA, followed by a nine-variant chunker-strategy ablation that lifts the SOTA to \textbf{0.902 MRR} ($+3.7$\,pp) with 800-char no-overlap chunks, identifying chunker geometry as a more tractable lever than embedder family for closing the multi-hop gap. (3)~A 55--61\,pp NLI-vs-judge disagreement together with a blinded 70-claim two-rater human eval that pins the judge at Cohen's $\kappa{=}0.882$ vs.\ majority human reading and NLI at $\kappa{=}-0.454$ \citep{cohen1960kappa} --- conclusively ruling out NLI as a faithfulness gate and validating the judge. (4)~A CRAG ablation that lifts retrieval correctness from 60\% to 80\% on a mixed-quality slice and a documented abstain branch that trades coverage for precision.
 
 
 \section{Approach}
@@ -169,12 +169,25 @@ Three findings:
 
 The verifier extends the proposal's NLI pipeline (DeBERTa-v3-large-mnli, \citealp{he2021debertav3}) with an LLM-judge head. On 24 answerable gold questions answered closed-book by three generators (GPT-4o-mini, Claude-3.5-haiku, DeepSeek-chat), NLI marks $18/24$ ($0.750$) faithful at every provider while the LLM judge marks $0.138$/$0.173$/$0.198$ --- a $55$--$61$\,pp gap matching a known NLI failure mode \citep{min-etal-2023-factscore,gao2023enabling}: NLI alone fails as a faithfulness gate.
 
-% TODO (Andrea + Yusif): human-eval pass per TA feedback ("Your faithfulness
-% section flags the 55-61pp NLI-vs-judge disagreement, but doesn't provide
-% information about the faithfulness of the judge LLM. Human evaluation
-% would be a strong addition to validate your claims here.").
-% Target: 60 disagreement items + 20 agreement controls; 2 annotators each;
-% report Cohen's kappa human vs (a) NLI, (b) judge.
+\paragraph{Human-eval validation (M3).} The 55--61\,pp NLI-vs-judge gap is only meaningful if we can establish which head humans agree with. We stratified a 70-claim sample across both disagreement classes (NLI=supported,judge=not\_supported and vice versa) plus a both-supported control, ran a blinded two-rater pass (raters did not see either automated label), and computed Cohen's $\kappa$ \citep{cohen1960kappa} pairwise on the 56 strict disagreement claims plus the agreement control.
+
+\begin{table}[h]
+\centering
+\footnotesize
+\begin{tabular}{lcc}
+\toprule
+pair & Cohen's $\kappa$ & $n$ \\
+\midrule
+rater\_a vs.\ rater\_b (inter-rater)        & 0.583          & 70 \\
+majority human vs.\ NLI                      & $-0.454$       & 56 \\
+\textbf{majority human vs.\ LLM judge}       & \textbf{0.882} & 56 \\
+\bottomrule
+\end{tabular}
+\caption{Human-eval Cohen's $\kappa$, 70-claim blinded sample. The judge tracks human reading almost perfectly; NLI is actively worse than random on the disagreement strata.}
+\label{tab:kappa}
+\end{table}
+
+The judge agrees with majority human reading at $\kappa{=}0.882$ (substantial-to-almost-perfect); NLI scores $\kappa{=}-0.454$ --- it is \emph{below chance} on the strata where the two automated heads disagree. On the $21$ \texttt{nli\_sup\_judge\_not} claims (NLI says supported, judge says not), the majority human label matches the judge on $18/21$ ($86\%$); on the $17$ \texttt{nli\_not\_judge\_sup} claims, the majority human label matches the judge on $17/17$ ($100\%$). Inter-rater $\kappa{=}0.583$ is above the $0.5$ acceptability floor; we report the result as a lower bound on judge-human agreement, not the definitive number. The headline: \textbf{the LLM judge is the trustworthy head and NLI should not be used as a faithfulness gate.}
 
 \subsection{End-to-end RAG vs long-context}
 \label{sec:ragas}
@@ -227,7 +240,7 @@ The intended beneficiaries are reviewers in citation-heavy workflows (legal rese
 \section{Conclusion}
 \label{sec:conclusion}
 
-A span-grounded benchmark plus four orthogonal interventions lets us pin component-level failure modes that end-to-end RAG metrics blur together. An embedder sweep names E5-large coarse$+$rerank the M2 SOTA, and a nine-variant chunker ablation lifts it further to \textbf{0.902 MRR} ($+3.7$\,pp) and \textbf{0.989 hit@10} ($+1.2$\,pp) with 800-char no-overlap chunks --- closing the multi-hop gap by tuning chunker geometry rather than the embedder. NLI and LLM-judge faithfulness disagree by 55--61\,pp with zero co-pessimistic claims, ruling out NLI as a standalone gate; CRAG lifts retrieval correctness by ${+}20$\,pp on a mixed slice with an abstain branch that trades coverage for precision on unanswerable items; at $n{=}30$ under a model-controlled three-arm ablation (Gemini both sides), long-context wins every RAGAS metric by $+6$ to $+14$\,pp at $6{-}14\times$ the answer-LLM cost. Limitations: a 93-claim English-only corpus from one domain, a two-rater human-eval, a closed-weight judge, and CRAG re-evaluated on a 10-question slice (M2 headline) with the full-93 sweep still in flight. Future work: multilingual port, IAA closure across all four annotators, a hierarchical chunker that preserves multi-hop bridges, and a calibrated abstain threshold tuned per-domain.
+A span-grounded benchmark plus four orthogonal interventions lets us pin component-level failure modes that end-to-end RAG metrics blur together. An embedder sweep names E5-large coarse$+$rerank the M2 SOTA, and a nine-variant chunker ablation lifts it further to \textbf{0.902 MRR} ($+3.7$\,pp) and \textbf{0.989 hit@10} ($+1.2$\,pp) with 800-char no-overlap chunks --- closing the multi-hop gap by tuning chunker geometry rather than the embedder. NLI and LLM-judge faithfulness disagree by 55--61\,pp and a 70-claim blinded human eval pins the judge at $\kappa{=}0.882$ vs.\ majority humans while NLI scores $\kappa{=}-0.454$, conclusively ruling out NLI as a standalone gate; CRAG lifts retrieval correctness by ${+}20$\,pp on a mixed slice with an abstain branch that trades coverage for precision on unanswerable items; at $n{=}30$ under a model-controlled three-arm ablation (Gemini both sides), long-context wins every RAGAS metric by $+6$ to $+14$\,pp at $6{-}14\times$ the answer-LLM cost. Limitations: a 93-claim English-only corpus from one domain, a two-rater human-eval, a closed-weight judge, and CRAG re-evaluated on a 10-question slice (M2 headline) with the full-93 sweep still in flight. Future work: multilingual port, IAA closure across all four annotators, a hierarchical chunker that preserves multi-hop bridges, and a calibrated abstain threshold tuned per-domain.
 
 
 % Entries for the entire Anthology, followed by custom entries

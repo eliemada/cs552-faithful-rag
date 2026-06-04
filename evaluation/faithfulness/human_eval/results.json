@@ -1,0 +1,41 @@
+{
+  "confusion_human_judge": {
+    "not_supported|not_supported": 18,
+    "not_supported|supported": 0,
+    "supported|not_supported": 3,
+    "supported|supported": 35
+  },
+  "confusion_human_nli": {
+    "not_supported|not_supported": 0,
+    "not_supported|supported": 18,
+    "supported|not_supported": 17,
+    "supported|supported": 21
+  },
+  "confusion_rater_ab": {
+    "not_supported|not_supported": 18,
+    "not_supported|supported": 14,
+    "supported|not_supported": 0,
+    "supported|supported": 38
+  },
+  "kappa_human_vs_judge": 0.8823529411764705,
+  "kappa_human_vs_nli": -0.454005934718101,
+  "kappa_rater_a_vs_b": 0.5826235093696764,
+  "n_joined": 70,
+  "stratum_breakdown": {
+    "both_supported": {
+      "human_eq_judge": 18,
+      "human_eq_nli": 18,
+      "n": 18
+    },
+    "nli_not_judge_sup": {
+      "human_eq_judge": 17,
+      "human_eq_nli": 0,
+      "n": 17
+    },
+    "nli_sup_judge_not": {
+      "human_eq_judge": 18,
+      "human_eq_nli": 3,
+      "n": 21
+    }
+  }
+}
