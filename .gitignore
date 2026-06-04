@@ -30,6 +30,16 @@ ENV/
 # Data directories (large files, generated data)
 data/
 openalex_data/
+# Exception: 2 small chunk files needed by Elie's notebook qualitative
+# side-by-side cell (variant chunks are not on HF; they're derived locally).
+# Re-include only the ancestor dirs and the two specific files.
+!data/
+!data/s3_archive/
+data/s3_archive/*
+!data/s3_archive/chunks/
+data/s3_archive/chunks/*
+!data/s3_archive/chunks/00002_W2122361802_s800_o0.json
+!data/s3_archive/chunks/00002_W2122361802_recursive_400.json
 *.parquet
 *.csv
 *.json.gz
