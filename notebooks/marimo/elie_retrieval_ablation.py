@@ -280,10 +280,22 @@ def __(mo):
     import sys
     from pathlib import Path
 
+    # Locate repo root: walk up, checking both ./pyproject.toml and ./code/pyproject.toml
+    # so the notebook works whether the grader unpacks the submission with
+    # pyproject.toml at the top level or one level below in a `code/` subdir.
     repo_root = Path.cwd().resolve()
-    while not (repo_root / "pyproject.toml").exists():
+    while True:
+        if (repo_root / "pyproject.toml").exists() and (repo_root / "evaluation").is_dir():
+            break
+        if (repo_root / "code" / "pyproject.toml").exists() and (
+            repo_root / "code" / "evaluation"
+        ).is_dir():
+            repo_root = repo_root / "code"
+            break
         if repo_root.parent == repo_root:
-            raise RuntimeError("Repo root not found above notebook.")
+            raise RuntimeError(
+                "Could not find repo root (no pyproject.toml + evaluation/ above or under notebook)."
+            )
         repo_root = repo_root.parent
     if str(repo_root) not in sys.path:
         sys.path.insert(0, str(repo_root))
