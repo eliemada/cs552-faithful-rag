@@ -76,8 +76,21 @@ def _select_sample(queries: list, sample_size: int, seed: int) -> list:
     return selected
 
 
-def _to_chunks_metadata_path(chunk_type: str) -> Path:
-    return REPO_ROOT / "data" / "s3_archive" / "indexes" / f"{chunk_type}_metadata.json"
+def _to_chunks_metadata_path(retriever_config) -> Path:
+    """Resolve the chunks-metadata file for a retriever config.
+
+    M2 indexes (OpenAI embedder) are written as ``<chunk_type>_metadata.json``
+    (``coarse_metadata.json``, ``fine_metadata.json``). Every other embedder
+    family + the M3 chunker-ablation variants use the FAISS-index naming
+    convention ``<embedder>_<chunk_type>_metadata.json``. We try the
+    prefixed name first (via ``RetrieverConfig.index_basename()``) and
+    fall back to the legacy chunk-type-only name.
+    """
+    indexes_dir = REPO_ROOT / "data" / "s3_archive" / "indexes"
+    prefixed = indexes_dir / f"{retriever_config.index_basename()}_metadata.json"
+    if prefixed.is_file():
+        return prefixed
+    return indexes_dir / f"{retriever_config.chunk_type}_metadata.json"
 
 
 def _aggregate_usage(per_sample: list[dict]) -> dict:
@@ -241,7 +254,7 @@ def main(argv: list[str] | None = None) -> int:
     retriever = load_adapter(args.retriever_config, indexes_dir=args.indexes_dir)
 
     print("Building chunk text lookup ...")
-    chunk_lookup = build_chunk_lookup(_to_chunks_metadata_path(retriever.config.chunk_type))
+    chunk_lookup = build_chunk_lookup(_to_chunks_metadata_path(retriever.config))
     print(f"  {len(chunk_lookup)} chunks indexed")
 
     print(f"\nGenerating RAG answers (model={args.answer_model_rag}) ...")
