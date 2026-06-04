@@ -879,7 +879,8 @@ def __(always_miss, json, per_config, repo_root):
         return {q["id"]: q for q in json.loads(gold_path.read_text())}
 
     def chunk_text_for_id(chunk_id: str) -> str:
-        """Look up a chunk's text from data/s3_archive/chunks/<paper>_coarse.json."""
+        """Look up a chunk's text from the local mirror, falling back to a
+        single-file HuggingFace download from `citeright/corpus` if absent."""
         # chunk_id format: "<paper_id>_<chunk_type>_<NNNN>"
         # Split from the right: chunk_type is the only non-numeric suffix component.
         parts = chunk_id.split("_")
@@ -889,7 +890,23 @@ def __(always_miss, json, per_config, repo_root):
         chunks_dir = repo_root / "data" / "s3_archive" / "chunks"
         chunk_file = chunks_dir / f"{paper_id}_{chunk_type}.json"
         if not chunk_file.is_file():
-            return f"<chunk file not found: {chunk_file.name}>"
+            # Lazy single-file HF fetch; gentler than `snapshot_download` of the
+            # full 71k-object corpus and keeps the notebook self-contained per
+            # TA M3 guidance (Ed #268).
+            import os as _os
+
+            from huggingface_hub import hf_hub_download  # type: ignore[import-not-found]
+
+            chunks_dir.mkdir(parents=True, exist_ok=True)
+            hf_hub_download(
+                "citeright/corpus",
+                f"chunks/{paper_id}_{chunk_type}.json",
+                repo_type="dataset",
+                local_dir=str(repo_root / "data" / "s3_archive"),
+                token=_os.environ.get("HF_TOKEN"),
+            )
+        if not chunk_file.is_file():
+            return f"<chunk file not retrievable: {chunk_file.name}>"
         doc = json.loads(chunk_file.read_text())
         for c in doc["chunks"]:
             if c["chunk_id"] == chunk_id:
