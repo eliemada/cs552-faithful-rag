@@ -13,11 +13,13 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 from pathlib import Path
 from typing import Final, Iterator, Literal
 
 from evaluation.common.paths import (
     GOLD_QA_PATH,
+    HF_CORPUS_BUNDLE,
     HF_CORPUS_REPO,
     HF_FALLBACK_CACHE,
     LOCAL_ARCHIVE,
@@ -168,22 +170,23 @@ def _explicit_override() -> Path | None:
     treat it as the **download target** rather than failing — so we don't
     raise here.
     """
-    import os
-
     if env_path := os.environ.get("CITERIGHT_DATA_DIR"):
         return Path(env_path)
     return None
 
 
-# The four FAISS files are the canonical sentinel for a complete corpus
-# download. They land last (largest binaries) and the loaders all need them,
-# so checking for these guards against partial / in-flight downloads being
-# mistaken for a populated cache.
+# Sentinel for a complete corpus download. These four FAISS files are what
+# the M3 notebooks (Faruk, Yusif) load in their smoke test cell, and they
+# are the four files shipped in ``bundles/corpus_min.tar.gz``. Checking for
+# them guards against partial / in-flight extractions being mistaken for a
+# populated cache. ``indexes/fine.*`` is NOT bundled — if a caller needs the
+# fine-granularity index they can fetch it lazily via ``snapshot_download``
+# with an explicit ``allow_patterns``.
 _REQUIRED_FILES: tuple[str, ...] = (
     "indexes/coarse.faiss",
     "indexes/coarse_metadata.json",
-    "indexes/fine.faiss",
-    "indexes/fine_metadata.json",
+    "indexes/bge_m3_coarse.faiss",
+    "indexes/bge_m3_coarse_metadata.json",
 )
 
 
@@ -219,22 +222,36 @@ def _ensure_file(rel_path: str) -> Path:
             "Install with: pip install huggingface_hub"
         ) from exc
 
-    import os as _os
-
     logger.info("Lazy-fetching %s from %s", rel_path, HF_CORPUS_REPO)
     hf_hub_download(
         HF_CORPUS_REPO,
         rel_path,
         repo_type="dataset",
         local_dir=str(art),
-        token=_os.environ.get("HF_TOKEN"),
+        token=os.environ.get("HF_TOKEN"),
     )
     return local
 
 
 def _hf_download(target: Path) -> Path:
+    """Fetch the minimal corpus bundle in one HF API call and extract it.
+
+    Replaces the previous ``snapshot_download`` (~71k metadata calls) with a
+    single ``hf_hub_download`` of ``bundles/corpus_min.tar.gz`` (~475 MB),
+    side-stepping the 1000-req / 5-min / IP HuggingFace rate limit that
+    bricks the grader's shared pod (see EdStem thread #268).
+
+    The bundle contains the indexes and coarse chunks that
+    ``load_chunk_metadata`` / ``load_faiss_index`` / ``load_paper_chunks``
+    require. Per-paper markdown (``processed/<paper_id>/document.md``) and
+    OpenAlex metadata stay on the existing single-file ``_ensure_file``
+    lazy-fetch path — they are only touched by a handful of cells and
+    don't justify the bundle size cost.
+    """
+    import tarfile
+
     try:
-        from huggingface_hub import snapshot_download
+        from huggingface_hub import hf_hub_download  # type: ignore[import-not-found]
     except ImportError as exc:
         raise RuntimeError(
             "Cannot reach corpus: no local archive and huggingface_hub not installed. "
@@ -242,6 +259,25 @@ def _hf_download(target: Path) -> Path:
         ) from exc
 
     target.mkdir(parents=True, exist_ok=True)
-    logger.info("Downloading corpus %s -> %s (first run, ~3 GB)", HF_CORPUS_REPO, target)
-    snapshot_download(HF_CORPUS_REPO, repo_type="dataset", local_dir=str(target))
+    logger.info(
+        "Downloading corpus bundle %s:%s -> %s (first run, ~475 MB)",
+        HF_CORPUS_REPO,
+        HF_CORPUS_BUNDLE,
+        target,
+    )
+    tar_path = hf_hub_download(
+        HF_CORPUS_REPO,
+        HF_CORPUS_BUNDLE,
+        repo_type="dataset",
+        token=os.environ.get("HF_TOKEN"),
+    )
+    logger.info("Extracting %s -> %s", tar_path, target)
+    with tarfile.open(tar_path, mode="r:gz") as tf:
+        # ``filter='data'`` (Python 3.12+) refuses absolute paths and symlinks
+        # escaping the destination — defence in depth, since this bundle is
+        # ours but tarfile-extract-attacks are a known footgun.
+        try:
+            tf.extractall(path=target, filter="data")
+        except TypeError:  # pragma: no cover — Python < 3.12
+            tf.extractall(path=target)
     return target

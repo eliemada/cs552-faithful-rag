@@ -29,6 +29,7 @@ SCRATCH_CACHE: Final[Path] = Path("/scratch/citeright_artifacts")
 HF_FALLBACK_CACHE: Final[Path] = REPO_ROOT / "data" / "hf_artifacts"
 
 HF_CORPUS_REPO: Final[str] = os.environ.get("CITERIGHT_HF_REPO", "citeright/corpus")
+HF_CORPUS_BUNDLE: Final[str] = os.environ.get("CITERIGHT_HF_BUNDLE", "bundles/corpus_min.tar.gz")
 GOLD_QA_PATH: Final[Path] = REPO_ROOT / "evaluation" / "gold_dataset" / "gold_qa.json"
 
 
