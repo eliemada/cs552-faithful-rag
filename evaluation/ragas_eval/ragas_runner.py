@@ -30,7 +30,7 @@ from typing import Any, Final
 from datasets import Dataset
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from pydantic import SecretStr
-from ragas import evaluate
+from ragas import RunConfig, evaluate
 from ragas.embeddings import LangchainEmbeddingsWrapper
 from ragas.llms import LangchainLLMWrapper
 from ragas.metrics._answer_relevance import AnswerRelevancy
@@ -128,13 +128,29 @@ def evaluate_samples(
     llm = _build_judge_llm(judge_model)
     embeddings = _build_embeddings(embed_model)
 
-    logger.info("Running RAGAS over %d samples with judge=%s", len(samples), judge_model)
+    # RAGAS defaults to max_workers=16 + timeout=180, which is aggressive on
+    # OpenRouter for slow judges (claude-haiku, claude-sonnet) and produces
+    # a long tail of TimeoutErrors. Override via env to throttle concurrency
+    # and extend the per-call ceiling. Defaults are tuned for OpenRouter.
+    run_config = RunConfig(
+        max_workers=int(os.environ.get("RAGAS_MAX_WORKERS", "4")),
+        timeout=int(os.environ.get("RAGAS_TIMEOUT", "300")),
+        max_retries=int(os.environ.get("RAGAS_MAX_RETRIES", "5")),
+    )
+    logger.info(
+        "Running RAGAS over %d samples with judge=%s (workers=%d, timeout=%ds)",
+        len(samples),
+        judge_model,
+        run_config.max_workers,
+        run_config.timeout,
+    )
     result = evaluate(
         dataset=dataset,
         metrics=metrics if metrics is not None else _build_metrics(),
         llm=llm,
         embeddings=embeddings,
         raise_exceptions=False,
+        run_config=run_config,
     )
 
     # evaluate() can return either an EvaluationResult or an Executor depending

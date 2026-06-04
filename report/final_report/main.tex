@@ -40,7 +40,7 @@ Team CiteRight \\
 \thispagestyle{fancy}
 
 \begin{abstract}
-Faithfulness in retrieval-augmented generation (RAG) is typically measured by end-to-end answer-level metrics that conflate retrieval quality, grounded generation, and a miscalibrated judge into one number. We disentangle these axes on a span-grounded benchmark of 93 atomic claims (88 answerable queries) over intellectual-property and innovation-policy papers, and run four interventions: a sixteen-configuration retrieval ablation plus a nine-variant chunker-strategy sweep, a faithfulness verifier that runs DeBERTa-v3 NLI and an LLM judge side by side and is itself validated against a human-rated subset, a chunked-RAG vs.\ 1M-token long-context comparison with USD-normalised cost, and a Corrective RAG router \citep{yan2024corrective} with an abstain fallback. Headline numbers (all at $n{=}88$): an 800-char no-overlap chunker lifts E5-large MRR from 0.865 to \textbf{0.902} ($+3.7$\,pp) and nDCG@10 from 0.882 to 0.895, closing the M2 multi-hop gap; NLI and LLM-judge disagree by 55--61\,pp with \emph{zero} claims where both call \texttt{not\_supported}, exposing NLI as an unsound gate; CRAG lifts retrieval correctness from 60\% to 80\% on a mixed slice; long-context wins every RAGAS metric but at ${\sim}10\times$ the answer-LLM cost.
+Faithfulness in retrieval-augmented generation (RAG) is typically measured by end-to-end answer-level metrics that conflate retrieval quality, grounded generation, and a miscalibrated judge into one number. We disentangle these axes on a span-grounded benchmark of 93 atomic claims (88 answerable queries) over intellectual-property and innovation-policy papers, and run four interventions: a sixteen-configuration retrieval ablation plus a nine-variant chunker-strategy sweep, a faithfulness verifier that runs DeBERTa-v3 NLI and an LLM judge side by side and is itself validated against a human-rated subset, a chunked-RAG vs.\ 1M-token long-context comparison with USD-normalised cost, and a Corrective RAG router \citep{yan2024corrective} with an abstain fallback. Headline numbers (all at $n{=}88$): an 800-char no-overlap chunker lifts E5-large MRR from 0.865 to \textbf{0.902} ($+3.7$\,pp) and nDCG@10 from 0.882 to 0.895, closing the M2 multi-hop gap; NLI and LLM-judge disagree by 55--61\,pp with \emph{zero} claims where both call \texttt{not\_supported}, exposing NLI as an unsound gate; CRAG lifts retrieval correctness from 60\% to 80\% on a mixed slice; at $n{=}30$ under a model-controlled three-arm ablation (Gemini both sides), long-context wins every RAGAS metric by $+6$ to $+14$\,pp at $6{-}14\times$ the answer-LLM cost.
 \end{abstract}
 
 
@@ -179,9 +179,31 @@ The verifier extends the proposal's NLI pipeline (DeBERTa-v3-large-mnli, \citeal
 \subsection{End-to-end RAG vs long-context}
 \label{sec:ragas}
 
-Two pipelines run through the four RAGAS metrics \citep{es2024ragas} on an $n{=}8$ stratified subset: chunked RAG (\S\ref{sec:retrieval} retriever, GPT-4o-mini) and a long-context baseline that loads every cited \texttt{document.md} into a 1M-token Gemini~2.5~Flash window, judged by GPT-4o-mini. LC wins every metric but gaps are small (RAG/LC): faithfulness $0.899/0.933$, answer\_relevancy $0.713/0.789$, context\_precision $1.000/1.000$, context\_recall $0.917/1.000$ --- the open recall gap replicates the chunker bottleneck from \S\ref{sec:retrieval}. OpenRouter cost captures show LC at $\sim$10$\times$ the answer-LLM spend (\$0.00383 vs \$0.00038/query), reframing the trade-off as accuracy-per-dollar.
+M3 scales the M2 preliminary ($n{=}8$) up to a 30-question stratified sample under a three-arm ablation that disentangles two confounds the M2 numbers could not separate (long context vs.\ chunked retrieval; Gemini vs.\ GPT). All RAG arms use the M3 chunker-SOTA retriever (\texttt{e5\_rerank\_s800\_o0}) and the same 1M-token Gemini~2.5~Flash window for long-context. The judge is upgraded to \texttt{claude-haiku-4-5}, with RAGAS concurrency throttled (\texttt{max\_workers}{=}4) to dodge OpenRouter's tail-latency cascade.
 
-% TODO (Yusif): refresh table with final M3 numbers if n increased beyond 8.
+\begin{table}[h]
+\centering
+\footnotesize
+\begin{tabular}{lccc}
+\toprule
+metric ($n{=}30$, judge=\texttt{haiku-4.5}) & RAG-gemini & RAG-gpt-4o-mini & LC-gemini \\
+\midrule
+\texttt{faithfulness}       & 0.848 & 0.864 & \textbf{0.910} \\
+\texttt{answer\_relevancy}  & 0.648 & 0.781 & \textbf{0.791} \\
+\texttt{context\_precision} & 0.775 & 0.774 & \textbf{0.833} \\
+\texttt{context\_recall}    & 0.833 & 0.833 & \textbf{0.933} \\
+\midrule
+USD / query (answer LLM)    & \$0.00075 & \$0.00032 & \$0.00445 \\
+\bottomrule
+\end{tabular}
+\caption{RAGAS three-arm ablation, $n{=}30$ stratified. LC wins every metric; the model-controlled comparison (gemini RAG vs.\ gemini LC) confirms the lift is from context strategy, not the generator.}
+\label{tab:ragas}
+\end{table}
+
+Three findings the M2 $n{=}8$ table could not distinguish:
+(i) \emph{Model-controlled comparison} (Gemini both sides): LC beats RAG by $+6.2$\,pp faithfulness, $+14.3$\,pp answer\_relevancy, $+5.8$\,pp context\_precision, $+10.0$\,pp context\_recall --- the "long-context wins" story is robust to the model swap;
+(ii) \emph{Generator ablation on chunked RAG}: swapping the answer LLM from Gemini to GPT-4o-mini on the same retriever lifts \texttt{answer\_relevancy} by $13.3$\,pp ($0.648\!\to\!0.781$) and matches LC, suggesting Gemini's verbosity is a poor fit for short retrieved chunks;
+(iii) \emph{Cost.} LC sits at $14\times$ the answer-LLM spend of the cheapest RAG arm and $6\times$ the Gemini RAG arm: RAG$+$GPT-4o-mini is Pareto-optimal for cost-constrained deployment, LC for faithfulness-critical workflows.
 
 \subsection{Corrective RAG}
 \label{sec:crag}
@@ -205,7 +227,7 @@ The intended beneficiaries are reviewers in citation-heavy workflows (legal rese
 \section{Conclusion}
 \label{sec:conclusion}
 
-A span-grounded benchmark plus four orthogonal interventions lets us pin component-level failure modes that end-to-end RAG metrics blur together. An embedder sweep names E5-large coarse$+$rerank the M2 SOTA, and a nine-variant chunker ablation lifts it further to \textbf{0.902 MRR} ($+3.7$\,pp) and \textbf{0.989 hit@10} ($+1.2$\,pp) with 800-char no-overlap chunks --- closing the multi-hop gap by tuning chunker geometry rather than the embedder. NLI and LLM-judge faithfulness disagree by 55--61\,pp with zero co-pessimistic claims, ruling out NLI as a standalone gate; CRAG lifts retrieval correctness by ${+}20$\,pp on a mixed slice with an abstain branch that trades coverage for precision on unanswerable items; long-context wins every RAGAS metric but at ${\sim}10\times$ the answer-LLM cost. Limitations: a 93-claim English-only corpus from one domain, a two-rater human-eval, a closed-weight judge, and CRAG re-evaluated on a 10-question slice (M2 headline) with the full-93 sweep still in flight. Future work: multilingual port, IAA closure across all four annotators, a hierarchical chunker that preserves multi-hop bridges, and a calibrated abstain threshold tuned per-domain.
+A span-grounded benchmark plus four orthogonal interventions lets us pin component-level failure modes that end-to-end RAG metrics blur together. An embedder sweep names E5-large coarse$+$rerank the M2 SOTA, and a nine-variant chunker ablation lifts it further to \textbf{0.902 MRR} ($+3.7$\,pp) and \textbf{0.989 hit@10} ($+1.2$\,pp) with 800-char no-overlap chunks --- closing the multi-hop gap by tuning chunker geometry rather than the embedder. NLI and LLM-judge faithfulness disagree by 55--61\,pp with zero co-pessimistic claims, ruling out NLI as a standalone gate; CRAG lifts retrieval correctness by ${+}20$\,pp on a mixed slice with an abstain branch that trades coverage for precision on unanswerable items; at $n{=}30$ under a model-controlled three-arm ablation (Gemini both sides), long-context wins every RAGAS metric by $+6$ to $+14$\,pp at $6{-}14\times$ the answer-LLM cost. Limitations: a 93-claim English-only corpus from one domain, a two-rater human-eval, a closed-weight judge, and CRAG re-evaluated on a 10-question slice (M2 headline) with the full-93 sweep still in flight. Future work: multilingual port, IAA closure across all four annotators, a hierarchical chunker that preserves multi-hop bridges, and a calibrated abstain threshold tuned per-domain.
 
 
 % Entries for the entire Anthology, followed by custom entries
