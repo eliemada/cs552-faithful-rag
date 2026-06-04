@@ -33,14 +33,18 @@ def show_claim(i, total, row, labeled_so_far):
     w = max(40, min(term_width(), 100))
     print(banner(f"  Claim {i + 1} of {total}   (already labeled: {labeled_so_far})"))
     print(f"  claim_uid:  {row['claim_uid']}")
-    print(f"  question:   {row['question_id']}  ({row.get('difficulty', '?')}, {row.get('category', '?')})")
+    print(
+        f"  question:   {row['question_id']}  ({row.get('difficulty', '?')}, {row.get('category', '?')})"
+    )
     print(f"  paper:      {row['paper_id']}")
     print()
     print("  CLAIM:")
     print(fill(row["claim_text"], width=w - 4, initial_indent="    ", subsequent_indent="    "))
     print()
     print("  SUPPORTING QUOTE:")
-    print(fill(row["supporting_quote"], width=w - 4, initial_indent="    ", subsequent_indent="    "))
+    print(
+        fill(row["supporting_quote"], width=w - 4, initial_indent="    ", subsequent_indent="    ")
+    )
     print()
     print("-" * w)
     print("  Does the quote SUPPORT the claim?")
