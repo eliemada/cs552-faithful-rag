@@ -155,10 +155,17 @@ class RetrieverAdapter:
 
     def search(self, query: str, k: int) -> list[dict]:
         results = self._hybrid.search(query, top_k=k, use_reranker=self.config.use_reranker)
+        # `text` is required by CRAG's cross-encoder scorer; without it
+        # `evaluate_retrieval_quality` scores `(query, "")` pairs and collapses
+        # every confidence to ~0. `paper_title` and `section_hierarchy` are
+        # cheap extras that the refine prompt benefits from.
         return [
             {
                 "chunk_id": r.chunk_id,
                 "paper_id": r.paper_id,
+                "text": r.text,
+                "paper_title": r.paper_title,
+                "section_hierarchy": list(r.section_hierarchy),
                 "score": float(r.score),
                 "rank": r.rank,
             }

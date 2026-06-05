@@ -181,3 +181,62 @@ def test_finalize_answer_delegates_when_not_abstained():
     res = CRAGResult("q", RetrievalQuality.CORRECT, 0.9, None, 1, [{"text": "d"}], abstained=False)
     out = finalize_answer(res, lambda r: f"ans:{len(r.final_documents)}")
     assert out == "ans:1"
+
+
+# ---- regression: doc-text plumbing ---------------------------------------
+# These guard the bug where `RetrieverAdapter.search` dropped the `text`
+# field and collapsed every confidence to ~0 in the ablation sweep.
+
+
+def test_empty_doc_text_collapses_to_incorrect(patch_scorer):
+    """A doc dict missing `text` must be treated as empty by the scorer.
+
+    This documents the actual failure mode of the adapter bug: the scorer
+    sees `(query, "")` pairs and (with a realistic logit-returning model)
+    confidence collapses far below any usable threshold.
+    """
+    # Simulate ms-marco's behaviour on empty docs: strongly-negative logit.
+    patch_scorer(lambda q, d: -10.0 if not d else 5.0)
+    quality, conf = evaluate_retrieval_quality(
+        "q",
+        [{"chunk_id": "c1", "paper_id": "p1", "score": 0.99, "rank": 0}],  # no `text`
+        CRAGConfig(),
+    )
+    assert quality is RetrievalQuality.INCORRECT
+    assert conf < 0.001  # sigmoid(-10) ~= 4.5e-5
+
+
+def test_doc_text_present_recovers_correct(patch_scorer):
+    """When `text` is present, the same scorer returns a CORRECT verdict."""
+    patch_scorer(lambda q, d: -10.0 if not d else 5.0)
+    quality, conf = evaluate_retrieval_quality(
+        "q",
+        [
+            {
+                "chunk_id": "c1",
+                "paper_id": "p1",
+                "text": "the answer is 42",
+                "score": 0.99,
+                "rank": 0,
+            }
+        ],
+        CRAGConfig(),
+    )
+    assert quality is RetrievalQuality.CORRECT
+    assert conf > 0.99  # sigmoid(5) ~= 0.993
+
+
+def test_batch_sigmoid_decision_uses_full_distribution(patch_scorer):
+    """A best score in [0,1] must still be sigmoided when other batch scores
+    are out of range — the model is returning logits and we should normalise.
+    """
+    # Best = 0.5 (looks like a probability), but min = -3.0 reveals it's a logit.
+    scores = iter([0.5, -3.0, -2.0])
+    patch_scorer(lambda q, d: next(scores))
+    _, conf = evaluate_retrieval_quality(
+        "q",
+        [{"text": "a"}, {"text": "b"}, {"text": "c"}],
+        CRAGConfig(),
+    )
+    # sigmoid(0.5) ~= 0.622, NOT 0.5 (which the old per-score heuristic would give).
+    assert conf == pytest.approx(1.0 / (1.0 + math.exp(-0.5)), abs=1e-6)

@@ -103,7 +103,7 @@ def _probe(records: list[dict], retriever, k: int) -> list[dict]:
                 "latency_s": round(elapsed, 4),
             }
         )
-        print(f"  [{i}/{len(records)}] {rec['id']} conf={confidence:.3f}", flush=True)
+        print(f"  [{i}/{len(records)}] {rec['id']} conf={confidence:.4f}", flush=True)
     return probe
 
 

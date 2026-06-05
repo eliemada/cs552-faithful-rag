@@ -120,8 +120,17 @@ def evaluate_retrieval_quality(
     scorer = _get_cross_encoder(config.cross_encoder_model)
     pairs = [(query, _doc_text(doc)) for doc in documents]
     scores = scorer.predict(pairs, show_progress_bar=False, convert_to_numpy=True)
-    best = float(max(scores))
-    norm = _sigmoid_if_logit(best)
+    # Decide once per call whether the model returns logits or probabilities.
+    # If ANY score in the batch is outside [0, 1], every score is a logit ->
+    # sigmoid the best. Otherwise treat them as probabilities and pass through.
+    # The previous per-score heuristic mis-classified borderline logits in
+    # [0, 1] as probabilities, mildly miscalibrating the thresholds.
+    score_floats = [float(s) for s in scores]
+    best = max(score_floats)
+    if min(score_floats) < 0.0 or max(score_floats) > 1.0:
+        norm = 1.0 / (1.0 + math.exp(-best))
+    else:
+        norm = best
 
     if norm >= config.confidence_threshold_high:
         return RetrievalQuality.CORRECT, norm
