@@ -8,7 +8,11 @@ Pipeline
 2. Score retrieval quality with a cross-encoder.
 3. If CORRECT  → use the retrieved docs as-is.
 4. If AMBIGUOUS → refine the query with an LLM and re-retrieve.
-5. If INCORRECT → fallback (web search / broader retrieval — currently a stub).
+5. If INCORRECT (or AMBIGUOUS retries exhausted) → abstain: drop the bad
+   documents (``final_documents=[]``, ``abstained=True``) so the downstream
+   generator emits an explicit "not enough evidence" answer rather than
+   grounding on low-relevance context. See ``INCORRECT_BRANCH_PLAN.md``
+   (Option A); off-corpus web fallback is deliberately out of scope.
 """
 
 from __future__ import annotations
@@ -54,8 +58,17 @@ class CRAGConfig:
     # Top-k for each retrieval call inside the pipeline.
     retrieval_k: int = 10
 
-    # Reserved: switches on the web-search branch after INCORRECT.
-    use_web_fallback: bool = False
+    # When True (default), an INCORRECT verdict (or exhausted AMBIGUOUS
+    # retries) abstains: the result carries no documents and ``abstained=True``
+    # so the generator can emit an explicit "no answer" instead of grounding
+    # on low-relevance context. Set False to keep the legacy behaviour of
+    # returning the low-quality documents unchanged.
+    use_abstain_fallback: bool = True
+
+    # The answer emitted on abstain. Mirrors the unanswerable stratum in the
+    # gold set ("Not covered by the corpus.") so abstain precision/recall is
+    # measurable against existing ground truth.
+    abstain_message: str = "I don't have enough evidence in the corpus to answer this faithfully."
 
     # Cross-encoder for relevance scoring. ms-marco-MiniLM is fast (~25M
     # params) and well-calibrated for ad-hoc (query, passage) relevance.
@@ -80,6 +93,10 @@ class CRAGResult:
     refined_query: str | None
     retrieval_rounds: int
     final_documents: list[dict]
+    # True when the pipeline gave up on low-relevance retrieval and chose to
+    # abstain rather than ground an answer on bad context. Implies
+    # ``final_documents == []``.
+    abstained: bool = False
 
 
 # Type alias for any callable taking `(query, k)` and returning hit dicts.
@@ -103,8 +120,17 @@ def evaluate_retrieval_quality(
     scorer = _get_cross_encoder(config.cross_encoder_model)
     pairs = [(query, _doc_text(doc)) for doc in documents]
     scores = scorer.predict(pairs, show_progress_bar=False, convert_to_numpy=True)
-    best = float(max(scores))
-    norm = _sigmoid_if_logit(best)
+    # Decide once per call whether the model returns logits or probabilities.
+    # If ANY score in the batch is outside [0, 1], every score is a logit ->
+    # sigmoid the best. Otherwise treat them as probabilities and pass through.
+    # The previous per-score heuristic mis-classified borderline logits in
+    # [0, 1] as probabilities, mildly miscalibrating the thresholds.
+    score_floats = [float(s) for s in scores]
+    best = max(score_floats)
+    if min(score_floats) < 0.0 or max(score_floats) > 1.0:
+        norm = 1.0 / (1.0 + math.exp(-best))
+    else:
+        norm = best
 
     if norm >= config.confidence_threshold_high:
         return RetrievalQuality.CORRECT, norm
@@ -186,16 +212,26 @@ def corrective_rag(
                 refined_query=refined_marker,
                 retrieval_rounds=retrieval_rounds,
                 final_documents=documents,
+                abstained=False,
             )
 
         if quality == RetrievalQuality.AMBIGUOUS and attempt < config.max_retries:
             current_query = refine_query(current_query, documents, config)
             continue
 
-        # INCORRECT, or retries exhausted.
-        if config.use_web_fallback:
-            # TODO: implement web search fallback
-            pass
+        # INCORRECT, or AMBIGUOUS retries exhausted. Per INCORRECT_BRANCH_PLAN.md
+        # (Option A), abstain: drop the low-relevance docs so the generator emits
+        # an explicit "no answer" rather than grounding on bad context.
+        if config.use_abstain_fallback:
+            return CRAGResult(
+                original_query=query,
+                quality=quality,
+                confidence=confidence,
+                refined_query=refined_marker,
+                retrieval_rounds=retrieval_rounds,
+                final_documents=[],
+                abstained=True,
+            )
 
         return CRAGResult(
             original_query=query,
@@ -204,6 +240,7 @@ def corrective_rag(
             refined_query=refined_marker,
             retrieval_rounds=retrieval_rounds,
             final_documents=documents,
+            abstained=False,
         )
 
     # Unreachable: the loop always returns. Kept as a defensive fallback
@@ -216,6 +253,25 @@ def corrective_rag(
         retrieval_rounds=retrieval_rounds,
         final_documents=[],
     )
+
+
+def finalize_answer(
+    result: CRAGResult,
+    answer_fn: Callable[[CRAGResult], str],
+    config: CRAGConfig = CRAGConfig(),
+) -> str:
+    """Resolve a :class:`CRAGResult` into a final answer string.
+
+    When the pipeline abstained, returns ``config.abstain_message`` and never
+    calls the generator — this is what makes the INCORRECT branch *do* something
+    measurable (abstain vs. hallucinate). Otherwise delegates to ``answer_fn``,
+    which receives the result (with ``final_documents``) and returns the
+    generated answer. Keeping the generator injectable makes this testable
+    without an LLM.
+    """
+    if result.abstained:
+        return config.abstain_message
+    return answer_fn(result)
 
 
 # ---------- private helpers ----------
