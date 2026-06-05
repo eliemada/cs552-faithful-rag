@@ -2,14 +2,15 @@
 
 **Owner:** Faruk · **Target:** branch logic + 3 qualitative examples landed by 2026-06-04 · **For §Approach/CRAG-router and §Results/CRAG in the final report.**
 
-> **Status (2026-06-03): Option A IMPLEMENTED.** `corrective_rag.py` now abstains
-> on INCORRECT / exhausted-AMBIGUOUS (`final_documents=[]`, `abstained=True`);
-> `use_web_fallback` was renamed to `use_abstain_fallback` (default `True`) and a
-> `finalize_answer()` helper emits `abstain_message` instead of calling the
-> generator. Covered by `tests/test_crag.py` (16 tests). The full-gold threshold
-> ablation runs via `scripts/run_crag_ablation.py` (probe once + analytical
-> sweep; reports branch distribution, abstain precision/recall vs. the
-> unanswerable stratum, and correct-retrieval-among-answered vs. baseline).
+> **Status (2026-06-05): Option A IMPLEMENTED and landed on `main` via PR #72.**
+> `corrective_rag.py` abstains on INCORRECT / exhausted-AMBIGUOUS
+> (`final_documents=[]`, `abstained=True`); `use_abstain_fallback` (default
+> `True`) and `finalize_answer()` emit `abstain_message` instead of calling the
+> generator. `tests/test_crag.py` covers abstain + adapter-text regressions (19
+> tests). Full-gold ablation: `scripts/run_crag_ablation.py` (probe once +
+> analytical sweep). **Headline n=97 result** (post adapter-text fix, τ_h=0.7,
+> τ_l=0.4, `e5_large_coarse_rerank`): `{correct: 85, ambiguous: 9, incorrect: 3}`;
+> baseline direct-correct retrieval **0.876**. Report numbers in PR #73.
 
 ## Why this exists
 
