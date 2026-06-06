@@ -42,8 +42,8 @@ jobs:
     steps:
       - name: Check final-submission deadline has not passed
         run: |
-          if [[ "$(date -u +%Y%m%d)" -gt "20260607" ]]; then
-            echo "Past final-submission deadline (2026-06-07) — refusing to sync."
+          if [[ "$(date -u +%Y%m%d)" -gt "20260610" ]]; then
+            echo "Past final-submission deadline (2026-06-10) — refusing to sync."
             exit 1
           fi
 
