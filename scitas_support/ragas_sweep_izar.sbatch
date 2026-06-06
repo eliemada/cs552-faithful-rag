@@ -106,6 +106,11 @@ uv python pin 3.12
 # --all-extras pulls in the optional `eval` extra on packages/shared
 # (langchain-openai, ragas, etc.) that scripts/run_ragas_sweep needs.
 uv sync --all-packages --all-extras
+# ragas 0.4.3 imports `langchain_community.chat_models.vertexai`, removed
+# in langchain-community 0.4.x. Fresh resolves grab 0.4.2 (broken); local
+# dev .venv has 0.3.31 (works). Pin the downgrade until ragas patches the
+# import or we move to a fixed ragas release.
+uv pip install "langchain-community<0.4"
 
 # ---------------------------------------------------------------------------
 # 4. dataset / index sanity — `sota` preset uses e5_large_coarse_rerank,
