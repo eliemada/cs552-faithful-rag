@@ -103,7 +103,9 @@ if ! command -v uv >/dev/null 2>&1; then
     curl -LsSf https://astral.sh/uv/install.sh | sh
 fi
 uv python pin 3.12
-uv sync --all-packages
+# --all-extras pulls in the optional `eval` extra on packages/shared
+# (langchain-openai, ragas, etc.) that scripts/run_ragas_sweep needs.
+uv sync --all-packages --all-extras
 
 # ---------------------------------------------------------------------------
 # 4. dataset / index sanity — `sota` preset uses e5_large_coarse_rerank,
