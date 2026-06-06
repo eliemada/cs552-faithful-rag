@@ -62,10 +62,13 @@ fi
 cd "${REPO_DIR}"
 mkdir -p slurm_logs "${RAGAS_OUT_DIR}"
 
-# Pin to the requested ref (default: main). Won't clobber local edits —
-# the SCITAS clone is read-mostly.
+# Pin to the requested ref (default: main). Uses `reset --hard` rather
+# than `checkout` so the SCITAS clone re-aligns with remote even if a
+# prior rsync left tracked files modified locally — the clone is treated
+# as read-mostly and any local changes to tracked files are discarded.
+# Untracked files (logs, results, .env) are preserved by reset --hard.
 git fetch --quiet origin "${GIT_REF}" || true
-git checkout --quiet "${GIT_REF}" 2>/dev/null || git checkout --quiet "origin/${GIT_REF}"
+git reset --hard --quiet "origin/${GIT_REF}"
 echo "[$(date)] HEAD: $(git rev-parse --short HEAD) on ${GIT_REF}"
 
 # ---------------------------------------------------------------------------
