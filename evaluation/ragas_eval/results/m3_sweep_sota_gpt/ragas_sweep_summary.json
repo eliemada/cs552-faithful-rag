@@ -1,0 +1,42 @@
+{
+  "config": {
+    "sample_size": 88,
+    "seed": 42,
+    "retriever_config": "e5_rerank_s800_o0",
+    "answer_model_rag": "api:openrouter/openai/gpt-4o-mini",
+    "answer_model_lc": "api:openrouter/google/gemini-2.5-flash",
+    "judge_model": "anthropic/claude-haiku-4-5",
+    "embed_model": "text-embedding-3-small",
+    "top_k": 5,
+    "lc_chars_per_paper": 60000,
+    "note": "Aggregate-only summary aligned with report PR #76; per-sample JSON on SCITAS scratch."
+  },
+  "questions": [],
+  "configs": {
+    "e5_rerank_s800_o0": {
+      "n": 88,
+      "aggregate": {
+        "faithfulness": 0.836,
+        "answer_relevancy": 0.835,
+        "context_precision": 0.807,
+        "context_recall": 0.864
+      },
+      "usage": {
+        "per_query_avg_cost_usd": 0.00032
+      },
+      "chunk_type": "coarse"
+    }
+  },
+  "long_context": {
+    "n": 88,
+    "aggregate": {
+      "faithfulness": 0.92,
+      "answer_relevancy": 0.731,
+      "context_precision": 0.864,
+      "context_recall": 0.875
+    },
+    "usage": {
+      "per_query_avg_cost_usd": 0.0037
+    }
+  }
+}
