@@ -201,7 +201,7 @@ def _run_rag_config(
         return json.loads(out_path.read_text())["rag"]
 
     retriever = load_adapter(config_name, indexes_dir=args.indexes_dir)
-    chunk_lookup = build_chunk_lookup(_to_chunks_metadata_path(retriever.config.chunk_type))
+    chunk_lookup = build_chunk_lookup(_to_chunks_metadata_path(retriever.config))
 
     rag_samples: list[RagasSample] = []
     for i, q in enumerate(sample, 1):
