@@ -44,6 +44,10 @@ RAGAS_CONFIGS="${RAGAS_CONFIGS:-sota}"
 RAGAS_JUDGE="${RAGAS_JUDGE:-anthropic/claude-haiku-4-5}"
 RAGAS_OUT_DIR="${RAGAS_OUT_DIR:-evaluation/ragas_eval/results/m3_sweep}"
 RAGAS_SAMPLE="${RAGAS_SAMPLE:-0}"  # 0 = full gold
+# Optional RAG answer-LLM override. Empty = script default
+# (DEFAULT_ANSWER_MODEL_RAG = api:openrouter/openai/gpt-4o-mini).
+# To run the Gemini RAG arm: RAGAS_RAG_MODEL=api:openrouter/google/gemini-2.5-flash
+RAGAS_RAG_MODEL="${RAGAS_RAG_MODEL:-}"
 
 export HF_HOME="${SCRATCH_ROOT}/hf_cache"
 export UV_CACHE_DIR="${SCRATCH_ROOT}/uv_cache"
@@ -131,13 +135,27 @@ fi
 case "${RAGAS_CONFIGS}" in
     sota|*e5_large_coarse_rerank*)
         required_index="data/s3_archive/indexes/e5_large_coarse.faiss"
-        if [[ ! -f "${required_index}" ]]; then
-            echo "[$(date)] WARN: ${required_index} missing — building it now."
-            uv run python -m scripts.build_hf_index \
-                --model e5-large --chunk-type coarse --batch-size 256 --device cuda
-        fi
+        ;;
+    *e5_rerank_s800_o0*)
+        required_index="data/s3_archive/indexes/e5_large_s800_o0.faiss"
+        ;;
+    *)
+        required_index=""
         ;;
 esac
+if [[ -n "${required_index}" && ! -f "${required_index}" ]]; then
+    echo "[$(date)] ERROR: ${required_index} missing." >&2
+    echo "Pre-stage from local (index files are large; debug QoS cannot rebuild them in 1h)." >&2
+    echo "  rsync -avhP data/s3_archive/indexes/$(basename ${required_index%.*}).* \\" >&2
+    echo "        izar:${REPO_DIR}/data/s3_archive/indexes/" >&2
+    exit 1
+fi
+
+# Optional RAG-answer-model override forwarded to the script.
+rag_model_flag=()
+if [[ -n "${RAGAS_RAG_MODEL}" ]]; then
+    rag_model_flag=(--answer-model-rag "${RAGAS_RAG_MODEL}")
+fi
 
 # Sanity-print the plan before paying for any API calls.
 echo "[$(date)] ==> dry-run plan (--list-only):"
@@ -146,17 +164,19 @@ uv run python -m scripts.run_ragas_sweep \
     --sample "${RAGAS_SAMPLE}" \
     --judge-model "${RAGAS_JUDGE}" \
     --out-dir "${RAGAS_OUT_DIR}" \
+    "${rag_model_flag[@]}" \
     --list-only
 
 # ---------------------------------------------------------------------------
 # 5. run the RAGAS sweep — API-bound; expect ~20-60 min wall for n=88
 # ---------------------------------------------------------------------------
-echo "[$(date)] ==> running RAGAS sweep (configs=${RAGAS_CONFIGS}, sample=${RAGAS_SAMPLE}, judge=${RAGAS_JUDGE})"
+echo "[$(date)] ==> running RAGAS sweep (configs=${RAGAS_CONFIGS}, sample=${RAGAS_SAMPLE}, judge=${RAGAS_JUDGE}, rag_model=${RAGAS_RAG_MODEL:-default})"
 uv run python -m scripts.run_ragas_sweep \
     --configs "${RAGAS_CONFIGS}" \
     --sample "${RAGAS_SAMPLE}" \
     --judge-model "${RAGAS_JUDGE}" \
-    --out-dir "${RAGAS_OUT_DIR}"
+    --out-dir "${RAGAS_OUT_DIR}" \
+    "${rag_model_flag[@]}"
 
 # ---------------------------------------------------------------------------
 # 6. report
