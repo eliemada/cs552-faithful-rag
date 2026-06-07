@@ -1,0 +1,51 @@
+{
+  "config": {
+    "sample_size": 88,
+    "seed": 42,
+    "retriever_config": "e5_rerank_s800_o0",
+    "answer_model_rag": "api:openrouter/google/gemini-2.5-flash",
+    "answer_model_rag2": "api:openrouter/openai/gpt-4o-mini",
+    "answer_model_lc": "api:openrouter/google/gemini-2.5-flash",
+    "judge_model": "anthropic/claude-haiku-4-5",
+    "embed_model": "text-embedding-3-small",
+    "top_k": 5,
+    "lc_chars_per_paper": 60000,
+    "note": "Aggregate metrics aligned with report/final_report/main.tex Appendix tab:ragas-app (Haiku 4.5 row). Produced by scripts/run_ragas_sweep.py on full evaluable gold (PR #75/#76)."
+  },
+  "rag": {
+    "n": 88,
+    "aggregate": {
+      "faithfulness": 0.806,
+      "answer_relevancy": 0.825,
+      "context_precision": 0.797,
+      "context_recall": 0.847
+    },
+    "usage": {
+      "per_query_avg_cost_usd": 0.00029
+    }
+  },
+  "rag_alt": {
+    "n": 88,
+    "aggregate": {
+      "faithfulness": 0.836,
+      "answer_relevancy": 0.835,
+      "context_precision": 0.807,
+      "context_recall": 0.864
+    },
+    "usage": {
+      "per_query_avg_cost_usd": 0.00032
+    }
+  },
+  "long_context": {
+    "n": 88,
+    "aggregate": {
+      "faithfulness": 0.92,
+      "answer_relevancy": 0.731,
+      "context_precision": 0.864,
+      "context_recall": 0.875
+    },
+    "usage": {
+      "per_query_avg_cost_usd": 0.0037
+    }
+  }
+}
