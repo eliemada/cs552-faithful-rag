@@ -1,0 +1,31 @@
+evaluation/ragas_eval/results/m3_sweep_sota_gemini/ragas_sweep_summary.md
+  s_ca37eb1d0a0277::t_e440c08045f417 1-8
+evaluation/ragas_eval/results/m3_sweep_sota_gpt_sonnet/ragas_sweep_summary.md
+  s_ca37eb1d0a0277::t_e440c08045f417 1-8
+evaluation/ragas_eval/results/m3_sweep/ragas_sweep_summary.md
+  s_ca37eb1d0a0277::t_e440c08045f417 1-8
+scitas_support/crag_ambiguous_izar.sbatch
+  s_ca37eb1d0a0277::t_e440c08045f417 1-139
+evaluation/ragas_eval/results/m3_sweep_sota_gpt/ragas_sweep_summary.md
+  s_ca37eb1d0a0277::t_e440c08045f417 1-8
+evaluation/ragas_eval/results/m3_sweep_sota_gemini_sonnet/ragas_sweep_summary.md
+  s_ca37eb1d0a0277::t_e440c08045f417 1-8
+evaluation/crag/results/threshold_sweep_2962732.md
+  s_ca37eb1d0a0277::t_e440c08045f417 1-17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.6",
+  "base_commit_sha": "12fa16ab0b25fd855fbfff1cd216bf55de21db8c",
+  "prompts": {},
+  "sessions": {
+    "s_ca37eb1d0a0277": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "dba18ef2-1a21-4f24-8203-92fe9fa4ca30",
+        "model": "claude-fable-5"
+      },
+      "human_author": "Elie BRUNO <contact@eliebruno.com>"
+    }
+  }
+}
