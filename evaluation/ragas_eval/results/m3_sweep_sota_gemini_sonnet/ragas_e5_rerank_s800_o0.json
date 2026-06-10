@@ -1,0 +1,1442 @@
+{
+  "config": {
+    "sample_size": 88,
+    "seed": 42,
+    "answer_model_rag": "api:openrouter/google/gemini-2.5-flash",
+    "answer_model_lc": "api:openrouter/google/gemini-2.5-flash",
+    "judge_model": "anthropic/claude-sonnet-4-6",
+    "embed_model": "text-embedding-3-small",
+    "top_k": 5,
+    "lc_chars_per_paper": 60000,
+    "retriever_config": "e5_rerank_s800_o0"
+  },
+  "chunk_type": "s800_o0",
+  "rag": {
+    "n": 88,
+    "aggregate": {
+      "faithfulness": 0.9205221861471862,
+      "answer_relevancy": 0.741466680442477,
+      "context_precision": 0.8059227330436679,
+      "context_recall": 0.8636363636363636
+    },
+    "usage": {
+      "prompt_tokens": 166628,
+      "completion_tokens": 6580,
+      "total_tokens": 173208,
+      "cost_usd": 0.06643839999999997,
+      "per_query_avg_cost_usd": 0.0007549818181818178,
+      "per_query_avg_total_tokens": 1968.2727272727273,
+      "n_calls": 88
+    },
+    "per_sample": [
+      {
+        "query_id": "q026",
+        "pipeline": "rag",
+        "question": "According to Moser (2013), how do patent 'thickets' built by incumbents affect litigation risk for later innovators?",
+        "faithfulness": 0.6666666666666666,
+        "answer_relevancy": 0.792361167191972,
+        "context_precision": 0.99999999995,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1939,
+          "completion_tokens": 49,
+          "total_tokens": 1988,
+          "cost_usd": 0.0007042,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q002",
+        "pipeline": "rag",
+        "question": "What does the literature say about patents holding back follow-on innovation in technology-heavy industries?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.7634172348414232,
+        "context_precision": 0.699999999965,
+        "context_recall": 0.5,
+        "usage": {
+          "prompt_tokens": 1855,
+          "completion_tokens": 91,
+          "total_tokens": 1946,
+          "cost_usd": 0.000784,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q201",
+        "pipeline": "rag",
+        "question": "How do market structures in the semiconductor and biotechnology industries result in different IPR externalization styles?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8889206880156671,
+        "context_precision": 0.8041666666465626,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1882,
+          "completion_tokens": 73,
+          "total_tokens": 1955,
+          "cost_usd": 0.0007471,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q209",
+        "pipeline": "rag",
+        "question": "How did U.S. software firms use 'Section 301' tactics in the mid-1980s?",
+        "faithfulness": 0.8571428571428571,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.7499999999625,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1878,
+          "completion_tokens": 110,
+          "total_tokens": 1988,
+          "cost_usd": 0.0008384,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q022",
+        "pipeline": "rag",
+        "question": "How do Aghion, Dewatripont, and Stein (2008) characterize the fundamental trade-off between academic and private-sector research, and the role each plays across research stages?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8597141913478212,
+        "context_precision": 0.8874999999778125,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1769,
+          "completion_tokens": 81,
+          "total_tokens": 1850,
+          "cost_usd": 0.0007332,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q200",
+        "pipeline": "rag",
+        "question": "Contrast the foundational justification for IPR as an innovation driver with the core argument of the dissenting tradition.",
+        "faithfulness": 0.8333333333333334,
+        "answer_relevancy": 0.7238450342718695,
+        "context_precision": 0.99999999995,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1678,
+          "completion_tokens": 65,
+          "total_tokens": 1743,
+          "cost_usd": 0.0006659,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q019",
+        "pipeline": "rag",
+        "question": "Does the joint evidence from Boldrin and Levine (2013) and Moser (2013) support the view that more patents lead to more innovation?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.9999999999,
+        "context_recall": 0.0,
+        "usage": {
+          "prompt_tokens": 1956,
+          "completion_tokens": 56,
+          "total_tokens": 2012,
+          "cost_usd": 0.0007268,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q007",
+        "pipeline": "rag",
+        "question": "According to Mendon\u00e7a et al. (2004), what advantage do trademarks have over patents and R&D as innovation indicators in terms of firm coverage?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.7103101174388581,
+        "context_precision": 0.9999999999,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1468,
+          "completion_tokens": 115,
+          "total_tokens": 1583,
+          "cost_usd": 0.0007279,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q312",
+        "pipeline": "rag",
+        "question": "What are the primary reasons startups require exclusive IP rights over university discoveries, according to the study?",
+        "faithfulness": 0.8,
+        "answer_relevancy": 0.9172246637951157,
+        "context_precision": 0.99999999995,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1836,
+          "completion_tokens": 56,
+          "total_tokens": 1892,
+          "cost_usd": 0.0006908,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q016",
+        "pipeline": "rag",
+        "question": "According to Sell and Prakash's (2004) summary of Kingdon (1984), what two types of changes can open a policy window?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8031246220857351,
+        "context_precision": 0.99999999995,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1953,
+          "completion_tokens": 78,
+          "total_tokens": 2031,
+          "cost_usd": 0.0007809,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q210",
+        "pipeline": "rag",
+        "question": "What is the relationship between 'trade leverage' and externalization strategies according to the IPR reform text?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9559052247890114,
+        "context_precision": 0.99999999998,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1626,
+          "completion_tokens": 60,
+          "total_tokens": 1686,
+          "cost_usd": 0.0006378,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q104",
+        "pipeline": "rag",
+        "question": "What concern does the theoretical literature raise about upstream patent rights impeding downstream innovation, and what causal evidence do Galasso and Schankerman (2014) provide on the effect of removing patent rights?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8172146195577992,
+        "context_precision": 0.9999999999,
+        "context_recall": 0.5,
+        "usage": {
+          "prompt_tokens": 1690,
+          "completion_tokens": 116,
+          "total_tokens": 1806,
+          "cost_usd": 0.000797,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q008",
+        "pipeline": "rag",
+        "question": "According to the surveys reviewed by Mendon\u00e7a et al. (2004), how do firms generally rank patents as a means of appropriating returns from innovation, compared to marketing activities?",
+        "faithfulness": 0.3333333333333333,
+        "answer_relevancy": 0.8842808274535503,
+        "context_precision": 0.99999999995,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1538,
+          "completion_tokens": 61,
+          "total_tokens": 1599,
+          "cost_usd": 0.0006139,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q009",
+        "pipeline": "rag",
+        "question": "According to Lemley and Shapiro (2005), what fraction of issued patents are ever litigated, and what fraction reach trial?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9306935434832913,
+        "context_precision": 0.99999999998,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1851,
+          "completion_tokens": 39,
+          "total_tokens": 1890,
+          "cost_usd": 0.0006528,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q020",
+        "pipeline": "rag",
+        "question": "What two-way trade-off does Fosfuri (2006) use to model the licensor's decision to license a technology?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8670660569965919,
+        "context_precision": 0.99999999998,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1881,
+          "completion_tokens": 85,
+          "total_tokens": 1966,
+          "cost_usd": 0.0007768,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q023",
+        "pipeline": "rag",
+        "question": "Why does Lemley (2001) argue that it would be wasteful for the US Patent Office to invest substantially more resources in examining every application?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9028090543257573,
+        "context_precision": 0.99999999998,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1807,
+          "completion_tokens": 107,
+          "total_tokens": 1914,
+          "cost_usd": 0.0008096,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q037",
+        "pipeline": "rag",
+        "question": "How do two recent scholarly accounts of TRIPS characterise (a) the trajectory of post-TRIPS rule-making and (b) the analytical lens that best lets us judge whether TRIPS has worked?",
+        "faithfulness": 0.3333333333333333,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0,
+        "usage": {
+          "prompt_tokens": 2051,
+          "completion_tokens": 43,
+          "total_tokens": 2094,
+          "cost_usd": 0.0007228,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q101",
+        "pipeline": "rag",
+        "question": "According to the survey evidence reviewed by Moser (2013), how does the effectiveness of secrecy compare to patents across industries, and for which industries are patents rated most effective?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.7554107143492585,
+        "context_precision": 0.8333333332916666,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1944,
+          "completion_tokens": 47,
+          "total_tokens": 1991,
+          "cost_usd": 0.0007007,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q013",
+        "pipeline": "rag",
+        "question": "How do Jorde and Teece (1990) define innovation?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0,
+        "usage": {
+          "prompt_tokens": 1601,
+          "completion_tokens": 53,
+          "total_tokens": 1654,
+          "cost_usd": 0.0006128,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q318",
+        "pipeline": "rag",
+        "question": "What limitations of the vector space model (VSM) does Lei et al. (2019) identify for patent analysis?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9679585410630684,
+        "context_precision": 0.99999999998,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 2103,
+          "completion_tokens": 93,
+          "total_tokens": 2196,
+          "cost_usd": 0.0008634,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q030",
+        "pipeline": "rag",
+        "question": "What does the Harmonization Myth article argue has driven the post-TRIPS treaties and agreements?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8683568424198651,
+        "context_precision": 0.99999999998,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1561,
+          "completion_tokens": 77,
+          "total_tokens": 1638,
+          "cost_usd": 0.0006608,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q316",
+        "pipeline": "rag",
+        "question": "Why does Moschini (2010) argue that both germplasm and GM traits are essential for modern seed varieties, and how does he characterize trait licensing in this setting?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.3333333333,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1994,
+          "completion_tokens": 68,
+          "total_tokens": 2062,
+          "cost_usd": 0.0007682,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q029",
+        "pipeline": "rag",
+        "question": "What does Kong et al. (2020) quantitatively find about the disclosure gap between university and corporate patents?",
+        "faithfulness": 0.75,
+        "answer_relevancy": 0.9629311550128902,
+        "context_precision": 0.8874999999778125,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1639,
+          "completion_tokens": 103,
+          "total_tokens": 1742,
+          "cost_usd": 0.0007492,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q212",
+        "pipeline": "rag",
+        "question": "What does the text suggest about the impact of Diamond v. Chakrabarty on biotechnology?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.824283912522281,
+        "context_precision": 0.99999999998,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 2515,
+          "completion_tokens": 90,
+          "total_tokens": 2605,
+          "cost_usd": 0.0009795,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q218",
+        "pipeline": "rag",
+        "question": "How do Shadlen, Schrank, and Kurtz (2005) distinguish intellectual property protection (IPP) from intellectual property rights (IPRs)?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8687474796272485,
+        "context_precision": 0.8055555555287036,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1998,
+          "completion_tokens": 91,
+          "total_tokens": 2089,
+          "cost_usd": 0.0008269,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q220",
+        "pipeline": "rag",
+        "question": "According to Shadlen, Schrank, and Kurtz (2005), how much do U.S. bilateral investment treaties (BITs) and full TRIPS compliance each reduce estimated software piracy rates?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8553059061016469,
+        "context_precision": 0.0,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 2200,
+          "completion_tokens": 64,
+          "total_tokens": 2264,
+          "cost_usd": 0.00082,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q039",
+        "pipeline": "rag",
+        "question": "What core institutional argument do scholars make about reform of the U.S. patent system, and what parallel critique applies to the trajectory of international IP rules?",
+        "faithfulness": 0.5,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0,
+        "usage": {
+          "prompt_tokens": 2141,
+          "completion_tokens": 66,
+          "total_tokens": 2207,
+          "cost_usd": 0.0008073,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q015",
+        "pipeline": "rag",
+        "question": "How did the business and NGO campaigns frame intellectual property rights according to Sell and Prakash (2004)?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.767191664387783,
+        "context_precision": 0.6791666666496875,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1876,
+          "completion_tokens": 66,
+          "total_tokens": 1942,
+          "cost_usd": 0.0007278,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q207",
+        "pipeline": "rag",
+        "question": "What was the significance of the 1978 Customs Procedural Reform and Simplification Act for Levi Strauss?",
+        "faithfulness": 0.8,
+        "answer_relevancy": 0.9768096958397678,
+        "context_precision": 0.99999999995,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1838,
+          "completion_tokens": 76,
+          "total_tokens": 1914,
+          "cost_usd": 0.0007414,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q216",
+        "pipeline": "rag",
+        "question": "How large was G\u00f6ktepe-Hulten and Mahagaonkar's (2010) survey sample of Max Planck scientists, and how many usable responses did they analyze?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9391820871871173,
+        "context_precision": 0.0,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 2086,
+          "completion_tokens": 48,
+          "total_tokens": 2134,
+          "cost_usd": 0.0007458,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q103",
+        "pipeline": "rag",
+        "question": "According to Galasso and Schankerman (2014), what is the causal effect of patent invalidation on follow-on innovation, and how does this effect vary across industries and patentee types?",
+        "faithfulness": 0.8333333333333334,
+        "answer_relevancy": 0.8234403696765847,
+        "context_precision": 0.8041666666465626,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1467,
+          "completion_tokens": 90,
+          "total_tokens": 1557,
+          "cost_usd": 0.0006651,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q025",
+        "pipeline": "rag",
+        "question": "Do Kanwar and Evenson (2003) and Boldrin and Levine (2013) agree on whether stronger intellectual property rights spur innovation?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.5,
+        "usage": {
+          "prompt_tokens": 2269,
+          "completion_tokens": 94,
+          "total_tokens": 2363,
+          "cost_usd": 0.0009157,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q205",
+        "pipeline": "rag",
+        "question": "What factor suggests a reverse payment is a good-faith effort to avoid litigation costs?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.5059982660495975,
+        "context_precision": 0.94999999997625,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 2334,
+          "completion_tokens": 59,
+          "total_tokens": 2393,
+          "cost_usd": 0.0008477,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q032",
+        "pipeline": "rag",
+        "question": "What gap in the existing literature motivates the patent-for-design systematic review by Jiang et al.?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8655457176712129,
+        "context_precision": 0.99999999995,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1505,
+          "completion_tokens": 59,
+          "total_tokens": 1564,
+          "cost_usd": 0.000599,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q313",
+        "pipeline": "rag",
+        "question": "What antitrust action does Moschini (2010) report the U.S. government taking regarding Monsanto?",
+        "faithfulness": 0.8,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.9999999999,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 2065,
+          "completion_tokens": 85,
+          "total_tokens": 2150,
+          "cost_usd": 0.000832,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q038",
+        "pipeline": "rag",
+        "question": "What two distinct research streams illustrate the use of natural-language and computational methods on patent corpora?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9938197389271614,
+        "context_precision": 0.0,
+        "context_recall": 0.0,
+        "usage": {
+          "prompt_tokens": 1915,
+          "completion_tokens": 53,
+          "total_tokens": 1968,
+          "cost_usd": 0.000707,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q024",
+        "pipeline": "rag",
+        "question": "How do Besen and Raskind (1991) state the basic economic objective of intellectual property protection?",
+        "faithfulness": 0.75,
+        "answer_relevancy": 0.8951064768680561,
+        "context_precision": 0.94999999997625,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 2104,
+          "completion_tokens": 88,
+          "total_tokens": 2192,
+          "cost_usd": 0.0008512,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q014",
+        "pipeline": "rag",
+        "question": "How does the simultaneous model of innovation described by Jorde and Teece (1990) characterize the nature of innovation activity?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8684830522408988,
+        "context_precision": 0.0,
+        "context_recall": 0.0,
+        "usage": {
+          "prompt_tokens": 1722,
+          "completion_tokens": 115,
+          "total_tokens": 1837,
+          "cost_usd": 0.0008041,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q204",
+        "pipeline": "rag",
+        "question": "Why is the holding in FTC v. Actavis considered a 'de facto' rule of presumptive illegality?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.999999611294254,
+        "context_precision": 0.49999999995,
+        "context_recall": 0.0,
+        "usage": {
+          "prompt_tokens": 2447,
+          "completion_tokens": 113,
+          "total_tokens": 2560,
+          "cost_usd": 0.0010166,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q005",
+        "pipeline": "rag",
+        "question": "According to Shapiro (2001), what economic problem do cross-licenses solve, and what happens to product prices in their absence?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9036695077610133,
+        "context_precision": 0.8333333332916666,
+        "context_recall": 0.5,
+        "usage": {
+          "prompt_tokens": 1942,
+          "completion_tokens": 67,
+          "total_tokens": 2009,
+          "cost_usd": 0.0007501,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q221",
+        "pipeline": "rag",
+        "question": "Do Shadlen, Schrank, and Kurtz (2005) find that U.S. Special 301 listing reduces software piracy in their panel models?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9999995542093151,
+        "context_precision": 0.5333333333155555,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 2348,
+          "completion_tokens": 70,
+          "total_tokens": 2418,
+          "cost_usd": 0.0008794,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q102",
+        "pipeline": "rag",
+        "question": "How do Aghion, Dewatripont, and Stein (2008) characterize the fundamental tradeoff between academic and private-sector research?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8955294199907018,
+        "context_precision": 0.9166666666361111,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1723,
+          "completion_tokens": 85,
+          "total_tokens": 1808,
+          "cost_usd": 0.0007294,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q305",
+        "pipeline": "rag",
+        "question": "What is the impact of 'overly protective' policies on market entry for followers?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.669278543104288,
+        "context_precision": 0.99999999998,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1784,
+          "completion_tokens": 66,
+          "total_tokens": 1850,
+          "cost_usd": 0.0007002,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q203",
+        "pipeline": "rag",
+        "question": "What are the steps in the structured 'Rule of Reason' analysis used in pharmaceutical antitrust cases?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.9999999999666667,
+        "context_recall": 0.5,
+        "usage": {
+          "prompt_tokens": 1898,
+          "completion_tokens": 88,
+          "total_tokens": 1986,
+          "cost_usd": 0.0007894,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q320",
+        "pipeline": "rag",
+        "question": "Which three patent analysis tasks does Lei et al. (2019) apply FVSM to in their IoT case study?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8661113494567082,
+        "context_precision": 0.999999999975,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1780,
+          "completion_tokens": 56,
+          "total_tokens": 1836,
+          "cost_usd": 0.000674,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q027",
+        "pipeline": "rag",
+        "question": "Why does Harris (2011) use compulsory licensing as a yardstick for evaluating TRIPS' first fifteen years?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9999996539162256,
+        "context_precision": 0.999999999975,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1596,
+          "completion_tokens": 90,
+          "total_tokens": 1686,
+          "cost_usd": 0.0007038,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q213",
+        "pipeline": "rag",
+        "question": "What central claim do G\u00f6ktepe-Hulten and Mahagaonkar (2010) make about why academic scientists patent?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8263177191530837,
+        "context_precision": 0.699999999965,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1750,
+          "completion_tokens": 81,
+          "total_tokens": 1831,
+          "cost_usd": 0.0007275,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q215",
+        "pipeline": "rag",
+        "question": "What do G\u00f6ktepe-Hulten and Mahagaonkar (2010) find drives patenting and disclosure among non-industry-collaborating Max Planck scientists\u2014reputation expectations or monetary expectations?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8151760723890676,
+        "context_precision": 0.99999999998,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1643,
+          "completion_tokens": 54,
+          "total_tokens": 1697,
+          "cost_usd": 0.0006279,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q034",
+        "pipeline": "rag",
+        "question": "When did the US Patent Trial and Appeal Board begin accepting petitions for inter partes review?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9999996081163198,
+        "context_precision": 0.99999999998,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 2471,
+          "completion_tokens": 46,
+          "total_tokens": 2517,
+          "cost_usd": 0.0008563,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q321",
+        "pipeline": "rag",
+        "question": "How does Lei et al. (2019) build their IoT patent experimental dataset from USPTO data?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9150001465424294,
+        "context_precision": 0.999999999975,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1795,
+          "completion_tokens": 92,
+          "total_tokens": 1887,
+          "cost_usd": 0.0007685,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q011",
+        "pipeline": "rag",
+        "question": "According to Lemley and Shapiro (2005), how does patent quality affect the efficiency of the patent system at stimulating innovation?",
+        "faithfulness": 0.6666666666666666,
+        "answer_relevancy": 0.8097516570801047,
+        "context_precision": 0.9999999999,
+        "context_recall": 0.5,
+        "usage": {
+          "prompt_tokens": 2104,
+          "completion_tokens": 66,
+          "total_tokens": 2170,
+          "cost_usd": 0.0007962,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q109",
+        "pipeline": "rag",
+        "question": "How do Besen and Raskind (1991) and Moser (2013) together explain why patent laws affect which industries attract innovative activity?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0,
+        "usage": {
+          "prompt_tokens": 1688,
+          "completion_tokens": 58,
+          "total_tokens": 1746,
+          "cost_usd": 0.0006514,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q315",
+        "pipeline": "rag",
+        "question": "When did private agricultural R&D spending in the United States surpass public spending, according to Moschini (2010)?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.7499999999625,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1684,
+          "completion_tokens": 49,
+          "total_tokens": 1733,
+          "cost_usd": 0.0006277,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q319",
+        "pipeline": "rag",
+        "question": "How do Lei et al. (2019) construct the feature vector space model (FVSM) for patent documents?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9793404672892483,
+        "context_precision": 0.99999999998,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 2113,
+          "completion_tokens": 84,
+          "total_tokens": 2197,
+          "cost_usd": 0.0008439,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q206",
+        "pipeline": "rag",
+        "question": "How can large reverse payments serve as a surrogate for patent strength in antitrust analysis?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.7919408732870101,
+        "context_precision": null,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1802,
+          "completion_tokens": 57,
+          "total_tokens": 1859,
+          "cost_usd": 0.0006831,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q010",
+        "pipeline": "rag",
+        "question": "How do Lemley and Shapiro (2005) reframe what a patent grants its owner, and what two dimensions of uncertainty do they identify?",
+        "faithfulness": 0.4,
+        "answer_relevancy": 0.9381004016884925,
+        "context_precision": 0.9999999999,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1748,
+          "completion_tokens": 78,
+          "total_tokens": 1826,
+          "cost_usd": 0.0007194,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q035",
+        "pipeline": "rag",
+        "question": "Which production-side challenges does the Silvello et al. AgTech roadmapping case study identify as driving Brazilian cacha\u00e7a producers to demand new technical solutions?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9832444472527787,
+        "context_precision": 0.5833333333041666,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 2028,
+          "completion_tokens": 66,
+          "total_tokens": 2094,
+          "cost_usd": 0.0007734,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q028",
+        "pipeline": "rag",
+        "question": "What measurement approach does Kong et al. (2020) propose for the disclosure quality of patent applications?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8852655327749226,
+        "context_precision": 0.99999999995,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 2015,
+          "completion_tokens": 49,
+          "total_tokens": 2064,
+          "cost_usd": 0.000727,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q036",
+        "pipeline": "rag",
+        "question": "What does the Rwanda-Canada test case under TRIPS Article 31bis reveal about that compulsory-licensing pathway, according to Harris (2011)?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8782552957549082,
+        "context_precision": 0.8874999999778125,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 2299,
+          "completion_tokens": 51,
+          "total_tokens": 2350,
+          "cost_usd": 0.0008172,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q304",
+        "pipeline": "rag",
+        "question": "According to the article, what are the two dimensions that characterize a patent policy?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9623337029709217,
+        "context_precision": 0.9999999999,
+        "context_recall": 0.5,
+        "usage": {
+          "prompt_tokens": 1835,
+          "completion_tokens": 95,
+          "total_tokens": 1930,
+          "cost_usd": 0.000788,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q106",
+        "pipeline": "rag",
+        "question": "According to Fosfuri (2006), what fundamental trade-off does technology licensing impose on a licensor?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8988225042645104,
+        "context_precision": 0.99999999998,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1875,
+          "completion_tokens": 78,
+          "total_tokens": 1953,
+          "cost_usd": 0.0007575,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q100",
+        "pipeline": "rag",
+        "question": "According to Moser (2013), how can patent laws influence the direction of technical change across industries?",
+        "faithfulness": 0.75,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.4499999999775,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1687,
+          "completion_tokens": 46,
+          "total_tokens": 1733,
+          "cost_usd": 0.0006211,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q211",
+        "pipeline": "rag",
+        "question": "Under what condition is a restraint considered 'per se illegal' in the Rule of Reason framework?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9843438616847413,
+        "context_precision": 0.99999999995,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 2147,
+          "completion_tokens": 96,
+          "total_tokens": 2243,
+          "cost_usd": 0.0008841,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q301",
+        "pipeline": "rag",
+        "question": "Under what specific condition does 'Arrow's traditional result' regarding follower innovation reverse?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8375741995817045,
+        "context_precision": 0.9166666666361111,
+        "context_recall": 0.5,
+        "usage": {
+          "prompt_tokens": 2167,
+          "completion_tokens": 87,
+          "total_tokens": 2254,
+          "cost_usd": 0.0008676,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q303",
+        "pipeline": "rag",
+        "question": "How does an increase in patent length (T) specifically affect the leader's R&D investment strategy?",
+        "faithfulness": 0.8,
+        "answer_relevancy": 0.8923131243477864,
+        "context_precision": 0.99999999998,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1922,
+          "completion_tokens": 107,
+          "total_tokens": 2029,
+          "cost_usd": 0.0008441,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q308",
+        "pipeline": "rag",
+        "question": "How does the legal definition of patent co-ownership in Japan contribute to the 'lock-up' of university inventions?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9059134135207992,
+        "context_precision": 0.99999999998,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1710,
+          "completion_tokens": 120,
+          "total_tokens": 1830,
+          "cost_usd": 0.000813,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q314",
+        "pipeline": "rag",
+        "question": "According to Moschini (2010), what percentage of U.S. soybean acres planted in 2009 contained at least one Monsanto biotech trait?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.939680124705989,
+        "context_precision": 0.9999999999666667,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 2475,
+          "completion_tokens": 62,
+          "total_tokens": 2537,
+          "cost_usd": 0.0008975,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q300",
+        "pipeline": "rag",
+        "question": "What is the 'replacement effect' and how does it change as a patent's expiration date approaches?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8561811420742986,
+        "context_precision": 0.94999999997625,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1511,
+          "completion_tokens": 70,
+          "total_tokens": 1581,
+          "cost_usd": 0.0006283,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q214",
+        "pipeline": "rag",
+        "question": "For Max Planck scientists without industrial cooperation, how does G\u00f6ktepe-Hulten and Mahagaonkar (2010) relate expected financial benefits to patenting?",
+        "faithfulness": 0.5,
+        "answer_relevancy": 0.7148269421277234,
+        "context_precision": 0.99999999998,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1635,
+          "completion_tokens": 65,
+          "total_tokens": 1700,
+          "cost_usd": 0.000653,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q031",
+        "pipeline": "rag",
+        "question": "What overarching thesis does Rai (2003) advance about reforming the U.S. patent system?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8982458800218434,
+        "context_precision": 0.8333333332916666,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1569,
+          "completion_tokens": 99,
+          "total_tokens": 1668,
+          "cost_usd": 0.0007182,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q309",
+        "pipeline": "rag",
+        "question": "What role do 'boundary spanners' play in successful industry-university collaborations?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8245200350633153,
+        "context_precision": 0.99999999995,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1840,
+          "completion_tokens": 43,
+          "total_tokens": 1883,
+          "cost_usd": 0.0006595,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q018",
+        "pipeline": "rag",
+        "question": "What does Moser (2013) conclude from the historical evidence about whether patent laws are necessary or sufficient for higher rates of innovation?",
+        "faithfulness": 0.75,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.8666666666377778,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1610,
+          "completion_tokens": 80,
+          "total_tokens": 1690,
+          "cost_usd": 0.000683,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q311",
+        "pipeline": "rag",
+        "question": "Why do some Japanese manufacturers choose to keep collaborative discoveries as trade secrets instead of filing for patents?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9875247352371823,
+        "context_precision": 0.8333333332916666,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1740,
+          "completion_tokens": 75,
+          "total_tokens": 1815,
+          "cost_usd": 0.0007095,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q033",
+        "pipeline": "rag",
+        "question": "On what grounds did the European Union impose its moratorium on marketing approvals for GM crops, according to Curtis (2004)?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8795331929345026,
+        "context_precision": 0.8874999999778125,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1676,
+          "completion_tokens": 83,
+          "total_tokens": 1759,
+          "cost_usd": 0.0007103,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q017",
+        "pipeline": "rag",
+        "question": "How much did annual US patent issuance grow between 1983 and 2010, according to Boldrin and Levine (2013)?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.941335933949647,
+        "context_precision": 0.9999999999666667,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 2185,
+          "completion_tokens": 62,
+          "total_tokens": 2247,
+          "cost_usd": 0.0008105,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q306",
+        "pipeline": "rag",
+        "question": "Why do companies in the US typically accept university IP policies in exploratory research but find them problematic in focused collaborations?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9691405378544444,
+        "context_precision": 0.8333333332916666,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 2245,
+          "completion_tokens": 70,
+          "total_tokens": 2315,
+          "cost_usd": 0.0008485,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q307",
+        "pipeline": "rag",
+        "question": "Explain the 'Full Economic Cost' (FEC) requirement in the UK's Lambert Model Agreements.",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9662104066381774,
+        "context_precision": 0.99999999998,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1717,
+          "completion_tokens": 95,
+          "total_tokens": 1812,
+          "cost_usd": 0.0007526,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q302",
+        "pipeline": "rag",
+        "question": "Contrast the optimal patent policy for the pharmaceutical sector versus the software industry as described by Parra.",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8284018076601463,
+        "context_precision": 0.99999999995,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1697,
+          "completion_tokens": 102,
+          "total_tokens": 1799,
+          "cost_usd": 0.0007641,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q021",
+        "pipeline": "rag",
+        "question": "What does the cross-country panel evidence in Kanwar and Evenson (2003) say about the effect of intellectual property rights on innovation?",
+        "faithfulness": 0.75,
+        "answer_relevancy": 0.9318986271333166,
+        "context_precision": 0.99999999998,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 2047,
+          "completion_tokens": 72,
+          "total_tokens": 2119,
+          "cost_usd": 0.0007941,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q012",
+        "pipeline": "rag",
+        "question": "How do Jorde and Teece (1990) characterize the standard view of cooperation among competitors in antitrust thinking?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 1.0000000000000002,
+        "context_precision": 0.99999999995,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1295,
+          "completion_tokens": 56,
+          "total_tokens": 1351,
+          "cost_usd": 0.0005285,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q317",
+        "pipeline": "rag",
+        "question": "What does Moschini (2010) say about the expiration timeline for the original Roundup Ready soybean trait and the prospect of generic biotech soybeans?",
+        "faithfulness": 0.6,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.99999999995,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 2263,
+          "completion_tokens": 70,
+          "total_tokens": 2333,
+          "cost_usd": 0.0008539,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q202",
+        "pipeline": "rag",
+        "question": "What triggered the U.S. software industry's shift from 'cooperative multilateralism' to 'coercive multilateralism' in the mid-1980s?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9999996242152033,
+        "context_precision": 0.8333333332916666,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1898,
+          "completion_tokens": 102,
+          "total_tokens": 2000,
+          "cost_usd": 0.0008244,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q107",
+        "pipeline": "rag",
+        "question": "According to Besen and Raskind (1991), what is the fundamental objective of intellectual property protection?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8962324790787816,
+        "context_precision": 0.999999999975,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 2104,
+          "completion_tokens": 51,
+          "total_tokens": 2155,
+          "cost_usd": 0.0007587,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q310",
+        "pipeline": "rag",
+        "question": "Contrast the typical complaints about university IP management made by companies in the UK versus those in the US.",
+        "faithfulness": 0.8571428571428571,
+        "answer_relevancy": 0.8650846743959781,
+        "context_precision": 0.5833333333041666,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 2208,
+          "completion_tokens": 84,
+          "total_tokens": 2292,
+          "cost_usd": 0.0008724,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q004",
+        "pipeline": "rag",
+        "question": "According to Shapiro (2001), what are the two main types of transaction costs that overlapping patents impose on innovation?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9765484359211926,
+        "context_precision": 0.9999999999,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 2183,
+          "completion_tokens": 70,
+          "total_tokens": 2253,
+          "cost_usd": 0.0008299,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q219",
+        "pipeline": "rag",
+        "question": "Why do Shadlen, Schrank, and Kurtz (2005) focus their study on computer software rather than other IP-intensive sectors?",
+        "faithfulness": 0.8,
+        "answer_relevancy": 0.7986521607013558,
+        "context_precision": 0.5833333333041666,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1747,
+          "completion_tokens": 88,
+          "total_tokens": 1835,
+          "cost_usd": 0.0007441,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q208",
+        "pipeline": "rag",
+        "question": "Which industry group opposed semiconductor copyright reform and why?",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8739133698709649,
+        "context_precision": 0.8666666666377778,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1859,
+          "completion_tokens": 35,
+          "total_tokens": 1894,
+          "cost_usd": 0.0006452,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      },
+      {
+        "query_id": "q001",
+        "pipeline": "rag",
+        "question": "Does Shapiro (2001) treat cross-licensing as a brake or a boost on innovation?",
+        "faithfulness": 0.875,
+        "answer_relevancy": 0.9073984363836776,
+        "context_precision": 0.5888888888692593,
+        "context_recall": 1.0,
+        "usage": {
+          "prompt_tokens": 1588,
+          "completion_tokens": 81,
+          "total_tokens": 1669,
+          "cost_usd": 0.0006789,
+          "model": "openrouter/google/gemini-2.5-flash"
+        }
+      }
+    ]
+  }
+}
