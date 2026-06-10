@@ -13,6 +13,8 @@
 \usepackage{natbib}
 \usepackage{booktabs}
 \usepackage{array}
+\usepackage{tabularx}
+\usepackage{dblfloatfix}
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -87,7 +89,8 @@ The M2 sixteen-config grid (Appendix Table~\ref{tab:retrieval-app}) names E5-lar
 \begin{table}[h]
 \centering
 \footnotesize
-\begin{tabular}{lccc}
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\columnwidth}{@{}>{\raggedright\arraybackslash}Xrrr@{}}
 \toprule
 config (all E5-large $+$ rerank) & hit@10 & MRR & nDCG@10 \\
 \midrule
@@ -99,7 +102,7 @@ config (all E5-large $+$ rerank) & hit@10 & MRR & nDCG@10 \\
 \textbf{\texttt{s800\_o0}}             & 0.966 & \textbf{0.902} & \textbf{0.895} \\
 \texttt{s800\_o400}                    & \textbf{0.989} & 0.862 & 0.874 \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \caption{Chunker ablation, $n{=}88$. \texttt{s800\_o0} is the new SOTA on MRR/nDCG; \texttt{s600\_o0}, \texttt{s800\_o400} tie hit@10. Full 10-config grid in \texttt{evaluation/retrieval\_eval/}.}
 \label{tab:chunker}
 \end{table}
@@ -114,7 +117,7 @@ On 24 answerable gold questions closed-book from three generators, NLI marks 18/
 \subsection{End-to-end RAG vs long-context}
 \label{sec:ragas}
 
-M3 scales the M2 preliminary ($n{=}8$) to the full $n{=}88$ evaluable gold (the 9 unanswerable and 6 adversarial pairs have no reference answer for RAGAS to score) under a three-arm ablation disentangling two confounds (long context vs.\ chunked retrieval; Gemini vs.\ GPT). All RAG arms use the M3 chunker-SOTA retriever \texttt{e5\_rerank\_s800\_o0}; long-context loads cited \texttt{document.md} into Gemini~2.5~Flash's 1M-token window. We run the full sweep under two judges (\texttt{claude-haiku-4-5} and \texttt{claude-sonnet-4-6}) to bound judge sensitivity; per-judge tables in Appendix~\ref{tab:ragas-app}. \textbf{Direction-stable across judges}: model-controlled (both Gemini), LC wins \texttt{faithfulness} ($+3.7$\,pp Sonnet, $+11.4$\,pp Haiku) and \texttt{context\_precision} ($+4.6$/$+6.7$\,pp); the direction holds, the magnitude is judge-dependent. \textbf{Judge-sensitive}: under Haiku, RAG-Gemini beats LC on \texttt{answer\_relevancy} by $+9.4$\,pp; under Sonnet the gap closes to LC $+1.1$\,pp --- a Haiku-specific finding, consistent with RAGAS's documented judge sensitivity on this metric \citep{es2024ragas}. The "answer\_relevancy flip" therefore does not survive a stronger judge and is reported as a sensitivity result rather than a headline conclusion. LC costs \$0.00370/query, $13\times$ the cheapest RAG arm (\$0.00029); chunked RAG remains Pareto-optimal on cost, LC wins the grounded-faithfulness and context-precision axes consistently across judges.
+M3 scales the M2 preliminary ($n{=}8$) to the full $n{=}88$ evaluable gold (the 9 unanswerable and 6 adversarial pairs have no reference answer for RAGAS to score) under a three-arm ablation disentangling two confounds (long context vs.\ chunked retrieval; Gemini vs.\ GPT). All RAG arms use the M3 chunker-SOTA retriever \texttt{e5\_rerank\_s800\_o0}; long-context loads cited \texttt{document.md} into Gemini~2.5~Flash's 1M-token window. We run the full sweep under two judges (\texttt{claude-haiku-4-5} and \texttt{claude-sonnet-4-6}) to bound judge sensitivity; the full per-judge breakdown is in Appendix Table~\ref{tab:ragas-app}. \textbf{Direction-stable across judges}: model-controlled (both Gemini), LC wins \texttt{faithfulness} ($+3.7$\,pp Sonnet, $+11.4$\,pp Haiku) and \texttt{context\_precision} ($+4.6$/$+6.7$\,pp); the direction holds, the magnitude is judge-dependent. \textbf{Judge-sensitive}: under Haiku, RAG-Gemini beats LC on \texttt{answer\_relevancy} by $+9.4$\,pp; under Sonnet the gap closes to LC $+1.1$\,pp --- a Haiku-specific finding, consistent with RAGAS's documented judge sensitivity on this metric \citep{es2024ragas}. The "answer\_relevancy flip" therefore does not survive a stronger judge and is reported as a sensitivity result rather than a headline conclusion. LC costs \$0.00370/query, $13\times$ the cheapest RAG arm (\$0.00029); chunked RAG remains Pareto-optimal on cost, LC wins the grounded-faithfulness and context-precision axes consistently across judges.
 
 \paragraph{Corrective RAG.}\label{sec:crag} M3 scales CRAG \citep{yan2024corrective} from the M2 10-question slice to the full $n{=}88$ gold (97 with unanswerables). The probe (\texttt{e5\_large\_coarse\_rerank}, $k{=}10$, cross-encoder \texttt{ms-marco-MiniLM-L-6-v2}) bins each retrieval analytically over the $(\tau_h, \tau_l)$ grid \citep{yan2024corrective}; at the latency-optimal cell $(\tau_h{=}0.7, \tau_l{=}0.4)$, branches partition as $\{$correct: $85$, ambiguous: $9$, incorrect: $3\}$. With direct-correct retrieval already at $87.6\%$ ($85/97$) the refinement upside is bounded at $+9.3$\,pp ($9$ ambiguous queries rescuable in one round); the INCORRECT branch abstains (\S\ref{sec:approach}) and catches $1/9$ unanswerables at $\tau_l{=}0.4$ (precision $0.33$, recall $0.11$) --- the cross-encoder is a confident-but-shallow abstain detector that scores $7/9$ unanswerables above $\tau_h$ because lexical overlap with retrieved chunks masquerades as evidence, a known failure mode that motivates the corpus-rather-than-web framing (\S\ref{sec:ethics}). Sweeping $\tau_h \in \{0.6, 0.7, 0.8\}$ shifts at most $3$ borderline queries between CORRECT and AMBIGUOUS; $\tau_l$ is the operative knob.
 
@@ -153,10 +156,11 @@ ColBERTv2                             & 0.892          & 0.919          & 0.786 
 
 \paragraph{RAGAS three-arm ablation with cross-judge sensitivity (M3).} Full $n{=}88$ evaluable gold (88 answerable; 9 unanswerable and 6 adversarial pairs excluded as RAGAS requires a reference answer), the chunker-SOTA retriever, and Gemini~2.5~Flash's 1M-token window for long-context. Four SCITAS izar jobs in two factor pairs (RAG answer LLM $\in \{$Gemini-2.5-Flash, GPT-4o-mini$\} \times$ judge $\in \{$Haiku 4.5, Sonnet 4.6$\}$). The LC arm is retriever-independent so its row averages the two answer-LLM runs at each judge (within judge variance).
 
-\begin{table}[h]
+\begin{table*}[!ht]
 \centering
 \footnotesize
-\begin{tabular}{llccc}
+\setlength{\tabcolsep}{5pt}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.14\textwidth}>{\raggedright\arraybackslash}p{0.22\textwidth}*{3}{>{\raggedleft\arraybackslash}X}@{}}
 \toprule
 judge & metric ($n{=}88$) & RAG-gemini & RAG-gpt-4o-mini & LC-gemini \\
 \midrule
@@ -170,13 +174,15 @@ judge & metric ($n{=}88$) & RAG-gemini & RAG-gpt-4o-mini & LC-gemini \\
 \texttt{sonnet-4.6}  & \texttt{context\_precision} & 0.806 & 0.795 & \textbf{0.852} \\
 \texttt{sonnet-4.6}  & \texttt{context\_recall}    & 0.864 & 0.852 & \textbf{0.869} \\
 \midrule
-\multicolumn{2}{l}{USD / query (answer LLM only)}  & \$0.00029 & \$0.00032 & \$0.00370 \\
+\multicolumn{2}{@{}l}{USD / query (answer LLM only)}  & \$0.00029 & \$0.00032 & \$0.00370 \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \caption{RAGAS three-arm ablation, $n{=}88$, under two judges. \textbf{Direction-stable across judges}: LC wins \texttt{faithfulness} and \texttt{context\_precision} on every metric/judge pair. \textbf{Judge-sensitive}: Haiku puts RAG ahead on \texttt{answer\_relevancy} by $+9$--$+10$\,pp; Sonnet shows the metric essentially tied. Reported per-judge so the headline ratios bound rather than pretend at significance.}
 \label{tab:ragas-app}
-\end{table}
+\end{table*}
 
+\clearpage
+\raggedbottom
 \bibliography{custom}
 \bibliographystyle{acl_natbib}
 
