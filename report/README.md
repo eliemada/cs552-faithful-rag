@@ -34,9 +34,10 @@ Course-provided read-only templates (for reference / re-copying):
 
 ## Notes on `report/final_report/`
 
-- `anthology.bib` (~42 MB ACL Anthology references) lives in Overleaf
-  only — it's `.gitignore`'d to keep this repo lean. Overleaf already
-  has it; nothing to do for compilation there. If you need it locally,
-  fetch it with `curl -L -o report/final_report/anthology.bib https://aclanthology.org/anthology.bib`.
-- `main.pdf`, `main.bbl` are produced by Overleaf on each compile;
-  ship the latest `.pdf` to the repo only when tagging a submission.
+- Bibliography uses `custom.bib` only (all cited keys are defined there).
+  The final report does **not** depend on `anthology.bib`; older drafts used
+  `\bibliography{anthology,custom}`, which breaks on Overleaf when the
+  42\,MB anthology file is missing.
+- `main.bbl` is checked in so citations resolve even before BibTeX runs;
+  Overleaf regenerates it on each compile.
+- Ship the latest `main.pdf` to the repo only when tagging a submission.
