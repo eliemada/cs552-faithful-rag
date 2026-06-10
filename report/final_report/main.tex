@@ -128,10 +128,6 @@ The benchmark is English IP/policy text only and Anglo-American-biased; deployme
 \paragraph{Conclusion.}\label{sec:conclusion} Four interventions on one span-grounded benchmark pin component-level failure modes end-to-end metrics blur. A chunker ablation lifts M2 to \textbf{0.902 MRR} / \textbf{0.989 hit@10} (800-char no-overlap); a 70-claim blinded eval pins the LLM judge at $\kappa{=}0.882$ and NLI at $\kappa{=}-0.454$, ruling NLI out as a gate; CRAG on full $n{=}88$ partitions retrievals into $\{85, 9, 3\}$ at the latency-optimal cell with a documented abstain branch bounded at $1/9$ unanswerable recall; long-context wins RAGAS \texttt{faithfulness} ($+3.7$ Sonnet / $+11.4$\,pp Haiku model-controlled) and \texttt{context\_precision} across both judges at $13\times$ the answer-LLM cost; \texttt{answer\_relevancy} is judge-sensitive. \textbf{Limitations:} English corpus, two raters, closed judge, cross-encoder abstain detector overcalls unanswerables ($7/9$ above $\tau_h$). \textbf{Future work:} multilingual port, IAA closure, hierarchical chunker, per-domain abstain threshold.
 
 
-% Entries for the entire Anthology, followed by custom entries
-\bibliography{anthology,custom}
-\bibliographystyle{acl_natbib}
-
 \appendix
 
 \section{Appendix}\label{sec:appendix}
@@ -181,5 +177,7 @@ judge & metric ($n{=}88$) & RAG-gemini & RAG-gpt-4o-mini & LC-gemini \\
 \label{tab:ragas-app}
 \end{table}
 
+\bibliography{custom}
+\bibliographystyle{acl_natbib}
 
 \end{document}
