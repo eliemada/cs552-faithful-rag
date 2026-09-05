@@ -11,7 +11,7 @@
 # Pin VLLM_TAG to a specific version, never `:latest` or
 # `:latest-ubuntu2404` (those move with every vLLM release).
 # Tag list: https://hub.docker.com/r/vllm/vllm-openai/tags
-ARG VLLM_TAG=v0.22.0@sha256:0fec7ec5f3e6bc168e54899935fb0557da908a4832a1dbc88e2debcf2f889416
+ARG VLLM_TAG=v0.28.0@sha256:61fc8a896b0a4fbbbdc063bc4b0dbc25ce98e02b5050c24aeb7830ac02039b14
 FROM vllm/vllm-openai:${VLLM_TAG}
 
 # The vllm-openai image's default ENTRYPOINT launches the OpenAI server.
