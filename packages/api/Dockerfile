@@ -4,10 +4,10 @@
 # ==============================================================================
 
 # Multi-stage build for minimal final image
-FROM python:3.14-slim@sha256:c845af9399020c7e562969a13689e929074a10fd057acd1b1fad06a2fb068e97 AS builder
+FROM python:3.15-slim@sha256:08a4c22c92b79ec821a7ad49768480039ee5b7accac3955228e75366e30abc8e AS builder
 
 # Install UV for fast dependency management
-COPY --from=ghcr.io/astral-sh/uv:latest@sha256:b46b03ddfcfbf8f547af7e9eaefdf8a39c8cebcba7c98858d3162bd28cf536f6 /uv /usr/local/bin/uv
+COPY --from=ghcr.io/astral-sh/uv:latest@sha256:a3ea1357342c1a4bf9a0c53a3deb1b55379aefa037338d8113d5771efa01774f /uv /usr/local/bin/uv
 
 WORKDIR /app
 
@@ -26,7 +26,7 @@ RUN uv sync --frozen --no-dev --package api
 # ==============================================================================
 # Production stage - Minimal runtime image
 # ==============================================================================
-FROM python:3.14-slim@sha256:c845af9399020c7e562969a13689e929074a10fd057acd1b1fad06a2fb068e97
+FROM python:3.15-slim@sha256:08a4c22c92b79ec821a7ad49768480039ee5b7accac3955228e75366e30abc8e
 
 # Install minimal system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
